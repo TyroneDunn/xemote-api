@@ -4,7 +4,7 @@
   "description": "The Xemote API project is a back-end web application built using Node.js and Express. This API simulates the functionality of an online product store, allowing users to read, create, delete and update a collection of products. The Xemote Mock project is a showcase of my skills in full-stack development. This project demonstrates my ability to create a functional and user-friendly interface that aligns with industry standards.",
   "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "ts-node src/index.ts"
   },
   "keywords": [
     "Node.js",

@@ -1,4 +1,4 @@
-import {UserSortOptions} from "./user-sort-options.type";
+import {UserSortOptions} from "./users-sort-options.type";
 import {UserPermissions} from "./user-permissions.type";
 import {PaginationOptions} from "../../shared/pagination-options.type";
 import {UsersFilter} from "./users-filter.type";

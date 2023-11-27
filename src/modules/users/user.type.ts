@@ -4,7 +4,9 @@ export type User = {
     _id: string,
     username: string,
     hash: string,
+    firstName: string,
+    lastName: string,
+    permissions: UserPermissions[],
     dateCreated: Date,
     lastUpdated: Date,
-    permissions: UserPermissions[],
 };

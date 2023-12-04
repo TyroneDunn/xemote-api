@@ -7,6 +7,7 @@ import {
     validateUpdateProductDTO,
     validateDeleteProductDTO
 } from "./products-dto-validator.service";
+import {PRODUCTS_REPOSITORY} from "../../environment/repositories-config";
 
 const repository: ProductsRepository = PRODUCTS_REPOSITORY;
 

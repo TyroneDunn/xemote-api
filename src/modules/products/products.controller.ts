@@ -48,7 +48,6 @@ const deleteProductMethod: Method = {
     callback: deleteProduct
 };
 
-
 export const ProductsController: Controller = {
     path: '/products/',
     guard: true,

@@ -1,4 +1,10 @@
-import {buildAppConfig, Config, HashingAlgorithm, NodeEnvironmentOption} from "@hals/core";
+import {
+    App,
+    Config,
+    buildAppConfig,
+    NodeEnvironmentOption,
+    HashingAlgorithm
+} from "@hals/core";
 import {
     API_PORT,
     API_TITLE,
@@ -12,6 +18,7 @@ import {
     SESSION_SECRET,
 } from "../environment/environment";
 import {corsOptions} from "./cors-options-config";
+import {ProductsController} from "../modules/products/products.controller";
 
 export const config: Config = buildAppConfig(
     `${NODE_ENV as NodeEnvironmentOption}`,
@@ -29,3 +36,10 @@ export const config: Config = buildAppConfig(
     PASSWORD_LENGTH,
     PASSWORD_SALT
 );
+
+App.init(config, [
+    ProductsController,
+])
+
+const run = App.run;
+export default run;

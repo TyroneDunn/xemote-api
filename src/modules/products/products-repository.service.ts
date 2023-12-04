@@ -1,12 +1,10 @@
-import {Product} from "./product.type";
-import {Request} from "@hals/core"
-import {Response} from "../../shared/response-dto.type";
+import {Request, Response} from "@hals/core"
 
 export type ProductsRepository = {
-    getProduct: (dto: Request) => Promise<Response<Product>>,
-    getProducts: (dto: Request) => Promise<Response<Product>>,
-    createProduct: (dto: Request) => Promise<Response<Product>>,
-    deleteProduct: (dto: Request) => Promise<Response<Product>>,
-    updateProduct: (dto: Request) => Promise<Response<Product>>,
+    getProduct: (dto: Request) => Promise<Response>,
+    getProducts: (dto: Request) => Promise<Response>,
+    createProduct: (dto: Request) => Promise<Response>,
+    deleteProduct: (dto: Request) => Promise<Response>,
+    updateProduct: (dto: Request) => Promise<Response>,
     exists: (dto: Request) => Promise<boolean>,
 };

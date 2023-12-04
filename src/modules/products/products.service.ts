@@ -1,5 +1,12 @@
 import {Request, Response} from "@hals/core";
 import {ProductsRepository} from "./products-repository.service";
+import {
+    validateGetProductDTO,
+    validateGetProductsDTO,
+    validateCreateProductDTO,
+    validateUpdateProductDTO,
+    validateDeleteProductDTO
+} from "./products-dto-validator.service";
 
 const repository: ProductsRepository = PRODUCTS_REPOSITORY;
 

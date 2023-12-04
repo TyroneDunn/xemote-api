@@ -3,32 +3,32 @@ import {ProductsRepository} from "./products-repository.service";
 
 const repository: ProductsRepository = PRODUCTS_REPOSITORY;
 
-export const getProduct = async (dto: Request): Promise<Response> => {
-    const response: Response = await validateGetProductDTO(dto);
+export const getProduct = (dto: Request): Response => {
+    const response: Response = validateGetProductDTO(dto);
     if (response.error) return response;
     return repository.getProduct(dto);
 };
 
-export const getProducts = async (dto: Request): Promise<Response> => {
-    const response: Response = await validateGetProductsDTO(dto);
+export const getProducts = (dto: Request): Response => {
+    const response: Response = validateGetProductsDTO(dto);
     if (response.error) return response;
     return repository.getProducts(dto);
 };
 
-export const createProduct = async (dto: Request): Promise<Response> => {
-    const response: Response = await validateCreateProductDTO(dto);
+export const createProduct = (dto: Request): Response => {
+    const response: Response = validateCreateProductDTO(dto);
     if (response.error) return response;
     return repository.createProduct(dto);
 };
 
-export const deleteProduct = async (dto: Request): Promise<Response> => {
-    const response: Response = await validateDeleteProductDTO(dto);
+export const deleteProduct = (dto: Request): Response => {
+    const response: Response = validateDeleteProductDTO(dto);
     if (response.error) return response;
     return repository.deleteProduct(dto);
 };
 
-export const updateProduct = async (dto: Request): Promise<Response> => {
-    const response: Response = await validateUpdateProductDTO(dto);
+export const updateProduct = (dto: Request): Response => {
+    const response: Response = validateUpdateProductDTO(dto);
     if (response.error) return response;
     return repository.updateProduct(dto);
 };

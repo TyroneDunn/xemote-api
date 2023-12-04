@@ -3,7 +3,6 @@ export type Product = {
     name: string,
     costOfGood: number,
     markup: number,
-    lastName: string,
     type: ProductType,
 };
 

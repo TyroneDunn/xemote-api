@@ -1,5 +1,5 @@
 import {Request, Response} from "@hals/core";
-import {ProductsRepository} from "./products-repository.service";
+import {ProductsRepository} from "./products-repository.type";
 import {
     validateGetProductDTO,
     validateGetProductsDTO,

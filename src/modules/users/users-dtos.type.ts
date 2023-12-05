@@ -1,16 +1,16 @@
 import {UserSortOptions} from "./users-sort-options.type";
 import {UserPermissions} from "./user-permissions.type";
-import {PaginationOptions} from "../../shared/pagination-options.type";
+import {Pagination} from "../../shared/pagination.type";
 import {UsersFilter} from "./users-filter.type";
-import {DateRangeFilter} from "../../shared/date-range-filter.type";
+import {DateRange} from "../../shared/date-range.type";
 
 export type GetUserDTO = { username: string };
 
 export type GetUsersDTO = {
     filter?: UsersFilter,
-    dateRange?: DateRangeFilter,
+    dateRange?: DateRange,
     sort?: UserSortOptions,
-    page?: PaginationOptions,
+    page?: Pagination,
 };
 
 export type RegisterUserDTO = {
@@ -27,7 +27,7 @@ export type UpdateUserDTO = {
 
 export type UpdateUsersDTO = {
     filter: UsersFilter,
-    dateRange?: DateRangeFilter,
+    dateRange?: DateRange,
     newPermissions: UserPermissions[],
     sort?: UserSortOptions,
 };
@@ -36,6 +36,6 @@ export type DeleteUserDTO = { username: string };
 
 export type DeleteUsersDTO = {
     filter?: UsersFilter,
-    dateRange?: DateRangeFilter,
+    dateRange?: DateRange,
     sort?: UserSortOptions,
 };

@@ -10,9 +10,11 @@ import {
 } from "./products.service";
 
 export const ProductsQueryParamKeys: string[] = [
-    'idRegex',
+    'name',
+    'nameRegex',
     'type',
-    'costOfGoodRange',
+    'typeRegex',
+    'costRange',
     'markupRange',
     'dateRange',
     'sort',

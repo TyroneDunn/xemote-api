@@ -1,4 +1,4 @@
-export type PaginationOptions = {
+export type Pagination = {
     index: number;
     limit: number;
 };

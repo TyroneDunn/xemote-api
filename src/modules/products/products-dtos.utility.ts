@@ -11,8 +11,8 @@ import {
     UpdateProductsDTO
 } from "./products-dtos.type";
 import {NumberRange} from "../../shared/number-range.type";
-import {DateRange} from "../../shared/date-range-filter.type";
-import {Pagination} from "../../shared/pagination-options.type";
+import {DateRange} from "../../shared/date-range.type";
+import {Pagination} from "../../shared/pagination.type";
 import {Price} from "../../shared/price.type";
 
 export const mapRequestToGetProductDTO = (request: Request): GetProductDTO => ({

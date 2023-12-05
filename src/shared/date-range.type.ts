@@ -1,4 +1,4 @@
-export type DateRangeFilter = {
+export type DateRange = {
     dateCreated: {
       startDate: string,
       endDate: string,

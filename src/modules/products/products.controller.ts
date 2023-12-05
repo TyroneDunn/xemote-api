@@ -6,7 +6,16 @@ import {
     getProducts,
     updateProduct
 } from "./products.service";
-import {ProductsQueryParamKeys} from "./product.type";
+
+export const ProductsQueryParamKeys: string[] = [
+    'idRegex',
+    'type',
+    'costOfGoodRange',
+    'markupRange',
+    'dateRange',
+    'sort',
+    'page',
+];
 
 const getProductMethod: Method = {
     type: "GET",

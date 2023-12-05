@@ -18,12 +18,3 @@ export type ProductType =
     "Wireless Infrared Beam Sensor" |
     "Wireless 4-30mA Sensor";
 
-export const ProductsQueryParamKeys: string[] = [
-    'idRegex',
-    'costOfGoodRange',
-    'markupRange',
-    'type',
-    'sort',
-    'index',
-    'limit',
-];

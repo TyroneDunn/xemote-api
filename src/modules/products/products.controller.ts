@@ -2,9 +2,11 @@ import {Controller, Method} from "@hals/core";
 import {
     createProduct,
     deleteProduct,
+    deleteProducts,
     getProduct,
     getProducts,
-    updateProduct
+    updateProduct,
+    updateProducts,
 } from "./products.service";
 
 export const ProductsQueryParamKeys: string[] = [
@@ -22,7 +24,7 @@ const getProductMethod: Method = {
     paramKeys: ['id'],
     queryParamKeys: [],
     sideEffects: [],
-    callback: getProduct
+    done: getProduct
 };
 
 const getProductsMethod: Method = {
@@ -30,7 +32,7 @@ const getProductsMethod: Method = {
     paramKeys: [],
     queryParamKeys: ProductsQueryParamKeys,
     sideEffects: [],
-    callback: getProducts
+    done: getProducts
 };
 
 const createProductMethod: Method = {
@@ -38,7 +40,7 @@ const createProductMethod: Method = {
     paramKeys: [],
     queryParamKeys: [],
     sideEffects: [],
-    callback: createProduct
+    done: createProduct
 };
 
 const updateProductMethod: Method = {
@@ -46,7 +48,15 @@ const updateProductMethod: Method = {
     paramKeys: ['id'],
     queryParamKeys: [],
     sideEffects: [],
-    callback: updateProduct
+    done: updateProduct
+};
+
+const updateProductsMethod: Method = {
+    type: "PATCH",
+    paramKeys: [],
+    queryParamKeys: ProductsQueryParamKeys,
+    sideEffects: [],
+    done: updateProducts
 };
 
 const deleteProductMethod: Method = {
@@ -54,17 +64,27 @@ const deleteProductMethod: Method = {
     paramKeys: ['id'],
     queryParamKeys: [],
     sideEffects: [],
-    callback: deleteProduct
+    done: deleteProduct
+};
+
+const deleteProductsMethod: Method = {
+    type: "DELETE",
+    paramKeys: [],
+    queryParamKeys: ProductsQueryParamKeys,
+    sideEffects: [],
+    done: deleteProducts
 };
 
 export const ProductsController: Controller = {
-    path: '/products/',
+    path: 'products/',
     guard: true,
     methods: [
         getProductMethod,
         getProductsMethod,
         createProductMethod,
         updateProductMethod,
+        updateProductsMethod,
         deleteProductMethod,
+        deleteProductsMethod,
     ]
 };

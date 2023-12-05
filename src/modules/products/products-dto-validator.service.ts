@@ -1,21 +1,38 @@
-import {Request, Response} from "@hals/core";
+import {ValidationOutcome} from "../../shared/validate/validation-dtos.type";
+import {
+    CreateProductDTO,
+    DeleteProductDTO,
+    DeleteProductsDTO,
+    GetProductDTO,
+    GetProductsDTO,
+    UpdateProductDTO,
+    UpdateProductsDTO,
+} from "./products-dtos.type";
 
-export const validateGetProductDTO = (dto: Request): Response => {
+export const validateGetProductDTO = (dto: GetProductDTO): ValidationOutcome => {
     return undefined;
 };
 
-export const validateGetProductsDTO = (dto: Request): Response => {
+export const validateGetProductsDTO = (dto: GetProductsDTO): ValidationOutcome => {
     return undefined;
 };
 
-export const validateCreateProductDTO = (dto: Request): Response => {
+export const validateCreateProductDTO = (dto: CreateProductDTO): ValidationOutcome => {
     return undefined;
 };
 
-export const validateUpdateProductDTO = (dto: Request): Response => {
+export const validateUpdateProductDTO = (dto: UpdateProductDTO): ValidationOutcome => {
     return undefined;
 };
 
-export const validateDeleteProductDTO = (dto: Request): Response => {
+export const validateUpdateProductsDTO = (dto: UpdateProductsDTO): ValidationOutcome => {
+    return undefined;
+};
+
+export const validateDeleteProductDTO = (dto: DeleteProductDTO): ValidationOutcome => {
+    return undefined;
+};
+
+export const validateDeleteProductsDTO = (dto: DeleteProductsDTO): ValidationOutcome => {
     return undefined;
 };

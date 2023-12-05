@@ -1,7 +1,9 @@
+import {Price} from "../../shared/price.type";
+
 export type Product = {
     _id: string,
     name: string,
-    costOfGood: number,
+    costOfGood: Price,
     markup: number,
     type: ProductType,
 };

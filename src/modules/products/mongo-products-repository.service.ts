@@ -26,7 +26,13 @@ export const MongoProductsRepository: ProductsRepository = {
         return query.exec();
     },
 
-    createProduct(dto: CreateProductDTO): Promise<Product> {
+    createProduct: (dto: CreateProductDTO): Promise<Product> =>
+        new ProductModel({
+            name: dto.name,
+            type: dto.type,
+            costOfGood: dto.costOfGood,
+            markup: dto.markup,
+        }).save(),
 
     },
 

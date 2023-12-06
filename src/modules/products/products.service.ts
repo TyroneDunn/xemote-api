@@ -67,8 +67,7 @@ export const getProducts = async (request: Request): Promise<Response> => {
         const addPageData = (response: Response): Response =>
             addRequestPageDataToResponse(request, response);
         return addPageData(mapProductsToResponse(products, HttpStatusCodes.OK));
-    }
-    catch (error) {
+    } catch (error) {
         return mapToInternalServerErrorResponse(error)
     }
 };
@@ -82,25 +81,22 @@ export const createProduct = async (request: Request): Promise<Response> => {
     try {
         const product: Product = await repository.createProduct(dto);
         return mapProductToResponse(product, HttpStatusCodes.CREATED);
-    }
-    catch (error) {
+    } catch (error) {
         return mapToInternalServerErrorResponse(error);
     }
 };
 
-export const updateProduct = (request: Request, done: Callback): void => {
+export const updateProduct = async (request: Request): Promise<Response> => {
     const dto: UpdateProductDTO = mapRequestToUpdateProductDTO(request);
-    const validationOutcome: ValidationOutcome = validateUpdateProductDTO(dto);
-    if (validationOutcome.error) {
-        done(mapToErrorResponse(validationOutcome))
-        return;
+    const validationOutcome: ValidationOutcome = await validateUpdateProductDTO(dto);
+    if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
+
+    try {
+        const product: Product = await repository.updateProduct(dto);
+        return mapProductToResponse(product, HttpStatusCodes.OK);
+    } catch (error) {
+        return mapToInternalServerErrorResponse(error);
     }
-
-    const mapProductToResponseThenDone =
-        (product: Product): void =>
-            done(mapProductToResponse(product, HttpStatusCodes.OK));
-
-    repository.updateProduct(dto, mapProductToResponseThenDone);
 };
 
 export const updateProducts = (request: Request, done: Callback): void => {

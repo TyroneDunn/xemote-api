@@ -47,10 +47,7 @@ export const getProduct = async (request: Request): Promise<Response> => {
         const product: Product = await repository.getProduct(dto);
         return mapProductToResponse(product, HttpStatusCodes.OK);
     } catch (error) {
-        return {
-            status: HttpStatusCodes.INTERNAL_SERVER_ERROR,
-            error: error.message
-        }
+        return mapToInternalServerErrorResponse(error);
     }
 };
 
@@ -76,26 +73,26 @@ export const getProducts = async (request: Request): Promise<Response> => {
     }
 };
 
-export const createProduct = (request: Request, done: Callback): void => {
+export const createProduct = async (request: Request): Promise<Response> => {
     const dto: CreateProductDTO = mapRequestToCreateProductDTO(request);
-    const validationOutcome: ValidationOutcome = validateCreateProductDTO(dto);
-    if (validationOutcome.error) {
-        done(mapValidationErrorToResponse(validationOutcome))
-        return;
+
+    const validationOutcome: ValidationOutcome = await validateCreateProductDTO(dto);
+    if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
+
+    try {
+        const product: Product = await repository.createProduct(dto);
+        return mapProductToResponse(product, HttpStatusCodes.CREATED);
     }
-
-    const mapProductToResponseThenDone =
-        (product: Product): void =>
-            done(mapProductToResponse(product, HttpStatusCodes.CREATED));
-
-    repository.createProduct(dto, mapProductToResponseThenDone);
+    catch (error) {
+        return mapToInternalServerErrorResponse(error);
+    }
 };
 
 export const updateProduct = (request: Request, done: Callback): void => {
     const dto: UpdateProductDTO = mapRequestToUpdateProductDTO(request);
     const validationOutcome: ValidationOutcome = validateUpdateProductDTO(dto);
     if (validationOutcome.error) {
-        done(mapValidationErrorToResponse(validationOutcome))
+        done(mapToErrorResponse(validationOutcome))
         return;
     }
 
@@ -110,7 +107,7 @@ export const updateProducts = (request: Request, done: Callback): void => {
     const dto: UpdateProductsDTO = mapRequestToUpdateProductsDTO(request);
     const validationOutcome: ValidationOutcome = validateUpdateProductsDTO(dto);
     if (validationOutcome.error) {
-        done(mapValidationErrorToResponse(validationOutcome))
+        done(mapToErrorResponse(validationOutcome))
         return;
     }
 
@@ -128,7 +125,7 @@ export const deleteProduct = (request: Request, done: Callback): void => {
     const dto: DeleteProductDTO = mapRequestToDeleteProductDTO(request);
     const validationOutcome: ValidationOutcome = validateDeleteProductDTO(dto);
     if (validationOutcome.error) {
-        done(mapValidationErrorToResponse(validationOutcome))
+        done(mapToErrorResponse(validationOutcome))
         return;
     }
 
@@ -143,7 +140,7 @@ export const deleteProducts = (request: Request, done: Callback): void => {
     const dto: DeleteProductsDTO = mapRequestToDeleteProductsDTO(request);
     const validationOutcome: ValidationOutcome = validateDeleteProductsDTO(dto);
     if (validationOutcome.error) {
-        done(mapValidationErrorToResponse(validationOutcome))
+        done(mapToErrorResponse(validationOutcome))
         return;
     }
 

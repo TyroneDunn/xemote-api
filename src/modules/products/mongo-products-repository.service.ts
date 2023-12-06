@@ -52,8 +52,10 @@ export const MongoProductsRepository: ProductsRepository = {
         return UserModel.find(mapToProductsFilter(dto.filter));
     },
 
-    deleteProduct(dto: DeleteProductDTO): Promise<Product> {
-
+    deleteProduct: async (dto: DeleteProductDTO): Promise<Product> => {
+        const result = (await ProductModel.findByIdAndDelete(dto._id));
+        if (result.ok === 0) throw new Error(`Error deleting product "${dto._id}".`);
+        return result.value;
     },
 
     deleteProducts(dto: DeleteProductsDTO): Promise<Product[]> {

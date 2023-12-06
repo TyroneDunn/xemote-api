@@ -99,22 +99,20 @@ export const updateProduct = async (request: Request): Promise<Response> => {
     }
 };
 
-export const updateProducts = (request: Request, done: Callback): void => {
+export const updateProducts = async (request: Request): Promise<Response> => {
     const dto: UpdateProductsDTO = mapRequestToUpdateProductsDTO(request);
-    const validationOutcome: ValidationOutcome = validateUpdateProductsDTO(dto);
-    if (validationOutcome.error) {
-        done(mapToErrorResponse(validationOutcome))
-        return;
-    }
+    const validationOutcome: ValidationOutcome = await validateUpdateProductsDTO(dto);
+    if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
 
     const addPageData = (response: Response) =>
         addRequestPageDataToResponse(request, response);
 
-    const mapProductsToResponseThenDone =
-        (products: Product[]): void =>
-            done(addPageData(mapProductsToResponse(products, HttpStatusCodes.OK)));
-
-    repository.updateProducts(dto, mapProductsToResponseThenDone)
+    try {
+        const products: Product[] = await repository.updateProducts(dto);
+        return addPageData(mapProductsToResponse(products, HttpStatusCodes.OK));
+    } catch (error) {
+        return mapToInternalServerErrorResponse(error);
+    }
 };
 
 export const deleteProduct = (request: Request, done: Callback): void => {

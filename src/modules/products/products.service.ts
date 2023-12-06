@@ -88,6 +88,7 @@ export const createProduct = async (request: Request): Promise<Response> => {
 
 export const updateProduct = async (request: Request): Promise<Response> => {
     const dto: UpdateProductDTO = mapRequestToUpdateProductDTO(request);
+
     const validationOutcome: ValidationOutcome = await validateUpdateProductDTO(dto);
     if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
 
@@ -101,6 +102,7 @@ export const updateProduct = async (request: Request): Promise<Response> => {
 
 export const updateProducts = async (request: Request): Promise<Response> => {
     const dto: UpdateProductsDTO = mapRequestToUpdateProductsDTO(request);
+
     const validationOutcome: ValidationOutcome = await validateUpdateProductsDTO(dto);
     if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
 
@@ -115,19 +117,18 @@ export const updateProducts = async (request: Request): Promise<Response> => {
     }
 };
 
-export const deleteProduct = (request: Request, done: Callback): void => {
+export const deleteProduct = async (request: Request): Promise<Response> => {
     const dto: DeleteProductDTO = mapRequestToDeleteProductDTO(request);
-    const validationOutcome: ValidationOutcome = validateDeleteProductDTO(dto);
-    if (validationOutcome.error) {
-        done(mapToErrorResponse(validationOutcome))
-        return;
+
+    const validationOutcome: ValidationOutcome = await validateDeleteProductDTO(dto);
+    if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
+
+    try {
+        const product: Product = await repository.deleteProduct(dto);
+        return mapProductToResponse(product, HttpStatusCodes.OK);
+    } catch (error) {
+        return mapToInternalServerErrorResponse(error);
     }
-
-    const mapProductToResponseThenDone =
-        (product: Product): void =>
-            done(mapProductToResponse(product, HttpStatusCodes.OK));
-
-    repository.deleteProduct(dto, mapProductToResponseThenDone);
 };
 
 export const deleteProducts = (request: Request, done: Callback): void => {

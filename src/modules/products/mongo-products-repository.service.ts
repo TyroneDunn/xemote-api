@@ -13,6 +13,7 @@ import {
     ProductsFilter
 } from "./products-dtos.type";
 import UserModel from "../users/mongo-user.model";
+import {DeleteResult} from "mongodb";
 
 export const MongoProductsRepository: ProductsRepository = {
     getProduct: (dto: GetProductDTO): Promise<Product> =>
@@ -58,8 +59,12 @@ export const MongoProductsRepository: ProductsRepository = {
         return result.value;
     },
 
-    deleteProducts(dto: DeleteProductsDTO): Promise<Product[]> {
-
+    deleteProducts: async (dto: DeleteProductsDTO): Promise<Product[]> => {
+        const filter = mapToProductsFilter(dto.filter);
+        const products: Product[] = await ProductModel.find(filter);
+        const result: DeleteResult = await ProductModel.deleteMany(filter);
+        if (!result.acknowledged) throw new Error(`Error deleting products.\n Filter: ${filter}`);
+        return products;
     },
 
     exists(dto: GetProductDTO): Promise<boolean> {

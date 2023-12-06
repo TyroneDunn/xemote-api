@@ -12,9 +12,8 @@ import {
 } from "./products-dtos.type";
 
 export const MongoProductsRepository: ProductsRepository = {
-    getProduct(dto: GetProductDTO): Promise<Product> {
-        return ProductModel.findById(dto._id);
-    },
+    getProduct: (dto: GetProductDTO): Promise<Product> =>
+        ProductModel.findById(dto._id),
 
     getProducts(dto: GetProductsDTO): Promise<Product[]> {
 

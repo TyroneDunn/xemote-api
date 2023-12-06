@@ -67,8 +67,13 @@ export const MongoProductsRepository: ProductsRepository = {
         return products;
     },
 
-    exists(dto: GetProductDTO): Promise<boolean> {
-        return false;
+    exists: async (dto: GetProductDTO): Promise<boolean> => {
+        try {
+            const product: Product = await ProductModel.findById(dto._id);
+            return !!product;
+        } catch (error) {
+            return false;
+        }
     }
 };
 

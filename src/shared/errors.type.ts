@@ -37,3 +37,11 @@ export class ForbiddenError implements Error {
     message: string;
     name: string;
 }
+
+export class InternalServerError implements Error {
+    constructor(message: string) {
+        this.message = message;
+    }
+    message: string;
+    name: string;
+}

@@ -1,4 +1,4 @@
-import {Callback, HttpStatusCodes, Request, Response} from "@hals/core";
+import {HttpStatusCodes, Request, Response} from "@hals/core";
 import {ProductsRepository} from "./products-repository.type";
 import {PRODUCTS_REPOSITORY} from "../../environment/repositories-config";
 import {
@@ -37,19 +37,21 @@ import {
 
 const repository: ProductsRepository = PRODUCTS_REPOSITORY;
 
-export const getProduct = (request: Request, done: Callback): void => {
+export const getProduct = async (request: Request): Promise<Response> => {
     const dto: GetProductDTO = mapRequestToGetProductDTO(request);
-    const validationOutcome: ValidationOutcome = validateGetProductDTO(dto);
-    if (validationOutcome.error) {
-        done(mapValidationErrorToResponse(validationOutcome))
-        return;
+
+    const validationOutcome: ValidationOutcome = await validateGetProductDTO(dto);
+    if (validationOutcome.error) return mapValidationErrorToResponse(validationOutcome);
+
+    try {
+        const product: Product = await repository.getProduct(dto);
+        return mapProductToResponse(product, HttpStatusCodes.OK);
+    } catch (error) {
+        return {
+            status: HttpStatusCodes.INTERNAL_SERVER_ERROR,
+            error: error.message
+        }
     }
-
-    const mapProductToResponseThenDone =
-        (product: Product): void =>
-            done(mapProductToResponse(product, HttpStatusCodes.OK));
-
-    repository.getProduct(dto, mapProductToResponseThenDone);
 };
 
 export const getProducts = (request: Request, done: Callback): void => {

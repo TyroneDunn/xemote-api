@@ -21,12 +21,16 @@ export type CreateProductDTO = {
     type: ProductType,
 };
 
-export type UpdateProductDTO = {
-    _id: string,
+export type UpdateProductFields = {
     newName?: string,
     newCostOfGood?: Price,
     newMarkup?: number,
     newType?: ProductType,
+}
+
+export type UpdateProductDTO = {
+    _id: string,
+    updateFields: UpdateProductFields,
 };
 
 export type UpdateProductsDTO = {
@@ -34,10 +38,7 @@ export type UpdateProductsDTO = {
     dateRange?: DateRange,
     sort?: ProductsSort[],
     page?: Pagination,
-    newName?: string,
-    newCostOfGood?: Price,
-    newMarkup?: number,
-    newType?: ProductType,
+    updateFields: UpdateProductFields,
 };
 
 export type DeleteProductDTO = { _id: string };

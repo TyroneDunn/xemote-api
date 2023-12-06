@@ -34,9 +34,12 @@ export const MongoProductsRepository: ProductsRepository = {
             markup: dto.markup,
         }).save(),
 
-    },
-
-    updateProduct(dto: UpdateProductDTO): Promise<Product> {
+    updateProduct: (dto: UpdateProductDTO): Promise<Product> =>
+        ProductModel.findOneAndUpdate(
+            {_id: dto._id},
+            mapToUpdateProductQuery(dto),
+            {new: true},
+        ),
 
     },
 

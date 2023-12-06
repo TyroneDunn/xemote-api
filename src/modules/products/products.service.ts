@@ -12,7 +12,7 @@ import {
 } from "./products-dto-validator.utility";
 import {Product} from "./product.type";
 import {ValidationOutcome} from "../../shared/validate/validation-dtos.type";
-import {mapValidationErrorToResponse} from "../../shared/validate/validation-dtos.utility";
+import {mapToErrorResponse} from "../../shared/validate/validation-dtos.utility";
 import {
     addRequestPageDataToResponse,
     mapProductsToResponse,
@@ -26,13 +26,13 @@ import {
     mapRequestToUpdateProductsDTO
 } from "./products-dtos.utility";
 import {
-    GetProductDTO,
-    GetProductsDTO,
     CreateProductDTO,
-    UpdateProductDTO,
-    UpdateProductsDTO,
     DeleteProductDTO,
     DeleteProductsDTO,
+    GetProductDTO,
+    GetProductsDTO,
+    UpdateProductDTO,
+    UpdateProductsDTO,
 } from "./products-dtos.type";
 
 const repository: ProductsRepository = PRODUCTS_REPOSITORY;
@@ -41,7 +41,7 @@ export const getProduct = async (request: Request): Promise<Response> => {
     const dto: GetProductDTO = mapRequestToGetProductDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateGetProductDTO(dto);
-    if (validationOutcome.error) return mapValidationErrorToResponse(validationOutcome);
+    if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
 
     try {
         const product: Product = await repository.getProduct(dto);
@@ -54,22 +54,26 @@ export const getProduct = async (request: Request): Promise<Response> => {
     }
 };
 
-export const getProducts = (request: Request, done: Callback): void => {
+const mapToInternalServerErrorResponse = (error): Response => ({
+    status: HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    error: error.message,
+});
+
+export const getProducts = async (request: Request): Promise<Response> => {
     const dto: GetProductsDTO = mapRequestToGetProductsDTO(request);
-    const validationOutcome: ValidationOutcome = validateGetProductsDTO(dto);
-    if (validationOutcome.error) {
-        done(mapValidationErrorToResponse(validationOutcome))
-        return;
+
+    const validationOutcome: ValidationOutcome = await validateGetProductsDTO(dto);
+    if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
+
+    try {
+        const products: Product[] = await repository.getProducts(dto);
+        const addPageData = (response: Response): Response =>
+            addRequestPageDataToResponse(request, response);
+        return addPageData(mapProductsToResponse(products, HttpStatusCodes.OK));
     }
-
-    const addPageData = (response: Response) =>
-        addRequestPageDataToResponse(request, response);
-
-    const mapProductsToResponseThenDone =
-        (products: Product[]): void =>
-            done(addPageData(mapProductsToResponse(products, HttpStatusCodes.OK)));
-
-    repository.getProducts(dto, mapProductsToResponseThenDone);
+    catch (error) {
+        return mapToInternalServerErrorResponse(error)
+    }
 };
 
 export const createProduct = (request: Request, done: Callback): void => {

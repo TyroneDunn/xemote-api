@@ -8,7 +8,7 @@ import {
     UnauthorizedError
 } from "../errors.type";
 
-export const mapValidationErrorToResponse = (validationOutcome: ValidationOutcome): Response => {
+export const mapToErrorResponse = (validationOutcome: ValidationOutcome): Response => {
     if (validationOutcome.error instanceof BadRequestError) return ({
         status: HttpStatusCodes.BAD_REQUEST,
         error: validationOutcome.error.message,

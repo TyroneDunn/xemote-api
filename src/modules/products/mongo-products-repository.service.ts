@@ -8,15 +8,18 @@ import {
     UpdateProductDTO,
     UpdateProductsDTO,
     DeleteProductDTO,
-    DeleteProductsDTO
+    DeleteProductsDTO,
+    UpdateProductFields,
+    ProductsFilter
 } from "./products-dtos.type";
+import UserModel from "../users/mongo-user.model";
 
 export const MongoProductsRepository: ProductsRepository = {
     getProduct: (dto: GetProductDTO): Promise<Product> =>
         ProductModel.findById(dto._id),
 
     getProducts: (dto: GetProductsDTO): Promise<Product[]> => {
-        const filter = mapToProductsFilter(dto);
+        const filter = mapToProductsFilter(dto.filter);
         const query = ProductModel.find(filter);
         dto.sort.forEach(productsSort => {
             query.sort({[productsSort.option]: productsSort.order === "asc"? 1: -1})
@@ -37,14 +40,16 @@ export const MongoProductsRepository: ProductsRepository = {
     updateProduct: (dto: UpdateProductDTO): Promise<Product> =>
         ProductModel.findOneAndUpdate(
             {_id: dto._id},
-            mapToUpdateProductQuery(dto),
+            mapToUpdateProductQuery(dto.updateFields),
             {new: true},
         ),
 
-    },
-
-    updateProducts(dto: UpdateProductsDTO): Promise<Product[]> {
-
+    updateProducts: async (dto: UpdateProductsDTO): Promise<Product[]> => {
+        await UserModel.updateMany(
+            mapToProductsFilter(dto.filter),
+            mapToUpdateProductQuery(dto.updateFields),
+        );
+        return UserModel.find(mapToProductsFilter(dto.filter));
     },
 
     deleteProduct(dto: DeleteProductDTO): Promise<Product> {
@@ -60,13 +65,19 @@ export const MongoProductsRepository: ProductsRepository = {
     }
 };
 
-const mapToProductsFilter = (dto: GetProductsDTO) => ({
-    ...dto.filter.name && {name: dto.filter.name},
-    ...dto.filter.nameRegex && {name: {$regex: dto.filter.nameRegex, $options: 'i'}},
-    ...dto.filter.type && {type: dto.filter.type},
-    ...dto.filter.typeRegex && {type: {$regex: dto.filter.typeRegex, $options: 'i'}},
-    ...(dto.filter.costRange.start && !dto.filter.costRange.end)  && {cost: {$gt: dto.filter.costRange.start}},
-    ...(!dto.filter.costRange.start && dto.filter.costRange.end)  && {cost: {$lt: dto.filter.costRange.end}},
-    ...(dto.filter.costRange.start && dto.filter.costRange.end)  && {cost: {$gt: dto.filter.costRange.start, $lt: dto.filter.costRange.end}},
+const mapToUpdateProductQuery = (dto: UpdateProductFields) => ({
+    ...dto.newName && {name: dto.newName},
+    ...dto.newType && {type: dto.newType},
+    ...dto.newCostOfGood && {costOfGood: dto.newCostOfGood},
+    ...dto.newMarkup && {markup: dto.newMarkup},
 });
 
+const mapToProductsFilter = (dto: ProductsFilter) => ({
+    ...dto.name && {name: dto.name},
+    ...dto.nameRegex && {name: {$regex: dto.nameRegex, $options: 'i'}},
+    ...dto.type && {type: dto.type},
+    ...dto.typeRegex && {type: {$regex: dto.typeRegex, $options: 'i'}},
+    ...(dto.costRange.start && !dto.costRange.end)  && {cost: {$gt: dto.costRange.start}},
+    ...(!dto.costRange.start && dto.costRange.end)  && {cost: {$lt: dto.costRange.end}},
+    ...(dto.costRange.start && dto.costRange.end)  && {cost: {$gt: dto.costRange.start, $lt: dto.costRange.end}},
+});

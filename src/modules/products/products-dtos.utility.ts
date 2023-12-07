@@ -60,10 +60,12 @@ export const mapRequestToDeleteProductsDTO = (request: Request): DeleteProductsD
 
 export const mapRequestToUpdateProductDTO = (request: Request): UpdateProductDTO => ({
     _id: request.paramMap['id'],
-    newName: request.payload['newName'],
-    newType: request.payload['newType'] as ProductType,
-    newCostOfGood: JSON.parse(request.payload['newCost']) as Price,
-    newMarkup: parseFloat(request.payload['newMarkup']),
+    updateFields: {
+        newName: request.payload['newName'],
+        newType: request.payload['newType'] as ProductType,
+        newCostOfGood: JSON.parse(request.payload['newCost']) as Price,
+        newMarkup: parseFloat(request.payload['newMarkup']),
+    }
 });
 
 export const mapRequestToUpdateProductsDTO = (request: Request): UpdateProductsDTO => {
@@ -79,10 +81,12 @@ export const mapRequestToUpdateProductsDTO = (request: Request): UpdateProductsD
         dateRange: JSON.parse(request.queryParamMap['dateRange']) as DateRange,
         sort: JSON.parse(request.queryParamMap['sort']) as ProductsSort[],
         page: JSON.parse(request.queryParamMap['page']) as Pagination,
-        newName: request.payload['newName'],
-        newType: request.payload['newType'] as ProductType,
-        newCostOfGood: JSON.parse(request.payload['newCost']) as Price,
-        newMarkup: parseFloat(request.payload['newMarkup']),
+        updateFields: {
+            newName: request.payload['newName'],
+            newType: request.payload['newType'] as ProductType,
+            newCostOfGood: JSON.parse(request.payload['newCost']) as Price,
+            newMarkup: parseFloat(request.payload['newMarkup']),
+        }
     };
 };
 

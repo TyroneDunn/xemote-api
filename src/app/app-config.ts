@@ -1,9 +1,10 @@
 import {
     App,
     Config,
-    buildAppConfig,
+    buildConfig,
     NodeEnvironmentOption,
-    HashingAlgorithm
+    LocalStrategy,
+    HashingAlgorithm,
 } from "@hals/core";
 import {
     API_PORT,
@@ -20,21 +21,25 @@ import {
 import {corsOptions} from "./cors-options-config";
 import {ProductsController} from "../modules/products/products.controller";
 
-export const config: Config = buildAppConfig(
+const localAuthStrategy: LocalStrategy = {
+    usersDbName: 'users',
+    usersDbUrl: MONGODB_URL,
+    usersDbOption: "MongoDB",
+    sessionSecret: SESSION_SECRET,
+    hashingAlgorithm: HASHING_ALGORITHM as HashingAlgorithm,
+    hashingIterations: HASHING_ITERATIONS,
+    passwordSalt: PASSWORD_SALT,
+    passwordLength: PASSWORD_LENGTH,
+};
+
+export const config: Config = buildConfig(
     `${NODE_ENV as NodeEnvironmentOption}`,
     "Express",
     `${API_TITLE}`,
     `${API_VERSION}`,
     API_PORT,
     corsOptions,
-    "Local",
-    'MongoDB',
-    MONGODB_URL,
-    SESSION_SECRET,
-    HASHING_ALGORITHM as HashingAlgorithm,
-    HASHING_ITERATIONS,
-    PASSWORD_LENGTH,
-    PASSWORD_SALT
+    localAuthStrategy
 );
 
 App.init(config, [

@@ -26,7 +26,8 @@ const getProductMethod: Method = {
     paramKeys: ['id'],
     queryParamKeys: [],
     sideEffects: [],
-    done: getProduct
+    middleware: [],
+    requestHandler: getProduct
 };
 
 const getProductsMethod: Method = {
@@ -34,7 +35,8 @@ const getProductsMethod: Method = {
     paramKeys: [],
     queryParamKeys: ProductsQueryParamKeys,
     sideEffects: [],
-    done: getProducts
+    middleware: [],
+    requestHandler: getProducts
 };
 
 const createProductMethod: Method = {
@@ -42,7 +44,8 @@ const createProductMethod: Method = {
     paramKeys: [],
     queryParamKeys: [],
     sideEffects: [],
-    done: createProduct
+    middleware: [],
+    requestHandler: createProduct
 };
 
 const updateProductMethod: Method = {
@@ -50,7 +53,8 @@ const updateProductMethod: Method = {
     paramKeys: ['id'],
     queryParamKeys: [],
     sideEffects: [],
-    done: updateProduct
+    middleware: [],
+    requestHandler: updateProduct
 };
 
 const updateProductsMethod: Method = {
@@ -58,7 +62,8 @@ const updateProductsMethod: Method = {
     paramKeys: [],
     queryParamKeys: ProductsQueryParamKeys,
     sideEffects: [],
-    done: updateProducts
+    middleware: [],
+    requestHandler: updateProducts
 };
 
 const deleteProductMethod: Method = {
@@ -66,7 +71,8 @@ const deleteProductMethod: Method = {
     paramKeys: ['id'],
     queryParamKeys: [],
     sideEffects: [],
-    done: deleteProduct
+    middleware: [],
+    requestHandler: deleteProduct
 };
 
 const deleteProductsMethod: Method = {
@@ -74,7 +80,8 @@ const deleteProductsMethod: Method = {
     paramKeys: [],
     queryParamKeys: ProductsQueryParamKeys,
     sideEffects: [],
-    done: deleteProducts
+    middleware: [],
+    requestHandler: deleteProducts
 };
 
 export const ProductsController: Controller = {

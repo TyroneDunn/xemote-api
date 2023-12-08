@@ -21,15 +21,6 @@ export const ProductsQueryParamKeys: string[] = [
     'page',
 ];
 
-const getProductMethod: Method = {
-    type: "GET",
-    paramKeys: ['id'],
-    queryParamKeys: [],
-    sideEffects: [],
-    middleware: [],
-    requestHandler: getProduct
-};
-
 const getProductsMethod: Method = {
     type: "GET",
     paramKeys: [],
@@ -37,6 +28,15 @@ const getProductsMethod: Method = {
     sideEffects: [],
     middleware: [],
     requestHandler: getProducts
+};
+
+const getProductMethod: Method = {
+    type: "GET",
+    paramKeys: ['id'],
+    queryParamKeys: [],
+    sideEffects: [],
+    middleware: [],
+    requestHandler: getProduct
 };
 
 const createProductMethod: Method = {
@@ -48,15 +48,6 @@ const createProductMethod: Method = {
     requestHandler: createProduct
 };
 
-const updateProductMethod: Method = {
-    type: "PATCH",
-    paramKeys: ['id'],
-    queryParamKeys: [],
-    sideEffects: [],
-    middleware: [],
-    requestHandler: updateProduct
-};
-
 const updateProductsMethod: Method = {
     type: "PATCH",
     paramKeys: [],
@@ -66,13 +57,13 @@ const updateProductsMethod: Method = {
     requestHandler: updateProducts
 };
 
-const deleteProductMethod: Method = {
-    type: "DELETE",
+const updateProductMethod: Method = {
+    type: "PATCH",
     paramKeys: ['id'],
     queryParamKeys: [],
     sideEffects: [],
     middleware: [],
-    requestHandler: deleteProduct
+    requestHandler: updateProduct
 };
 
 const deleteProductsMethod: Method = {
@@ -84,16 +75,25 @@ const deleteProductsMethod: Method = {
     requestHandler: deleteProducts
 };
 
+const deleteProductMethod: Method = {
+    type: "DELETE",
+    paramKeys: ['id'],
+    queryParamKeys: [],
+    sideEffects: [],
+    middleware: [],
+    requestHandler: deleteProduct
+};
+
 export const ProductsController: Controller = {
     path: 'products/',
     guard: true,
     methods: [
-        getProductMethod,
         getProductsMethod,
+        getProductMethod,
         createProductMethod,
-        updateProductMethod,
         updateProductsMethod,
-        deleteProductMethod,
+        updateProductMethod,
         deleteProductsMethod,
+        deleteProductMethod,
     ]
 };

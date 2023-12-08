@@ -1,10 +1,11 @@
 import {
     App,
     Config,
-    buildConfig,
     NodeEnvironmentOption,
     LocalStrategy,
     HashingAlgorithm,
+    buildConfig,
+    buildLocalAuthStrategy,
 } from "@hals/core";
 import {
     API_PORT,

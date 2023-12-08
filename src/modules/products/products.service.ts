@@ -41,7 +41,7 @@ export const getProduct = async (request: Request): Promise<Response> => {
     const dto: GetProductDTO = mapRequestToGetProductDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateGetProductDTO(dto);
-    if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
+    if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);
 
     try {
         const product: Product = await repository.getProduct(dto);
@@ -60,15 +60,14 @@ export const getProducts = async (request: Request): Promise<Response> => {
     const dto: GetProductsDTO = mapRequestToGetProductsDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateGetProductsDTO(dto);
-    if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
-
+    if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);
     try {
         const products: Product[] = await repository.getProducts(dto);
         const addPageData = (response: Response): Response =>
             addRequestPageDataToResponse(request, response);
         return addPageData(mapProductsToResponse(products, HttpStatusCodes.OK));
     } catch (error) {
-        return mapToInternalServerErrorResponse(error)
+        return mapToInternalServerErrorResponse(error);
     }
 };
 

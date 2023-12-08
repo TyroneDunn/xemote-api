@@ -40,5 +40,5 @@ const ProductSchema = new Schema<ProductsDocument>({
     }
 });
 
-const ProductModel = database.model<ProductsDocument>('Product', ProductSchema);
+const ProductModel = database.model<ProductsDocument>('products', ProductSchema);
 export {ProductModel};

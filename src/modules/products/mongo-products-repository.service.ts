@@ -22,11 +22,14 @@ export const MongoProductsRepository: ProductsRepository = {
     getProducts: (dto: GetProductsDTO): Promise<Product[]> => {
         const filter = mapToProductsFilter(dto.filter);
         const query = ProductModel.find(filter);
-        dto.sort.forEach(productsSort => {
-            query.sort({[productsSort.option]: productsSort.order === "asc"? 1: -1})
-        });
-        query.skip(dto.page.index * dto.page.limit);
-        query.limit(dto.page.limit);
+        if (dto.sort !== undefined)
+            dto.sort.forEach(productsSort => {
+                query.sort({[productsSort.option]: productsSort.order === "asc"? 1: -1})
+            });
+        if (dto.page !== undefined) {
+            query.skip(dto.page.index * dto.page.limit);
+            query.limit(dto.page.limit);
+        }
         return query.exec();
     },
 
@@ -89,7 +92,9 @@ const mapToProductsFilter = (dto: ProductsFilter) => ({
     ...dto.nameRegex && {name: {$regex: dto.nameRegex, $options: 'i'}},
     ...dto.type && {type: dto.type},
     ...dto.typeRegex && {type: {$regex: dto.typeRegex, $options: 'i'}},
-    ...(dto.costRange.start && !dto.costRange.end)  && {cost: {$gt: dto.costRange.start}},
-    ...(!dto.costRange.start && dto.costRange.end)  && {cost: {$lt: dto.costRange.end}},
-    ...(dto.costRange.start && dto.costRange.end)  && {cost: {$gt: dto.costRange.start, $lt: dto.costRange.end}},
+    ...dto.costRange && {
+        ...(dto.costRange.start && !dto.costRange.end)  && {cost: {$gt: dto.costRange.start}},
+        ...(!dto.costRange.start && dto.costRange.end)  && {cost: {$lt: dto.costRange.end}},
+        ...(dto.costRange.start && dto.costRange.end)  && {cost: {$gt: dto.costRange.start, $lt: dto.costRange.end}},
+    },
 });

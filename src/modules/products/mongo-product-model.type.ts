@@ -11,16 +11,19 @@ interface ProductsDocument extends Document, Product {
     type: ProductType,
 }
 
-const PriceSchema = new Schema({
-    price: {
-        type: String,
-        required: true
+const PriceSchema = new Schema(
+    {
+        price: {
+            type: String,
+            required: true
+        },
+        currency: {
+            type: String,
+            required: true,
+        },
     },
-    currency: {
-        type: String,
-        required: true,
-    },
-})
+    {_id: false, }
+);
 
 const ProductSchema = new Schema<ProductsDocument>({
     name: {

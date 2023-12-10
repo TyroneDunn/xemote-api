@@ -26,10 +26,10 @@ export const mapRequestToGetProductsDTO = (request: Request): GetProductsDTO =>
             ...request.queryParamMap['nameRegex'] && {nameRegex: request.queryParamMap['nameRegex']},
             ...request.queryParamMap['type'] && {type: request.queryParamMap['type'] as ProductType},
             ...request.queryParamMap['typeRegex'] && {typeRegex: request.queryParamMap['typeRegex']},
-            ...request.queryParamMap['costRange'] && {
-                costRange: {
-                    start: JSON.parse(request.queryParamMap['costRange']).start,
-                    end: JSON.parse(request.queryParamMap['costRange']).end,
+            ...request.queryParamMap['costPriceRange'] && {
+                costPriceRange: {
+                    start: JSON.parse(request.queryParamMap['costPriceRange']).start,
+                    end: JSON.parse(request.queryParamMap['costPriceRange']).end,
                 }
             },
             ...request.queryParamMap['markupRange'] && {markupRange: JSON.parse(request.queryParamMap['markupRange']) as NumberRange},
@@ -63,7 +63,7 @@ export const mapRequestToDeleteProductsDTO = (request: Request): DeleteProductsD
         nameRegex: request.queryParamMap['nameRegex'],
         type: request.queryParamMap['type'] as ProductType,
         typeRegex: request.queryParamMap['typeRegex'],
-        costRange: JSON.parse(request.queryParamMap['costRange']) as NumberRange,
+        costPriceRange: JSON.parse(request.queryParamMap['costRange']) as NumberRange,
         markupRange: JSON.parse(request.queryParamMap['markupRange']) as NumberRange,
     },
     dateRange: JSON.parse(request.queryParamMap['dateRange']) as DateRange,
@@ -88,7 +88,7 @@ export const mapRequestToUpdateProductsDTO = (request: Request): UpdateProductsD
             nameRegex: request.queryParamMap['nameRegex'],
             type: request.queryParamMap['type'] as ProductType,
             typeRegex: request.queryParamMap['typeRegex'],
-            costRange: JSON.parse(request.queryParamMap['costRange']) as NumberRange,
+            costPriceRange: JSON.parse(request.queryParamMap['costRange']) as NumberRange,
             markupRange: JSON.parse(request.queryParamMap['markupRange']) as NumberRange,
         },
         dateRange: JSON.parse(request.queryParamMap['dateRange']) as DateRange,

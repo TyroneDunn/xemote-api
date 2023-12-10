@@ -92,10 +92,10 @@ const mapToProductsFilter = (dto: ProductsFilter) => ({
     ...dto.nameRegex && {name: {$regex: dto.nameRegex, $options: 'i'}},
     ...dto.type && {type: dto.type},
     ...dto.typeRegex && {type: {$regex: dto.typeRegex, $options: 'i'}},
-    ...dto.costRange && {
-        ...(dto.costRange.start && !dto.costRange.end) && {'costPrice.price': {$gt: dto.costRange.start}},
-        ...(!dto.costRange.start && dto.costRange.end) && {'costPrice.price': {$lt: dto.costRange.end}},
-        ...(dto.costRange.start && dto.costRange.end) && {'costPrice.price': {$gt: dto.costRange.start, $lt: dto.costRange.end}},
+    ...dto.costPriceRange && {
+        ...(dto.costPriceRange.start && !dto.costPriceRange.end) && {'costPrice.price': {$gt: dto.costPriceRange.start}},
+        ...(!dto.costPriceRange.start && dto.costPriceRange.end) && {'costPrice.price': {$lt: dto.costPriceRange.end}},
+        ...(dto.costPriceRange.start && dto.costPriceRange.end) && {'costPrice.price': {$gt: dto.costPriceRange.start, $lt: dto.costPriceRange.end}},
     },
     ...dto.markupRange && {
         ...(dto.markupRange.start && !dto.markupRange.end) && {'markup': {$gt: dto.markupRange.start}},

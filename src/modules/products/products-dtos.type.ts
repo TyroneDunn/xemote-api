@@ -55,7 +55,7 @@ export type ProductsFilter = {
     nameRegex?: string,
     type?: ProductType,
     typeRegex?: string,
-    costRange?: NumberRange,
+    costPriceRange?: NumberRange,
     markupRange?: NumberRange,
 };
 

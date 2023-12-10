@@ -14,7 +14,7 @@ export const ProductsQueryParamKeys: string[] = [
     'nameRegex',
     'type',
     'typeRegex',
-    'costRange',
+    'costPriceRange',
     'markupRange',
     'dateRange',
     'sort',

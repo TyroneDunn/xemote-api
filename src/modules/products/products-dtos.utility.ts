@@ -32,7 +32,7 @@ export const mapRequestToGetProductsDTO = (request: Request): GetProductsDTO =>
                     end: JSON.parse(request.queryParamMap['costRange']).end,
                 }
             },
-            ...request.queryParamMap['name'] && {markupRange: JSON.parse(request.queryParamMap['markupRange']) as NumberRange},
+            ...request.queryParamMap['markupRange'] && {markupRange: JSON.parse(request.queryParamMap['markupRange']) as NumberRange},
         },
         ...request.queryParamMap['dateRange'] && {
             dateRange: {

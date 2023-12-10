@@ -14,7 +14,7 @@ interface ProductsDocument extends Document, Product {
 const CostPriceSchema = new Schema(
     {
         price: {
-            type: String,
+            type: Number,
             required: true
         },
         currency: {

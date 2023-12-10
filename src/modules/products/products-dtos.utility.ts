@@ -49,7 +49,7 @@ export const mapRequestToGetProductsDTO = (request: Request): GetProductsDTO =>
 export const mapRequestToCreateProductDTO = (request: Request): CreateProductDTO => ({
     name: request.payload['name'],
     type: request.payload['type'] as ProductType,
-    costOfGood: JSON.parse(request.payload['cost']) as Price,
+    costPrice: request.payload['costPrice'] as Price,
     markup: parseFloat(request.payload['markup']),
 });
 

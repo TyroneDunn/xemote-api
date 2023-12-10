@@ -6,12 +6,12 @@ import {Price} from "../../shared/price.type";
 interface ProductsDocument extends Document, Product {
     _id: string,
     name: string,
-    costOfGood: Price,
+    costPrice: Price,
     markup: number,
     type: ProductType,
 }
 
-const PriceSchema = new Schema(
+const CostPriceSchema = new Schema(
     {
         price: {
             type: String,
@@ -31,8 +31,8 @@ const ProductSchema = new Schema<ProductsDocument>(
             type: String,
             required: true
         },
-        costOfGood: {
-            type: PriceSchema,
+        costPrice: {
+            type: CostPriceSchema,
             required: true,
         },
         markup: {

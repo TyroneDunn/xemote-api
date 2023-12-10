@@ -37,7 +37,7 @@ export const MongoProductsRepository: ProductsRepository = {
         new ProductModel({
             name: dto.name,
             type: dto.type,
-            costOfGood: dto.costOfGood,
+            costPrice: dto.costPrice,
             markup: dto.markup,
         }).save(),
 
@@ -93,8 +93,8 @@ const mapToProductsFilter = (dto: ProductsFilter) => ({
     ...dto.type && {type: dto.type},
     ...dto.typeRegex && {type: {$regex: dto.typeRegex, $options: 'i'}},
     ...dto.costRange && {
-        ...(dto.costRange.start && !dto.costRange.end)  && {cost: {$gt: dto.costRange.start}},
-        ...(!dto.costRange.start && dto.costRange.end)  && {cost: {$lt: dto.costRange.end}},
-        ...(dto.costRange.start && dto.costRange.end)  && {cost: {$gt: dto.costRange.start, $lt: dto.costRange.end}},
+        ...(dto.costRange.start && !dto.costRange.end) && {'costPrice.price': {$gt: dto.costRange.start}},
+        ...(!dto.costRange.start && dto.costRange.end) && {'costPrice.price': {$lt: dto.costRange.end}},
+        ...(dto.costRange.start && dto.costRange.end) && {'costPrice.price': {$gt: dto.costRange.start, $lt: dto.costRange.end}},
     },
 });

@@ -16,7 +16,7 @@ export type GetProductsDTO = {
 
 export type CreateProductDTO = {
     name: string,
-    costOfGood: Price,
+    costPrice: Price,
     markup: number,
     type: ProductType,
 };
@@ -59,7 +59,7 @@ export type ProductsFilter = {
     markupRange?: NumberRange,
 };
 
-export type ProductsSortOptions = "name" | "type" | "cost" | "markup" | "dateCreated" | "lastUpdated";
+export type ProductsSortOptions = "name" | "type" | "costPrice" | "markup" | "dateCreated" | "lastUpdated";
 
 export type ProductsSort = {
     option: ProductsSortOptions,

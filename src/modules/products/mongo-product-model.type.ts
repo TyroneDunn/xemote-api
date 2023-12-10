@@ -25,23 +25,26 @@ const PriceSchema = new Schema(
     {_id: false, }
 );
 
-const ProductSchema = new Schema<ProductsDocument>({
-    name: {
-        type: String,
-        required: true
+const ProductSchema = new Schema<ProductsDocument>(
+    {
+        name: {
+            type: String,
+            required: true
+        },
+        costOfGood: {
+            type: PriceSchema,
+            required: true,
+        },
+        markup: {
+            type: Number,
+            required: true
+        },
+        type: {
+            type: String,
+        }
     },
-    costOfGood: {
-        type: PriceSchema,
-        required: true,
-    },
-    markup: {
-        type: Number,
-        required: true
-    },
-    type: {
-        type: String,
-    }
-});
+    {timestamps: true}
+);
 
 const ProductModel = database.model<ProductsDocument>('products', ProductSchema);
 export {ProductModel};

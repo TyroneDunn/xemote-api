@@ -97,4 +97,9 @@ const mapToProductsFilter = (dto: ProductsFilter) => ({
         ...(!dto.costRange.start && dto.costRange.end) && {'costPrice.price': {$lt: dto.costRange.end}},
         ...(dto.costRange.start && dto.costRange.end) && {'costPrice.price': {$gt: dto.costRange.start, $lt: dto.costRange.end}},
     },
+    ...dto.markupRange && {
+        ...(dto.markupRange.start && !dto.markupRange.end) && {'markup': {$gt: dto.markupRange.start}},
+        ...(!dto.markupRange.start && dto.markupRange.end) && {'markup': {$lt: dto.markupRange.end}},
+        ...(dto.markupRange.start && dto.markupRange.end) && {'markup': {$gt: dto.markupRange.start, $lt: dto.markupRange.end}},
+    },
 });

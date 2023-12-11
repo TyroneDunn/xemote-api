@@ -24,36 +24,10 @@ export const mapRequestToGetProductDTO = (request: Request): GetProductDTO => ({
 
 export const mapRequestToGetProductsDTO = (request: Request): GetProductsDTO =>
     ({
-        filter: {...mapToProductsFilter(request)},
-        ...(request.queryParamMap['createdAt'] && !request.queryParamMap['updatedAt']) && {
-            timestamp: {
-                createdAt: (JSON.parse(request.queryParamMap['createdAt']) as DateRange)
-            },
-        },
-        ...(request.queryParamMap['updatedAt'] && !request.queryParamMap['createdAt']) && {
-            timestamp: {
-                updatedAt: (JSON.parse(request.queryParamMap['updatedAt']) as DateRange)
-            }
-        },
-        ...(request.queryParamMap['createdAt'] && request.queryParamMap['updatedAt']) && {
-            timestamp: {
-                createdAt: (JSON.parse(request.queryParamMap['createdAt']) as DateRange),
-                updatedAt: (JSON.parse(request.queryParamMap['updatedAt']) as DateRange)
-            },
-        },
-        ...(request.queryParamMap['sort'] && request.queryParamMap['order']) && {
-            sort: {
-                field: request.queryParamMap['sort'] as ProductsSortOptions,
-                order: request.queryParamMap['order'] as OrderOptions,
-            }
-        },
-
-        ...(request.queryParamMap['index'] && request.queryParamMap['limit']) && {
-            page: {
-                index: parseInt(request.queryParamMap['index']),
-                limit: parseInt(request.queryParamMap['limit'])
-            }
-        },
+        ...mapToProductsFilter(request),
+        ...mapToTimestamps(request),
+        ...mapToProductsSort(request),
+        ...mapToPage(request),
     });
 
 export const mapRequestToCreateProductDTO = (request: Request): CreateProductDTO => ({
@@ -73,18 +47,58 @@ export const mapRequestToUpdateProductDTO = (request: Request): UpdateProductDTO
     }
 });
 
-const mapToProductsFilter = (request: Request): ProductsFilter => ({
-    ...request.queryParamMap['name'] && {name: request.queryParamMap['name']},
-    ...request.queryParamMap['nameRegex'] && {nameRegex: request.queryParamMap['nameRegex']},
-    ...request.queryParamMap['type'] && {type: request.queryParamMap['type'] as ProductType},
-    ...request.queryParamMap['typeRegex'] && {typeRegex: request.queryParamMap['typeRegex']},
-    ...request.queryParamMap['costPriceRange'] && {
-        costPriceRange: JSON.parse(request.queryParamMap['costPriceRange']) as NumberRange,
+const mapToProductsFilter = (request: Request) =>
+    ({
+        filter: {
+            ...request.queryParamMap['name'] && {name: request.queryParamMap['name']},
+            ...request.queryParamMap['nameRegex'] && {nameRegex: request.queryParamMap['nameRegex']},
+            ...request.queryParamMap['type'] && {type: request.queryParamMap['type'] as ProductType},
+            ...request.queryParamMap['typeRegex'] && {typeRegex: request.queryParamMap['typeRegex']},
+            ...request.queryParamMap['costPriceRange'] && {
+                costPriceRange: JSON.parse(request.queryParamMap['costPriceRange']) as NumberRange,
+            },
+            ...request.queryParamMap['markupRange'] && {
+                markupRange: JSON.parse(request.queryParamMap['markupRange']) as NumberRange
+            },
+        }
+    });
+
+const mapToTimestamps = (request: Request) => ({
+    ...(request.queryParamMap['createdAt'] && !request.queryParamMap['updatedAt']) && {
+        timestamps: {
+            createdAt: (JSON.parse(request.queryParamMap['createdAt']) as DateRange)
+        },
     },
-    ...request.queryParamMap['markupRange'] && {
-        markupRange: JSON.parse(request.queryParamMap['markupRange']) as NumberRange
+    ...(request.queryParamMap['updatedAt'] && !request.queryParamMap['createdAt']) && {
+        timestamps: {
+            updatedAt: (JSON.parse(request.queryParamMap['updatedAt']) as DateRange)
+        }
     },
-})
+    ...(request.queryParamMap['createdAt'] && request.queryParamMap['updatedAt']) && {
+        timestamps: {
+            createdAt: (JSON.parse(request.queryParamMap['createdAt']) as DateRange),
+            updatedAt: (JSON.parse(request.queryParamMap['updatedAt']) as DateRange)
+        },
+    },
+});
+
+const mapToProductsSort = (request: Request) => ({
+    ...(request.queryParamMap['sort'] && request.queryParamMap['order']) && {
+        sort: {
+            field: request.queryParamMap['sort'] as ProductsSortOptions,
+            order: request.queryParamMap['order'] as OrderOptions,
+        }
+    },
+});
+
+const mapToPage = (request: Request) => ({
+    ...(request.queryParamMap['index'] && request.queryParamMap['limit']) && {
+        page: {
+            index: parseInt(request.queryParamMap['index']),
+            limit: parseInt(request.queryParamMap['limit'])
+        }
+    },
+});
 
 export const mapRequestToUpdateProductsDTO = (request: Request): UpdateProductsDTO => ({
     filter: {...mapToProductsFilter(request)},

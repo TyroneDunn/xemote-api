@@ -12,10 +12,8 @@ import {
 } from "./products-dtos.type";
 import {NumberRange} from "../../shared/number-range.type";
 import {DateRange} from "../../shared/date-range.type";
-import {Pagination} from "../../shared/pagination.type";
 import {Price} from "../../shared/price.type";
 import {OrderOptions} from "../../shared/order-options.type";
-import {Timestamps} from "../../shared/timestamps.type";
 
 export const mapToGetProductDTO = (request: Request): GetProductDTO => ({
     _id: request.paramMap['id'],
@@ -47,6 +45,17 @@ export const mapToUpdateProductsDTO = (request: Request): UpdateProductsDTO => (
     ...mapToProductsSort(request),
     ...mapToPage(request),
     ...mapToUpdateFields(request)
+});
+
+export const mapToDeleteProductDTO = (request: Request): DeleteProductDTO => ({
+    _id: request.paramMap['id'],
+});
+
+export const mapToDeleteProductsDTO = (request: Request): DeleteProductsDTO => ({
+    ...mapToProductsFilter(request),
+    ...mapToTimestamps(request),
+    ...mapToProductsSort(request),
+    ...mapToPage(request),
 });
 
 const mapToProductsFilter = (request: Request) =>

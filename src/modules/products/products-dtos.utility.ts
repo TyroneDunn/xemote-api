@@ -6,6 +6,7 @@ import {
     DeleteProductsDTO,
     GetProductDTO,
     GetProductsDTO,
+    ProductsFilter,
     ProductsSortOptions,
     UpdateProductDTO,
     UpdateProductsDTO
@@ -23,18 +24,7 @@ export const mapRequestToGetProductDTO = (request: Request): GetProductDTO => ({
 
 export const mapRequestToGetProductsDTO = (request: Request): GetProductsDTO =>
     ({
-        filter: {
-            ...request.queryParamMap['name'] && {name: request.queryParamMap['name']},
-            ...request.queryParamMap['nameRegex'] && {nameRegex: request.queryParamMap['nameRegex']},
-            ...request.queryParamMap['type'] && {type: request.queryParamMap['type'] as ProductType},
-            ...request.queryParamMap['typeRegex'] && {typeRegex: request.queryParamMap['typeRegex']},
-            ...request.queryParamMap['costPriceRange'] && {
-                costPriceRange: JSON.parse(request.queryParamMap['costPriceRange']) as NumberRange,
-            },
-            ...request.queryParamMap['markupRange'] && {
-                markupRange: JSON.parse(request.queryParamMap['markupRange']) as NumberRange
-            },
-        },
+        filter: {...mapToProductsFilter(request)},
         ...(request.queryParamMap['createdAt'] && !request.queryParamMap['updatedAt']) && {
             timestamp: {
                 createdAt: (JSON.parse(request.queryParamMap['createdAt']) as DateRange)
@@ -83,14 +73,30 @@ export const mapRequestToUpdateProductDTO = (request: Request): UpdateProductDTO
     }
 });
 
-export const mapRequestToDeleteProductsDTO = (request: Request): DeleteProductsDTO => ({
-    filter: {
-        name: request.queryParamMap['name'],
-        nameRegex: request.queryParamMap['nameRegex'],
-        type: request.queryParamMap['type'] as ProductType,
-        typeRegex: request.queryParamMap['typeRegex'],
-        costPriceRange: JSON.parse(request.queryParamMap['costRange']) as NumberRange,
-        markupRange: JSON.parse(request.queryParamMap['markupRange']) as NumberRange,
+const mapToProductsFilter = (request: Request): ProductsFilter => ({
+    ...request.queryParamMap['name'] && {name: request.queryParamMap['name']},
+    ...request.queryParamMap['nameRegex'] && {nameRegex: request.queryParamMap['nameRegex']},
+    ...request.queryParamMap['type'] && {type: request.queryParamMap['type'] as ProductType},
+    ...request.queryParamMap['typeRegex'] && {typeRegex: request.queryParamMap['typeRegex']},
+    ...request.queryParamMap['costPriceRange'] && {
+        costPriceRange: JSON.parse(request.queryParamMap['costPriceRange']) as NumberRange,
+    },
+    ...request.queryParamMap['markupRange'] && {
+        markupRange: JSON.parse(request.queryParamMap['markupRange']) as NumberRange
+    },
+})
+
+export const mapRequestToUpdateProductsDTO = (request: Request): UpdateProductsDTO => ({
+    filter: {...mapToProductsFilter(request)},
+    ...(request.queryParamMap['createdAt'] && !request.queryParamMap['updatedAt']) && {
+        timestamp: {
+            createdAt: (JSON.parse(request.queryParamMap['createdAt']) as DateRange)
+        },
+    },
+    ...(request.queryParamMap['updatedAt'] && !request.queryParamMap['createdAt']) && {
+        timestamp: {
+            updatedAt: (JSON.parse(request.queryParamMap['updatedAt']) as DateRange)
+        }
     },
     dateRange: JSON.parse(request.queryParamMap['dateRange']) as DateRange,
     sort: JSON.parse(request.queryParamMap['sort']) as ProductsSort[],

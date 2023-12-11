@@ -16,9 +16,9 @@ export type GetProductsDTO = {
 
 export type CreateProductDTO = {
     name: string,
+    type: ProductType,
     costPrice: Price,
     markup: number,
-    type: ProductType,
 };
 
 export type UpdateProductFields = {

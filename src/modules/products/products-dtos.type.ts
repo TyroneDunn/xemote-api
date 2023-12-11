@@ -7,7 +7,7 @@ import {Timestamps} from "../../shared/timestamps.type";
 
 export type GetProductDTO = { _id: string };
 
-export type GetProductsDTO = {
+export type ProductsDTO = {
     filter?: ProductsFilter,
     timestamps?: Timestamps,
     sort?: ProductsSort,
@@ -42,13 +42,6 @@ export type UpdateProductsDTO = {
 };
 
 export type DeleteProductDTO = { _id: string };
-
-export type DeleteProductsDTO = {
-    filter?: ProductsFilter,
-    timestamps?: Timestamps,
-    sort?: ProductsSort,
-    page?: Pagination,
-};
 
 export type ProductsFilter = {
     name?: string,

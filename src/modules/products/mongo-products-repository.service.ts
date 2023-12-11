@@ -3,12 +3,11 @@ import {ProductModel} from "./mongo-product-model.type";
 import {Product} from "./product.type";
 import {
     GetProductDTO,
-    GetProductsDTO,
+    ProductsDTO,
     CreateProductDTO,
     UpdateProductDTO,
     UpdateProductsDTO,
     DeleteProductDTO,
-    DeleteProductsDTO,
     UpdateProductFields,
     ProductsFilter
 } from "./products-dtos.type";
@@ -62,7 +61,7 @@ export const MongoProductsRepository: ProductsRepository = {
         return result.value;
     },
 
-    deleteProducts: async (dto: DeleteProductsDTO): Promise<Product[]> => {
+    deleteProducts: async (dto: ProductsDTO): Promise<Product[]> => {
         const filter = mapToProductsFilter(dto.filter);
         const products: Product[] = await ProductModel.find(filter);
         const result: DeleteResult = await ProductModel.deleteMany(filter);

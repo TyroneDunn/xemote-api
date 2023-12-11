@@ -3,9 +3,8 @@ import {Request, Response} from "@hals/core";
 import {
     CreateProductDTO,
     DeleteProductDTO,
-    DeleteProductsDTO,
+    ProductsDTO,
     GetProductDTO,
-    GetProductsDTO,
     ProductsSortOptions,
     UpdateProductDTO,
     UpdateProductsDTO
@@ -19,7 +18,7 @@ export const mapToGetProductDTO = (request: Request): GetProductDTO => ({
     _id: request.paramMap['id'],
 });
 
-export const mapToGetProductsDTO = (request: Request): GetProductsDTO =>
+export const mapToProductsDTO = (request: Request): ProductsDTO =>
     ({
         ...mapToProductsFilter(request),
         ...mapToTimestamps(request),
@@ -49,13 +48,6 @@ export const mapToUpdateProductsDTO = (request: Request): UpdateProductsDTO => (
 
 export const mapToDeleteProductDTO = (request: Request): DeleteProductDTO => ({
     _id: request.paramMap['id'],
-});
-
-export const mapToDeleteProductsDTO = (request: Request): DeleteProductsDTO => ({
-    ...mapToProductsFilter(request),
-    ...mapToTimestamps(request),
-    ...mapToProductsSort(request),
-    ...mapToPage(request),
 });
 
 const mapToProductsFilter = (request: Request) =>

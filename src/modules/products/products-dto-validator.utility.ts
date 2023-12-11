@@ -2,9 +2,8 @@ import {ValidationOutcome} from "../../shared/validate/validation-dtos.type";
 import {
     CreateProductDTO,
     DeleteProductDTO,
-    DeleteProductsDTO,
+    ProductsDTO,
     GetProductDTO,
-    GetProductsDTO,
     UpdateProductDTO,
     UpdateProductsDTO,
 } from "./products-dtos.type";
@@ -22,26 +21,26 @@ export const validateGetProductDTO = async (dto: GetProductDTO): Promise<Validat
     return {};
 };
 
-export const validateGetProductsDTO = async (dto: GetProductsDTO): Promise<ValidationOutcome> => {
-    return undefined;
+export const validateGetProductsDTO = async (dto: ProductsDTO): Promise<ValidationOutcome> => {
+    return {};
 };
 
 export const validateCreateProductDTO = async (dto: CreateProductDTO): Promise<ValidationOutcome> => {
-    return undefined;
+    return {};
 };
 
 export const validateUpdateProductDTO = async (dto: UpdateProductDTO): Promise<ValidationOutcome> => {
-    return undefined;
+    return {};
 };
 
 export const validateUpdateProductsDTO = async (dto: UpdateProductsDTO): Promise<ValidationOutcome> => {
-    return undefined;
+    return {};
 };
 
 export const validateDeleteProductDTO = async (dto: DeleteProductDTO): Promise<ValidationOutcome> => {
-    return undefined;
+    return {};
 };
 
-export const validateDeleteProductsDTO = async (dto: DeleteProductsDTO): Promise<ValidationOutcome> => {
-    return undefined;
+export const validateDeleteProductsDTO = async (dto: ProductsDTO): Promise<ValidationOutcome> => {
+    return {};
 };

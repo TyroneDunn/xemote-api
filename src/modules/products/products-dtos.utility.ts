@@ -73,8 +73,14 @@ export const mapRequestToCreateProductDTO = (request: Request): CreateProductDTO
     markup: parseFloat(request.payload['markup']),
 });
 
-export const mapRequestToDeleteProductDTO = (request: Request): DeleteProductDTO => ({
+export const mapRequestToUpdateProductDTO = (request: Request): UpdateProductDTO => ({
     _id: request.paramMap['id'],
+    updateFields: {
+        ...request.payload['newName'] && {newName: request.payload['newName']},
+        ...request.payload['newType'] && {newType: request.payload['newType'] as ProductType},
+        ...request.payload['newCost'] && {newCostOfGood: JSON.parse(request.payload['newCost']) as Price},
+        ...request.payload['newMarkup'] && {newMarkup: parseFloat(request.payload['newMarkup'])},
+    }
 });
 
 export const mapRequestToDeleteProductsDTO = (request: Request): DeleteProductsDTO => ({

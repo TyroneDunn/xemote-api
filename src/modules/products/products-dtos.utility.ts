@@ -6,7 +6,6 @@ import {
     DeleteProductsDTO,
     GetProductDTO,
     GetProductsDTO,
-    ProductsFilter,
     ProductsSortOptions,
     UpdateProductDTO,
     UpdateProductsDTO
@@ -101,24 +100,10 @@ const mapToPage = (request: Request) => ({
 });
 
 export const mapRequestToUpdateProductsDTO = (request: Request): UpdateProductsDTO => ({
-    filter: {...mapToProductsFilter(request)},
-    ...(request.queryParamMap['createdAt'] && !request.queryParamMap['updatedAt']) && {
-        timestamp: {
-            createdAt: (JSON.parse(request.queryParamMap['createdAt']) as DateRange)
-        },
-    },
-    ...(request.queryParamMap['updatedAt'] && !request.queryParamMap['createdAt']) && {
-        timestamp: {
-            updatedAt: (JSON.parse(request.queryParamMap['updatedAt']) as DateRange)
-        }
-    },
-    dateRange: JSON.parse(request.queryParamMap['dateRange']) as DateRange,
-    sort: JSON.parse(request.queryParamMap['sort']) as ProductsSort[],
-    page: JSON.parse(request.queryParamMap['page']) as Pagination,
-});
-
-export const mapRequestToUpdateProductDTO = (request: Request): UpdateProductDTO => ({
-    _id: request.paramMap['id'],
+    ...mapToProductsFilter(request),
+    ...mapToTimestamps(request),
+    ...mapToProductsSort(request),
+    ...mapToPage(request),
     updateFields: {
         newName: request.payload['newName'],
         newType: request.payload['newType'] as ProductType,

@@ -16,9 +16,12 @@ export const ProductsQueryParamKeys: string[] = [
     'typeRegex',
     'costPriceRange',
     'markupRange',
-    'dateRange',
+    'createdAt',
+    'updatedAt',
     'sort',
-    'page',
+    'order',
+    'index',
+    'limit'
 ];
 
 const getProductsMethod: Method = {

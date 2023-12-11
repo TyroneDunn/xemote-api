@@ -1,4 +1,4 @@
 export type NumberRange = {
-    start: number,
-    end: number
+    start?: number,
+    end?: number
 };

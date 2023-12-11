@@ -1,16 +1,16 @@
 import {ProductType} from "./product.type";
-import {DateRange} from "../../shared/date-range.type";
 import {Pagination} from "../../shared/pagination.type";
 import {Price} from "../../shared/price.type";
 import {NumberRange} from "../../shared/number-range.type";
 import {OrderOptions} from "../../shared/order-options.type";
+import {Timestamps} from "../../shared/timestamps.type";
 
 export type GetProductDTO = { _id: string };
 
 export type GetProductsDTO = {
     filter?: ProductsFilter,
-    dateRange?: DateRange,
-    sort?: ProductsSort[],
+    timestamps?: Timestamps,
+    sort?: ProductsSort,
     page?: Pagination,
 };
 
@@ -35,8 +35,8 @@ export type UpdateProductDTO = {
 
 export type UpdateProductsDTO = {
     filter: ProductsFilter,
-    dateRange?: DateRange,
-    sort?: ProductsSort[],
+    timestamps?: Timestamps,
+    sort?: ProductsSort,
     page?: Pagination,
     updateFields: UpdateProductFields,
 };
@@ -45,8 +45,8 @@ export type DeleteProductDTO = { _id: string };
 
 export type DeleteProductsDTO = {
     filter?: ProductsFilter,
-    dateRange?: DateRange,
-    sort?: ProductsSort[],
+    timestamps?: Timestamps,
+    sort?: ProductsSort,
     page?: Pagination,
 };
 
@@ -62,6 +62,6 @@ export type ProductsFilter = {
 export type ProductsSortOptions = "name" | "type" | "costPrice" | "markup" | "dateCreated" | "lastUpdated";
 
 export type ProductsSort = {
-    option: ProductsSortOptions,
+    field: ProductsSortOptions,
     order: OrderOptions,
 };

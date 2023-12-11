@@ -51,11 +51,6 @@ export const getProduct = async (request: Request): Promise<Response> => {
     }
 };
 
-const mapToInternalServerErrorResponse = (error): Response => ({
-    status: HttpStatusCodes.INTERNAL_SERVER_ERROR,
-    error: error.message,
-});
-
 export const getProducts = async (request: Request): Promise<Response> => {
     const dto: GetProductsDTO = mapToGetProductsDTO(request);
 
@@ -145,3 +140,8 @@ export const deleteProducts = async (request: Request): Promise<Response> => {
         return mapToInternalServerErrorResponse(error);
     }
 };
+
+const mapToInternalServerErrorResponse = (error): Response => ({
+    status: HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    error: error.message,
+});

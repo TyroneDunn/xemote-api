@@ -17,11 +17,11 @@ import {Price} from "../../shared/price.type";
 import {OrderOptions} from "../../shared/order-options.type";
 import {Timestamps} from "../../shared/timestamps.type";
 
-export const mapRequestToGetProductDTO = (request: Request): GetProductDTO => ({
+export const mapToGetProductDTO = (request: Request): GetProductDTO => ({
     _id: request.paramMap['id'],
 });
 
-export const mapRequestToGetProductsDTO = (request: Request): GetProductsDTO =>
+export const mapToGetProductsDTO = (request: Request): GetProductsDTO =>
     ({
         ...mapToProductsFilter(request),
         ...mapToTimestamps(request),
@@ -29,25 +29,24 @@ export const mapRequestToGetProductsDTO = (request: Request): GetProductsDTO =>
         ...mapToPage(request),
     });
 
-export const mapRequestToCreateProductDTO = (request: Request): CreateProductDTO => ({
+export const mapToCreateProductDTO = (request: Request): CreateProductDTO => ({
     name: request.payload['name'],
     type: request.payload['type'] as ProductType,
     costPrice: request.payload['costPrice'] as Price,
     markup: parseFloat(request.payload['markup']),
 });
 
-export const mapRequestToUpdateProductDTO = (request: Request): UpdateProductDTO => ({
+export const mapToUpdateProductDTO = (request: Request): UpdateProductDTO => ({
     _id: request.paramMap['id'],
     ...mapToUpdateFields(request)
 });
 
-const mapToUpdateFields = (request: Request) => ({
-    updateFields: {
-        ...request.payload['newName'] && {newName: request.payload['newName']},
-        ...request.payload['newType'] && {newType: request.payload['newType'] as ProductType},
-        ...request.payload['newCost'] && {newCostOfGood: JSON.parse(request.payload['newCost']) as Price},
-        ...request.payload['newMarkup'] && {newMarkup: parseFloat(request.payload['newMarkup'])},
-    }
+export const mapToUpdateProductsDTO = (request: Request): UpdateProductsDTO => ({
+    ...mapToProductsFilter(request),
+    ...mapToTimestamps(request),
+    ...mapToProductsSort(request),
+    ...mapToPage(request),
+    ...mapToUpdateFields(request)
 });
 
 const mapToProductsFilter = (request: Request) =>

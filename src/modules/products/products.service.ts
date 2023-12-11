@@ -17,13 +17,13 @@ import {
     addRequestPageDataToResponse,
     mapProductsToResponse,
     mapProductToResponse,
-    mapRequestToCreateProductDTO,
-    mapRequestToDeleteProductDTO,
-    mapRequestToDeleteProductsDTO,
-    mapRequestToGetProductDTO,
-    mapRequestToGetProductsDTO,
-    mapRequestToUpdateProductDTO,
-    mapRequestToUpdateProductsDTO
+    mapToCreateProductDTO,
+    mapToDeleteProductDTO,
+    mapToDeleteProductsDTO,
+    mapToGetProductDTO,
+    mapToGetProductsDTO,
+    mapToUpdateProductDTO,
+    mapToUpdateProductsDTO
 } from "./products-dtos.utility";
 import {
     CreateProductDTO,
@@ -38,7 +38,7 @@ import {
 const repository: ProductsRepository = PRODUCTS_REPOSITORY;
 
 export const getProduct = async (request: Request): Promise<Response> => {
-    const dto: GetProductDTO = mapRequestToGetProductDTO(request);
+    const dto: GetProductDTO = mapToGetProductDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateGetProductDTO(dto);
     if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);
@@ -57,7 +57,7 @@ const mapToInternalServerErrorResponse = (error): Response => ({
 });
 
 export const getProducts = async (request: Request): Promise<Response> => {
-    const dto: GetProductsDTO = mapRequestToGetProductsDTO(request);
+    const dto: GetProductsDTO = mapToGetProductsDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateGetProductsDTO(dto);
     if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);
@@ -72,7 +72,7 @@ export const getProducts = async (request: Request): Promise<Response> => {
 };
 
 export const createProduct = async (request: Request): Promise<Response> => {
-    const dto: CreateProductDTO = mapRequestToCreateProductDTO(request);
+    const dto: CreateProductDTO = mapToCreateProductDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateCreateProductDTO(dto);
     if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
@@ -86,7 +86,7 @@ export const createProduct = async (request: Request): Promise<Response> => {
 };
 
 export const updateProduct = async (request: Request): Promise<Response> => {
-    const dto: UpdateProductDTO = mapRequestToUpdateProductDTO(request);
+    const dto: UpdateProductDTO = mapToUpdateProductDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateUpdateProductDTO(dto);
     if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
@@ -100,7 +100,7 @@ export const updateProduct = async (request: Request): Promise<Response> => {
 };
 
 export const updateProducts = async (request: Request): Promise<Response> => {
-    const dto: UpdateProductsDTO = mapRequestToUpdateProductsDTO(request);
+    const dto: UpdateProductsDTO = mapToUpdateProductsDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateUpdateProductsDTO(dto);
     if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
@@ -117,7 +117,7 @@ export const updateProducts = async (request: Request): Promise<Response> => {
 };
 
 export const deleteProduct = async (request: Request): Promise<Response> => {
-    const dto: DeleteProductDTO = mapRequestToDeleteProductDTO(request);
+    const dto: DeleteProductDTO = mapToDeleteProductDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateDeleteProductDTO(dto);
     if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
@@ -131,7 +131,7 @@ export const deleteProduct = async (request: Request): Promise<Response> => {
 };
 
 export const deleteProducts = async (request: Request): Promise<Response> => {
-    const dto: DeleteProductsDTO = mapRequestToDeleteProductsDTO(request);
+    const dto: DeleteProductsDTO = mapToDeleteProductsDTO(request);
     const validationOutcome: ValidationOutcome = await validateDeleteProductsDTO(dto);
     if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
 

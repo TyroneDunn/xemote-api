@@ -102,35 +102,14 @@ const mapToPage = (request: Request) => ({
     },
 });
 
-export const mapRequestToUpdateProductsDTO = (request: Request): UpdateProductsDTO => ({
-    ...mapToProductsFilter(request),
-    ...mapToTimestamps(request),
-    ...mapToProductsSort(request),
-    ...mapToPage(request),
-    ...mapToUpdateFields(request)
+const mapToUpdateFields = (request: Request) => ({
+    updateFields: {
+        ...request.payload['newName'] && {newName: request.payload['newName']},
+        ...request.payload['newType'] && {newType: request.payload['newType'] as ProductType},
+        ...request.payload['newCost'] && {newCostOfGood: JSON.parse(request.payload['newCost']) as Price},
+        ...request.payload['newMarkup'] && {newMarkup: parseFloat(request.payload['newMarkup'])},
+    }
 });
-
-export const mapRequestToUpdateProductsDTO = (request: Request): UpdateProductsDTO => {
-    return {
-        filter: {
-            name: request.queryParamMap['name'],
-            nameRegex: request.queryParamMap['nameRegex'],
-            type: request.queryParamMap['type'] as ProductType,
-            typeRegex: request.queryParamMap['typeRegex'],
-            costPriceRange: JSON.parse(request.queryParamMap['costRange']) as NumberRange,
-            markupRange: JSON.parse(request.queryParamMap['markupRange']) as NumberRange,
-        },
-        dateRange: JSON.parse(request.queryParamMap['dateRange']) as DateRange,
-        sort: JSON.parse(request.queryParamMap['sort']) as ProductsSort[],
-        page: JSON.parse(request.queryParamMap['page']) as Pagination,
-        updateFields: {
-            newName: request.payload['newName'],
-            newType: request.payload['newType'] as ProductType,
-            newCostOfGood: JSON.parse(request.payload['newCost']) as Price,
-            newMarkup: parseFloat(request.payload['newMarkup']),
-        }
-    };
-};
 
 export const mapProductToResponse = (product: Product, status: number): Response =>
     ({

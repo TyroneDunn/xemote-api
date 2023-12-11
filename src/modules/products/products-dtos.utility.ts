@@ -38,6 +38,10 @@ export const mapRequestToCreateProductDTO = (request: Request): CreateProductDTO
 
 export const mapRequestToUpdateProductDTO = (request: Request): UpdateProductDTO => ({
     _id: request.paramMap['id'],
+    ...mapToUpdateFields(request)
+});
+
+const mapToUpdateFields = (request: Request) => ({
     updateFields: {
         ...request.payload['newName'] && {newName: request.payload['newName']},
         ...request.payload['newType'] && {newType: request.payload['newType'] as ProductType},
@@ -104,12 +108,7 @@ export const mapRequestToUpdateProductsDTO = (request: Request): UpdateProductsD
     ...mapToTimestamps(request),
     ...mapToProductsSort(request),
     ...mapToPage(request),
-    updateFields: {
-        newName: request.payload['newName'],
-        newType: request.payload['newType'] as ProductType,
-        newCostOfGood: JSON.parse(request.payload['newCost']) as Price,
-        newMarkup: parseFloat(request.payload['newMarkup']),
-    }
+    ...mapToUpdateFields(request)
 });
 
 export const mapRequestToUpdateProductsDTO = (request: Request): UpdateProductsDTO => {

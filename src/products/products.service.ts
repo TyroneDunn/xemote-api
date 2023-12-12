@@ -1,6 +1,6 @@
 import {HttpStatusCodes, Request, Response} from "@hals/core";
-import {ProductsRepository} from "./products-repository.type";
-import {PRODUCTS_REPOSITORY} from "../../environment/repositories-config";
+import {ProductsRepository, Result} from "./products-repository.type";
+import {PRODUCTS_REPOSITORY} from "../environment/repositories-config";
 import {
     validateCreateProductDTO,
     validateDeleteProductDTO,
@@ -11,26 +11,24 @@ import {
     validateUpdateProductsDTO
 } from "./products-dto-validator.utility";
 import {Product} from "./product.type";
-import {ValidationOutcome} from "../../shared/validate/validation-dtos.type";
-import {mapToErrorResponse} from "../../shared/validate/validation-dtos.utility";
+import {ValidationOutcome} from "../shared/validate/validation-dtos.type";
+import {mapToErrorResponse} from "../shared/validate/validation-dtos.utility";
 import {
     addRequestPageDataToResponse,
     mapProductsToResponse,
     mapProductToResponse,
-    mapRequestToCreateProductDTO,
-    mapRequestToDeleteProductDTO,
-    mapRequestToDeleteProductsDTO,
-    mapRequestToGetProductDTO,
-    mapRequestToGetProductsDTO,
-    mapRequestToUpdateProductDTO,
-    mapRequestToUpdateProductsDTO
+    mapRequestToProductsDTO,
+    mapToCreateProductDTO,
+    mapToDeleteProductDTO,
+    mapToGetProductDTO,
+    mapToUpdateProductDTO,
+    mapToUpdateProductsDTO
 } from "./products-dtos.utility";
 import {
     CreateProductDTO,
     DeleteProductDTO,
-    DeleteProductsDTO,
     GetProductDTO,
-    GetProductsDTO,
+    ProductsDTO,
     UpdateProductDTO,
     UpdateProductsDTO,
 } from "./products-dtos.type";
@@ -38,7 +36,7 @@ import {
 const repository: ProductsRepository = PRODUCTS_REPOSITORY;
 
 export const getProduct = async (request: Request): Promise<Response> => {
-    const dto: GetProductDTO = mapRequestToGetProductDTO(request);
+    const dto: GetProductDTO = mapToGetProductDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateGetProductDTO(dto);
     if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);
@@ -51,13 +49,8 @@ export const getProduct = async (request: Request): Promise<Response> => {
     }
 };
 
-const mapToInternalServerErrorResponse = (error): Response => ({
-    status: HttpStatusCodes.INTERNAL_SERVER_ERROR,
-    error: error.message,
-});
-
 export const getProducts = async (request: Request): Promise<Response> => {
-    const dto: GetProductsDTO = mapRequestToGetProductsDTO(request);
+    const dto: ProductsDTO = mapRequestToProductsDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateGetProductsDTO(dto);
     if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);
@@ -72,7 +65,7 @@ export const getProducts = async (request: Request): Promise<Response> => {
 };
 
 export const createProduct = async (request: Request): Promise<Response> => {
-    const dto: CreateProductDTO = mapRequestToCreateProductDTO(request);
+    const dto: CreateProductDTO = mapToCreateProductDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateCreateProductDTO(dto);
     if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
@@ -86,7 +79,7 @@ export const createProduct = async (request: Request): Promise<Response> => {
 };
 
 export const updateProduct = async (request: Request): Promise<Response> => {
-    const dto: UpdateProductDTO = mapRequestToUpdateProductDTO(request);
+    const dto: UpdateProductDTO = mapToUpdateProductDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateUpdateProductDTO(dto);
     if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
@@ -100,48 +93,63 @@ export const updateProduct = async (request: Request): Promise<Response> => {
 };
 
 export const updateProducts = async (request: Request): Promise<Response> => {
-    const dto: UpdateProductsDTO = mapRequestToUpdateProductsDTO(request);
+    const dto: UpdateProductsDTO = mapToUpdateProductsDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateUpdateProductsDTO(dto);
     if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
 
-    const addPageData = (response: Response) =>
-        addRequestPageDataToResponse(request, response);
-
     try {
-        const products: Product[] = await repository.updateProducts(dto);
-        return addPageData(mapProductsToResponse(products, HttpStatusCodes.OK));
+        const result: Result = await repository.updateProducts(dto);
+        return mapUpdateResultToResponse(result);
     } catch (error) {
         return mapToInternalServerErrorResponse(error);
     }
 };
 
 export const deleteProduct = async (request: Request): Promise<Response> => {
-    const dto: DeleteProductDTO = mapRequestToDeleteProductDTO(request);
+    const dto: DeleteProductDTO = mapToDeleteProductDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateDeleteProductDTO(dto);
     if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
 
     try {
-        const product: Product = await repository.deleteProduct(dto);
-        return mapProductToResponse(product, HttpStatusCodes.OK);
+        const result: Result = await repository.deleteProduct(dto);
+        return mapDeleteResultToResponse(result);
     } catch (error) {
         return mapToInternalServerErrorResponse(error);
     }
 };
 
 export const deleteProducts = async (request: Request): Promise<Response> => {
-    const dto: DeleteProductsDTO = mapRequestToDeleteProductsDTO(request);
+    const dto: ProductsDTO = mapRequestToProductsDTO(request);
     const validationOutcome: ValidationOutcome = await validateDeleteProductsDTO(dto);
     if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
 
-    const addPageData = (response: Response) =>
-        addRequestPageDataToResponse(request, response);
-
     try {
-        const products: Product[] = await repository.deleteProducts(dto);
-        return addPageData(mapProductsToResponse(products, HttpStatusCodes.OK));
+        const result: Result = await repository.deleteProducts(dto);
+        return mapDeleteResultToResponse(result);
     } catch (error) {
         return mapToInternalServerErrorResponse(error);
     }
 };
+
+const mapToInternalServerErrorResponse = (error): Response => ({
+    status: HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    error: error.message,
+});
+
+const mapUpdateResultToResponse = (result: Result): Response => ({
+    status: result.success ? HttpStatusCodes.OK : HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    ...result.success && {count: result.affectedCount},
+    ...(!result.success) && {error: 'Error updating products.'}
+});
+
+const mapDeleteResultToResponse = (result: Result): Response => ({
+    status: result.success && result.affectedCount > 0
+        ? HttpStatusCodes.OK
+        : result.success && result.affectedCount === 0
+            ? HttpStatusCodes.NOT_FOUND
+            : HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    ...result.success && {count: result.affectedCount},
+    ...(!result.success) && {error: 'Error deleting product(s).'}
+});

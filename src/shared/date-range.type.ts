@@ -1,10 +1,4 @@
 export type DateRange = {
-    dateCreated: {
-      startDate: string,
-      endDate: string,
-    },
-    lastUpdated: {
-        startDate: string,
-        endDate: string,
-    },
+    start?: string,
+    end?: string,
 };

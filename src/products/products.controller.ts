@@ -14,11 +14,14 @@ export const ProductsQueryParamKeys: string[] = [
     'nameRegex',
     'type',
     'typeRegex',
-    'costRange',
+    'costPriceRange',
     'markupRange',
-    'dateRange',
+    'createdAt',
+    'updatedAt',
     'sort',
-    'page',
+    'order',
+    'index',
+    'limit'
 ];
 
 const getProductsMethod: Method = {

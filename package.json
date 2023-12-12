@@ -4,7 +4,8 @@
   "description": "The Xemote API project is a back-end web application built using Node.js and Express. This API simulates the functionality of an online product store, allowing users to read, create, delete and update a collection of products. The Xemote Mock project is a showcase of my skills in full-stack development. This project demonstrates my ability to create a functional and user-friendly interface that aligns with industry standards.",
   "main": "src/index.ts",
   "scripts": {
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "test": "ts-node node_modules/jasmine/bin/jasmine"
   },
   "keywords": [
     "Node.js",
@@ -30,8 +31,10 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/express-session": "^1.17.10",
+    "@types/jasmine": "^5.1.4",
     "@types/passport": "^1.0.16",
     "@types/passport-local": "^1.0.38",
+    "jasmine": "^5.1.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.3.2"
   }

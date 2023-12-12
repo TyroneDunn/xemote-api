@@ -21,16 +21,16 @@ export type CreateProductDTO = {
     markup: number,
 };
 
-export type UpdateProductFields = {
+export type ProductUpdateFields = {
     newName?: string,
-    newCostOfGood?: Price,
+    newCostPrice?: Price,
     newMarkup?: number,
     newType?: ProductType,
 }
 
 export type UpdateProductDTO = {
     _id: string,
-    updateFields: UpdateProductFields,
+    updateFields: ProductUpdateFields,
 };
 
 export type UpdateProductsDTO = {
@@ -38,7 +38,7 @@ export type UpdateProductsDTO = {
     timestamps?: Timestamps,
     sort?: ProductsSort,
     page?: Pagination,
-    updateFields: UpdateProductFields,
+    updateFields: ProductUpdateFields,
 };
 
 export type DeleteProductDTO = { _id: string };

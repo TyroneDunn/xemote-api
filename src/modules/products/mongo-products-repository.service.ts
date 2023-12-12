@@ -2,16 +2,17 @@ import {ProductsRepository} from "./products-repository.type";
 import {ProductModel} from "./mongo-product-model.type";
 import {Product} from "./product.type";
 import {
+    CreateProductDTO,
+    DeleteProductDTO,
     GetProductDTO,
     ProductsDTO,
-    CreateProductDTO,
+    ProductUpdateFields,
     UpdateProductDTO,
     UpdateProductsDTO,
-    DeleteProductDTO,
-    UpdateProductFields,
 } from "./products-dtos.type";
 import UserModel from "../users/mongo-user.model";
 import {DeleteResult} from "mongodb";
+import {Price} from "../../shared/price.type";
 
 export const MongoProductsRepository: ProductsRepository = {
     getProduct: (dto: GetProductDTO): Promise<Product> =>
@@ -40,14 +41,14 @@ export const MongoProductsRepository: ProductsRepository = {
     updateProduct: (dto: UpdateProductDTO): Promise<Product> =>
         ProductModel.findOneAndUpdate(
             {_id: dto._id},
-            mapToUpdateProductQuery(dto.updateFields),
+            mapToProductUpdateQuery(dto.updateFields),
             {new: true},
         ),
 
     updateProducts: async (dto: UpdateProductsDTO): Promise<Product[]> => {
         await UserModel.updateMany(
             mapToProductsFilter(dto),
-            mapToUpdateProductQuery(dto.updateFields),
+            mapToProductUpdateQuery(dto.updateFields),
         );
         return UserModel.find(mapToProductsFilter(dto));
     },
@@ -76,10 +77,10 @@ export const MongoProductsRepository: ProductsRepository = {
     }
 };
 
-const mapToUpdateProductQuery = (dto: UpdateProductFields) => ({
+const mapToProductUpdateQuery = (dto: ProductUpdateFields) => ({
     ...dto.newName && {name: dto.newName},
     ...dto.newType && {type: dto.newType},
-    ...dto.newCostOfGood && {costOfGood: dto.newCostOfGood},
+    ...dto.newCostPrice && {costPrice: dto.newCostPrice as Price},
     ...dto.newMarkup && {markup: dto.newMarkup},
 });
 

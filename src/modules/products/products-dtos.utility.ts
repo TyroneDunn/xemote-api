@@ -107,7 +107,7 @@ const mapToUpdateFields = (request: Request) => ({
     updateFields: {
         ...request.payload['newName'] && {newName: request.payload['newName']},
         ...request.payload['newType'] && {newType: request.payload['newType'] as ProductType},
-        ...request.payload['newCost'] && {newCostOfGood: JSON.parse(request.payload['newCost']) as Price},
+        ...request.payload['newCostPrice'] && {newCostPrice: request.payload['newCostPrice'] as Price},
         ...request.payload['newMarkup'] && {newMarkup: parseFloat(request.payload['newMarkup'])},
     }
 });

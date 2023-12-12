@@ -1,8 +1,8 @@
-import {Inventory} from "./inventory.type";
+import {InventoryRecord} from "./inventory-record.type";
 import {Document, Schema} from "mongoose";
 import database from "../environment/mongoose-database";
 
-export interface InventoryRecordsDocument extends Document, Inventory {
+export interface InventoryRecordsDocument extends Document, InventoryRecord {
     productId: string,
     count: number,
 }

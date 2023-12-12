@@ -19,10 +19,10 @@ export const MongoProductsRepository: ProductsRepository = {
         ProductModel.findById(dto._id),
 
     getProducts: (dto: ProductsDTO): Promise<Product[]> => {
-        const filter = mapToProductsFilter(dto);
+        const filter = mapProductsDtoToProductsFilter(dto);
         const query = ProductModel.find(filter);
         if (dto.sort !== undefined)
-            query.sort({[dto.sort.field]: dto.sort.order === 'asc'? 1: -1});
+            query.sort({[dto.sort.field]: dto.sort.order === 'asc' ? 1 : -1});
         if (dto.page !== undefined) {
             query.skip(dto.page.index * dto.page.limit);
             query.limit(dto.page.limit);
@@ -46,7 +46,7 @@ export const MongoProductsRepository: ProductsRepository = {
         ),
 
     updateProducts: async (dto: UpdateProductsDTO): Promise<Result> => {
-        const filter = mapUpdateProductsDTOToFilter(dto);
+        const filter = mapUpdateProductsDtoToFilter(dto);
         const updateQuery = mapUpdateFieldsToUpdateQuery(dto.updateFields);
         const updateResult: UpdateWriteOpResult = await ProductModel.updateMany(filter, updateQuery);
         return {success: updateResult.acknowledged, affectedCount: updateResult.modifiedCount};
@@ -58,7 +58,7 @@ export const MongoProductsRepository: ProductsRepository = {
     },
 
     deleteProducts: async (dto: ProductsDTO): Promise<Result> => {
-        const filter = mapToProductsFilter(dto);
+        const filter = mapProductsDtoToProductsFilter(dto);
         const result: DeleteResult = await ProductModel.deleteMany(filter);
         return {success: result.acknowledged, affectedCount: result.deletedCount};
     },
@@ -73,7 +73,7 @@ export const MongoProductsRepository: ProductsRepository = {
     }
 };
 
-const mapToProductsFilter = (dto: ProductsDTO) => ({
+const mapProductsDtoToProductsFilter = (dto: ProductsDTO) => ({
     ...dto.filter.name && {name: dto.filter.name},
     ...dto.filter.nameRegex && {name: {$regex: dto.filter.nameRegex, $options: 'i'}},
     ...dto.filter.type && {type: dto.filter.type},
@@ -81,12 +81,22 @@ const mapToProductsFilter = (dto: ProductsDTO) => ({
     ...dto.filter.costPriceRange && {
         ...(dto.filter.costPriceRange.start && !dto.filter.costPriceRange.end) && {'costPrice.price': {$gt: dto.filter.costPriceRange.start}},
         ...(!dto.filter.costPriceRange.start && dto.filter.costPriceRange.end) && {'costPrice.price': {$lt: dto.filter.costPriceRange.end}},
-        ...(dto.filter.costPriceRange.start && dto.filter.costPriceRange.end) && {'costPrice.price': {$gt: dto.filter.costPriceRange.start, $lt: dto.filter.costPriceRange.end}},
+        ...(dto.filter.costPriceRange.start && dto.filter.costPriceRange.end) && {
+            'costPrice.price': {
+                $gt: dto.filter.costPriceRange.start,
+                $lt: dto.filter.costPriceRange.end
+            }
+        },
     },
     ...dto.filter.markupRange && {
         ...(dto.filter.markupRange.start && !dto.filter.markupRange.end) && {markup: {$gt: dto.filter.markupRange.start}},
         ...(!dto.filter.markupRange.start && dto.filter.markupRange.end) && {markup: {$lt: dto.filter.markupRange.end}},
-        ...(dto.filter.markupRange.start && dto.filter.markupRange.end) && {markup: {$gt: dto.filter.markupRange.start, $lt: dto.filter.markupRange.end}},
+        ...(dto.filter.markupRange.start && dto.filter.markupRange.end) && {
+            markup: {
+                $gt: dto.filter.markupRange.start,
+                $lt: dto.filter.markupRange.end
+            }
+        },
     },
     ...dto.timestamps && {
         ...dto.timestamps.createdAt && {
@@ -114,7 +124,7 @@ const mapToProductsFilter = (dto: ProductsDTO) => ({
     },
 });
 
-const mapUpdateProductsDTOToFilter = (dto: UpdateProductsDTO) => ({
+const mapUpdateProductsDtoToFilter = (dto: UpdateProductsDTO) => ({
     ...dto.filter.name && {name: dto.filter.name},
     ...dto.filter.nameRegex && {name: {$regex: dto.filter.nameRegex, $options: 'i'}},
     ...dto.filter.type && {type: dto.filter.type},

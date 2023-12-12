@@ -14,7 +14,7 @@ import {Product} from "./product.type";
 import {ValidationOutcome} from "../../shared/validate/validation-dtos.type";
 import {mapToErrorResponse} from "../../shared/validate/validation-dtos.utility";
 import {
-    mapToProductsDTO,
+    mapRequestToProductsDTO,
     mapToCreateProductDTO,
     mapToDeleteProductDTO,
     mapToGetProductDTO,
@@ -50,7 +50,7 @@ export const getProduct = async (request: Request): Promise<Response> => {
 };
 
 export const getProducts = async (request: Request): Promise<Response> => {
-    const dto: ProductsDTO = mapToProductsDTO(request);
+    const dto: ProductsDTO = mapRequestToProductsDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateGetProductsDTO(dto);
     if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);

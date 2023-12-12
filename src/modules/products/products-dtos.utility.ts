@@ -18,7 +18,7 @@ export const mapToGetProductDTO = (request: Request): GetProductDTO => ({
     _id: request.paramMap['id'],
 });
 
-export const mapToProductsDTO = (request: Request): ProductsDTO =>
+export const mapRequestToProductsDTO = (request: Request): ProductsDTO =>
     ({
         ...mapToProductsFilter(request),
         ...mapToTimestamps(request),

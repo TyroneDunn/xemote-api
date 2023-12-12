@@ -1,5 +1,5 @@
-import {ProductsRepository} from "./products-repository.type";
-import {ProductModel} from "./mongo-product-model.type";
+import {ProductsRepository, Result} from "./products-repository.type";
+import {ProductModel, ProductsDocument} from "./mongo-product-model.type";
 import {Product} from "./product.type";
 import {
     CreateProductDTO,
@@ -10,9 +10,9 @@ import {
     UpdateProductDTO,
     UpdateProductsDTO,
 } from "./products-dtos.type";
-import UserModel from "../users/mongo-user.model";
 import {DeleteResult} from "mongodb";
 import {Price} from "../../shared/price.type";
+import {ModifyResult, UpdateWriteOpResult} from "mongoose";
 
 export const MongoProductsRepository: ProductsRepository = {
     getProduct: (dto: GetProductDTO): Promise<Product> =>
@@ -41,16 +41,15 @@ export const MongoProductsRepository: ProductsRepository = {
     updateProduct: (dto: UpdateProductDTO): Promise<Product> =>
         ProductModel.findOneAndUpdate(
             {_id: dto._id},
-            mapToProductUpdateQuery(dto.updateFields),
+            mapUpdateFieldsToUpdateQuery(dto.updateFields),
             {new: true},
         ),
 
-    updateProducts: async (dto: UpdateProductsDTO): Promise<Product[]> => {
-        await UserModel.updateMany(
-            mapToProductsFilter(dto),
-            mapToProductUpdateQuery(dto.updateFields),
-        );
-        return UserModel.find(mapToProductsFilter(dto));
+    updateProducts: async (dto: UpdateProductsDTO): Promise<Result> => {
+        const filter = mapUpdateProductsDTOToFilter(dto);
+        const updateQuery = mapUpdateFieldsToUpdateQuery(dto.updateFields);
+        const updateResult: UpdateWriteOpResult = await ProductModel.updateMany(filter, updateQuery);
+        return {success: updateResult.acknowledged, affectedCount: updateResult.modifiedCount};
     },
 
     deleteProduct: async (dto: DeleteProductDTO): Promise<Product> => {
@@ -76,13 +75,6 @@ export const MongoProductsRepository: ProductsRepository = {
         }
     }
 };
-
-const mapToProductUpdateQuery = (dto: ProductUpdateFields) => ({
-    ...dto.newName && {name: dto.newName},
-    ...dto.newType && {type: dto.newType},
-    ...dto.newCostPrice && {costPrice: dto.newCostPrice as Price},
-    ...dto.newMarkup && {markup: dto.newMarkup},
-});
 
 const mapToProductsFilter = (dto: ProductsDTO) => ({
     ...dto.filter.name && {name: dto.filter.name},
@@ -123,4 +115,62 @@ const mapToProductsFilter = (dto: ProductsDTO) => ({
             }
         }
     },
+});
+
+const mapUpdateProductsDTOToFilter = (dto: UpdateProductsDTO) => ({
+    ...dto.filter.name && {name: dto.filter.name},
+    ...dto.filter.nameRegex && {name: {$regex: dto.filter.nameRegex, $options: 'i'}},
+    ...dto.filter.type && {type: dto.filter.type},
+    ...dto.filter.typeRegex && {type: {$regex: dto.filter.typeRegex, $options: 'i'}},
+    ...dto.filter.costPriceRange && {
+        ...(dto.filter.costPriceRange.start && !dto.filter.costPriceRange.end) && {'costPrice.price': {$gt: dto.filter.costPriceRange.start}},
+        ...(!dto.filter.costPriceRange.start && dto.filter.costPriceRange.end) && {'costPrice.price': {$lt: dto.filter.costPriceRange.end}},
+        ...(dto.filter.costPriceRange.start && dto.filter.costPriceRange.end) && {
+            'costPrice.price': {
+                $gt: dto.filter.costPriceRange.start,
+                $lt: dto.filter.costPriceRange.end
+            }
+        },
+    },
+    ...dto.filter.markupRange && {
+        ...(dto.filter.markupRange.start && !dto.filter.markupRange.end) && {markup: {$gt: dto.filter.markupRange.start}},
+        ...(!dto.filter.markupRange.start && dto.filter.markupRange.end) && {markup: {$lt: dto.filter.markupRange.end}},
+        ...(dto.filter.markupRange.start && dto.filter.markupRange.end) && {
+            markup: {
+                $gt: dto.filter.markupRange.start,
+                $lt: dto.filter.markupRange.end
+            }
+        },
+    },
+    ...dto.timestamps && {
+        ...dto.timestamps.createdAt && {
+            ...(dto.timestamps.createdAt.start && !dto.timestamps.createdAt.end) && {
+                createdAt: {$gt: dto.timestamps.createdAt.start}
+            },
+            ...(!dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
+                createdAt: {$lt: dto.timestamps.createdAt.end}
+            },
+            ...(dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
+                createdAt: {$gt: dto.timestamps.createdAt.start, $lt: dto.timestamps.createdAt.end}
+            }
+        },
+        ...dto.timestamps.updatedAt && {
+            ...(dto.timestamps.updatedAt.start && !dto.timestamps.updatedAt.end) && {
+                updatedAt: {$gt: dto.timestamps.updatedAt.start}
+            },
+            ...(!dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
+                updatedAt: {$lt: dto.timestamps.updatedAt.end}
+            },
+            ...(dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
+                updatedAt: {$gt: dto.timestamps.updatedAt.start, $lt: dto.timestamps.updatedAt.end}
+            }
+        }
+    },
+});
+
+const mapUpdateFieldsToUpdateQuery = (dto: ProductUpdateFields) => ({
+    ...dto.newName && {name: dto.newName},
+    ...dto.newType && {type: dto.newType},
+    ...dto.newCostPrice && {costPrice: dto.newCostPrice as Price},
+    ...dto.newMarkup && {markup: dto.newMarkup},
 });

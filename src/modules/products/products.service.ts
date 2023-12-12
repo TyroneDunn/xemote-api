@@ -14,21 +14,21 @@ import {Product} from "./product.type";
 import {ValidationOutcome} from "../../shared/validate/validation-dtos.type";
 import {mapToErrorResponse} from "../../shared/validate/validation-dtos.utility";
 import {
+    addRequestPageDataToResponse,
+    mapProductsToResponse,
+    mapProductToResponse,
     mapRequestToProductsDTO,
     mapToCreateProductDTO,
     mapToDeleteProductDTO,
     mapToGetProductDTO,
     mapToUpdateProductDTO,
-    mapToUpdateProductsDTO,
-    mapProductToResponse,
-    mapProductsToResponse,
-    addRequestPageDataToResponse
+    mapToUpdateProductsDTO
 } from "./products-dtos.utility";
 import {
-    ProductsDTO,
     CreateProductDTO,
     DeleteProductDTO,
     GetProductDTO,
+    ProductsDTO,
     UpdateProductDTO,
     UpdateProductsDTO,
 } from "./products-dtos.type";
@@ -139,13 +139,13 @@ const mapToInternalServerErrorResponse = (error): Response => ({
 });
 
 const mapUpdateResultToResponse = (result: Result): Response => ({
-    status: result.success ? HttpStatusCodes.NO_CONTENT : HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    status: result.success ? HttpStatusCodes.OK : HttpStatusCodes.INTERNAL_SERVER_ERROR,
     ...result.success && {count: result.affectedCount},
     ...(!result.success) && {error: 'Error updating products.'}
 });
 
 const mapDeleteResultToResponse = (result: Result): Response => ({
-    status: result.success ? HttpStatusCodes.NO_CONTENT : HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    status: result.success ? HttpStatusCodes.OK : HttpStatusCodes.INTERNAL_SERVER_ERROR,
     ...result.success && {count: result.affectedCount},
     ...(!result.success) && {error: 'Error deleting product(s).'}
 });

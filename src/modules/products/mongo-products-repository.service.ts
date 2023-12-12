@@ -21,9 +21,7 @@ export const MongoProductsRepository: ProductsRepository = {
         const filter = mapToProductsFilter(dto);
         const query = ProductModel.find(filter);
         if (dto.sort !== undefined)
-            dto.sort.forEach(productsSort => {
-                query.sort({[productsSort.option]: productsSort.order === "asc"? 1: -1})
-            });
+            query.sort({[dto.sort.field]: dto.sort.order === 'asc'? 1: -1});
         if (dto.page !== undefined) {
             query.skip(dto.page.index * dto.page.limit);
             query.limit(dto.page.limit);

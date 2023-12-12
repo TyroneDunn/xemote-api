@@ -2,12 +2,12 @@ import {Inventory} from "./inventory.type";
 import {Document, Schema} from "mongoose";
 import database from "../environment/mongoose-database";
 
-export interface InventoryDocument extends Document, Inventory {
+export interface InventoryRecordsDocument extends Document, Inventory {
     productId: string,
     count: number,
 }
 
-const InventorySchema = new Schema(
+const InventoryRecordsSchema = new Schema(
     {
         productId: {
             type: Schema.Types.ObjectId,
@@ -22,5 +22,5 @@ const InventorySchema = new Schema(
     {_id: false}
 );
 
-const InventoryModel = database.model<InventoryDocument>('inventory', InventorySchema);
-export {InventoryModel};
+const InventoryRecordsModel = database.model<InventoryRecordsDocument>('inventory-records', InventoryRecordsSchema);
+export {InventoryRecordsModel};

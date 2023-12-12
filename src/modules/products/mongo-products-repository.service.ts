@@ -1,5 +1,5 @@
 import {ProductsRepository, Result} from "./products-repository.type";
-import {ProductModel, ProductsDocument} from "./mongo-product-model.type";
+import {ProductModel} from "./mongo-product-model.type";
 import {Product} from "./product.type";
 import {
     CreateProductDTO,
@@ -12,7 +12,7 @@ import {
 } from "./products-dtos.type";
 import {DeleteResult} from "mongodb";
 import {Price} from "../../shared/price.type";
-import {ModifyResult, UpdateWriteOpResult} from "mongoose";
+import {UpdateWriteOpResult} from "mongoose";
 
 export const MongoProductsRepository: ProductsRepository = {
     getProduct: (dto: GetProductDTO): Promise<Product> =>
@@ -57,12 +57,10 @@ export const MongoProductsRepository: ProductsRepository = {
         return {success: result.acknowledged, affectedCount: result.deletedCount};
     },
 
-    deleteProducts: async (dto: ProductsDTO): Promise<Product[]> => {
+    deleteProducts: async (dto: ProductsDTO): Promise<Result> => {
         const filter = mapToProductsFilter(dto);
-        const products: Product[] = await ProductModel.find(filter);
         const result: DeleteResult = await ProductModel.deleteMany(filter);
-        if (!result.acknowledged) throw new Error(`Error deleting products.\n Filter: ${filter}`);
-        return products;
+        return {success: result.acknowledged, affectedCount: result.deletedCount};
     },
 
     exists: async (dto: GetProductDTO): Promise<boolean> => {

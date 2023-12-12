@@ -19,4 +19,3 @@ export type ProductsRepository = {
     deleteProducts: (dto: ProductsDTO) => Promise<Result>,
     exists: (dto: GetProductDTO) => Promise<boolean>,
 };
-

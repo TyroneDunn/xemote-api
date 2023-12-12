@@ -9,12 +9,11 @@ export type Product = {
 };
 
 export type ProductType =
-    "Xemote Gateway" |
-    "Xemote Accessory" |
-    "Wireless Temperature Sensor" |
-    "Wireless Humidity Sensor" |
-    "Wireless AC Current Meter" |
-    "Wireless Event-Based Sensor" |
-    "Wireless Infrared Beam Sensor" |
-    "Wireless 4-30mA Sensor";
-
+    | "Xemote Gateway"
+    | "Xemote Accessory"
+    | "Wireless Temperature Sensor"
+    | "Wireless Humidity Sensor"
+    | "Wireless AC Current Meter"
+    | "Wireless Event-Based Sensor"
+    | "Wireless Infrared Beam Sensor"
+    | "Wireless 4-30mA Sensor";

@@ -50,7 +50,13 @@ export type ProductsFilter = {
     markupRange?: NumberRange,
 };
 
-export type ProductsSortOptions = "name" | "type" | "costPrice" | "markup" | "createdAt" | "updatedAt";
+export type ProductsSortOptions =
+    | "name"
+    | "type"
+    | "costPrice"
+    | "markup"
+    | "createdAt"
+    | "updatedAt";
 
 export type ProductsSort = {
     field: ProductsSortOptions,

@@ -1,5 +1,5 @@
 import {HttpStatusCodes, Request, Response} from "@hals/core";
-import {ProductsRepository, Result} from "./products-repository.type";
+import {ProductsRepository} from "./products-repository.type";
 import {PRODUCTS_REPOSITORY} from "../environment/repositories-config";
 import {
     validateCreateProductDTO,
@@ -32,6 +32,7 @@ import {
     UpdateProductDTO,
     UpdateProductsDTO,
 } from "./products-dtos.type";
+import {Result} from "../shared/result.type";
 
 const repository: ProductsRepository = PRODUCTS_REPOSITORY;
 

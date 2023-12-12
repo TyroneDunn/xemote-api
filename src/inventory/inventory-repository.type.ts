@@ -1,5 +1,4 @@
 import {InventoryRecord} from "./inventory-record.type";
-import {Result} from "../products/products-repository.type";
 import {
     GetInventoryRecordDTO,
     InventoryRecordsDTO,
@@ -8,6 +7,7 @@ import {
     UpdateInventoryRecordsDTO,
     DeleteInventoryRecordDTO
 } from "./inventory-records-dtos.type";
+import {Result} from "../shared/result.type";
 
 export type InventoryRepository = {
     getRecord: (dto: GetInventoryRecordDTO) => Promise<InventoryRecord>,

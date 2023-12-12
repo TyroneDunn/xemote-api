@@ -25,7 +25,7 @@ const CostPriceSchema = new Schema(
     {_id: false, }
 );
 
-const ProductSchema = new Schema<ProductsDocument>(
+const ProductsSchema = new Schema<ProductsDocument>(
     {
         name: {
             type: String,
@@ -46,5 +46,5 @@ const ProductSchema = new Schema<ProductsDocument>(
     {timestamps: true}
 );
 
-const ProductModel = database.model<ProductsDocument>('products', ProductSchema);
+const ProductModel = database.model<ProductsDocument>('products', ProductsSchema);
 export {ProductModel};

@@ -9,7 +9,6 @@ import {
     UpdateProductsDTO,
     DeleteProductDTO,
     UpdateProductFields,
-    ProductsFilter
 } from "./products-dtos.type";
 import UserModel from "../users/mongo-user.model";
 import {DeleteResult} from "mongodb";
@@ -18,8 +17,8 @@ export const MongoProductsRepository: ProductsRepository = {
     getProduct: (dto: GetProductDTO): Promise<Product> =>
         ProductModel.findById(dto._id),
 
-    getProducts: (dto: GetProductsDTO): Promise<Product[]> => {
-        const filter = mapToProductsFilter(dto.filter);
+    getProducts: (dto: ProductsDTO): Promise<Product[]> => {
+        const filter = mapToProductsFilter(dto);
         const query = ProductModel.find(filter);
         if (dto.sort !== undefined)
             dto.sort.forEach(productsSort => {
@@ -49,10 +48,10 @@ export const MongoProductsRepository: ProductsRepository = {
 
     updateProducts: async (dto: UpdateProductsDTO): Promise<Product[]> => {
         await UserModel.updateMany(
-            mapToProductsFilter(dto.filter),
+            mapToProductsFilter(dto),
             mapToUpdateProductQuery(dto.updateFields),
         );
-        return UserModel.find(mapToProductsFilter(dto.filter));
+        return UserModel.find(mapToProductsFilter(dto));
     },
 
     deleteProduct: async (dto: DeleteProductDTO): Promise<Product> => {
@@ -62,7 +61,7 @@ export const MongoProductsRepository: ProductsRepository = {
     },
 
     deleteProducts: async (dto: ProductsDTO): Promise<Product[]> => {
-        const filter = mapToProductsFilter(dto.filter);
+        const filter = mapToProductsFilter(dto);
         const products: Product[] = await ProductModel.find(filter);
         const result: DeleteResult = await ProductModel.deleteMany(filter);
         if (!result.acknowledged) throw new Error(`Error deleting products.\n Filter: ${filter}`);
@@ -86,19 +85,43 @@ const mapToUpdateProductQuery = (dto: UpdateProductFields) => ({
     ...dto.newMarkup && {markup: dto.newMarkup},
 });
 
-const mapToProductsFilter = (dto: ProductsFilter) => ({
-    ...dto.name && {name: dto.name},
-    ...dto.nameRegex && {name: {$regex: dto.nameRegex, $options: 'i'}},
-    ...dto.type && {type: dto.type},
-    ...dto.typeRegex && {type: {$regex: dto.typeRegex, $options: 'i'}},
-    ...dto.costPriceRange && {
-        ...(dto.costPriceRange.start && !dto.costPriceRange.end) && {'costPrice.price': {$gt: dto.costPriceRange.start}},
-        ...(!dto.costPriceRange.start && dto.costPriceRange.end) && {'costPrice.price': {$lt: dto.costPriceRange.end}},
-        ...(dto.costPriceRange.start && dto.costPriceRange.end) && {'costPrice.price': {$gt: dto.costPriceRange.start, $lt: dto.costPriceRange.end}},
+const mapToProductsFilter = (dto: ProductsDTO) => ({
+    ...dto.filter.name && {name: dto.filter.name},
+    ...dto.filter.nameRegex && {name: {$regex: dto.filter.nameRegex, $options: 'i'}},
+    ...dto.filter.type && {type: dto.filter.type},
+    ...dto.filter.typeRegex && {type: {$regex: dto.filter.typeRegex, $options: 'i'}},
+    ...dto.filter.costPriceRange && {
+        ...(dto.filter.costPriceRange.start && !dto.filter.costPriceRange.end) && {'costPrice.price': {$gt: dto.filter.costPriceRange.start}},
+        ...(!dto.filter.costPriceRange.start && dto.filter.costPriceRange.end) && {'costPrice.price': {$lt: dto.filter.costPriceRange.end}},
+        ...(dto.filter.costPriceRange.start && dto.filter.costPriceRange.end) && {'costPrice.price': {$gt: dto.filter.costPriceRange.start, $lt: dto.filter.costPriceRange.end}},
     },
-    ...dto.markupRange && {
-        ...(dto.markupRange.start && !dto.markupRange.end) && {'markup': {$gt: dto.markupRange.start}},
-        ...(!dto.markupRange.start && dto.markupRange.end) && {'markup': {$lt: dto.markupRange.end}},
-        ...(dto.markupRange.start && dto.markupRange.end) && {'markup': {$gt: dto.markupRange.start, $lt: dto.markupRange.end}},
+    ...dto.filter.markupRange && {
+        ...(dto.filter.markupRange.start && !dto.filter.markupRange.end) && {markup: {$gt: dto.filter.markupRange.start}},
+        ...(!dto.filter.markupRange.start && dto.filter.markupRange.end) && {markup: {$lt: dto.filter.markupRange.end}},
+        ...(dto.filter.markupRange.start && dto.filter.markupRange.end) && {markup: {$gt: dto.filter.markupRange.start, $lt: dto.filter.markupRange.end}},
+    },
+    ...dto.timestamps && {
+        ...dto.timestamps.createdAt && {
+            ...(dto.timestamps.createdAt.start && !dto.timestamps.createdAt.end) && {
+                createdAt: {$gt: dto.timestamps.createdAt.start}
+            },
+            ...(!dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
+                createdAt: {$lt: dto.timestamps.createdAt.end}
+            },
+            ...(dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
+                createdAt: {$gt: dto.timestamps.createdAt.start, $lt: dto.timestamps.createdAt.end}
+            }
+        },
+        ...dto.timestamps.updatedAt && {
+            ...(dto.timestamps.updatedAt.start && !dto.timestamps.updatedAt.end) && {
+                updatedAt: {$gt: dto.timestamps.updatedAt.start}
+            },
+            ...(!dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
+                updatedAt: {$lt: dto.timestamps.updatedAt.end}
+            },
+            ...(dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
+                updatedAt: {$gt: dto.timestamps.updatedAt.start, $lt: dto.timestamps.updatedAt.end}
+            }
+        }
     },
 });

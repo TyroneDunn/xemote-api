@@ -36,8 +36,6 @@ export type UpdateProductDTO = {
 export type UpdateProductsDTO = {
     filter: ProductsFilter,
     timestamps?: Timestamps,
-    sort?: ProductsSort,
-    page?: Pagination,
     updateFields: ProductUpdateFields,
 };
 

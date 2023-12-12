@@ -11,7 +11,7 @@ import {Result} from "../shared/result.type";
 
 export type InventoryRepository = {
     getRecord: (dto: GetInventoryRecordDTO) => Promise<InventoryRecord>,
-    getRecords: (dto: InventoryRecordsDTO) => Promise<InventoryRecord>,
+    getRecords: (dto: InventoryRecordsDTO) => Promise<InventoryRecord[]>,
     createRecord: (dto: CreateInventoryRecordDTO) => Promise<InventoryRecord>,
     updateRecord: (dto: UpdateInventoryRecordDTO) => Promise<InventoryRecord>,
     updateRecords: (dto: UpdateInventoryRecordsDTO) => Promise<Result>,

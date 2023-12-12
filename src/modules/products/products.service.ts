@@ -1,5 +1,5 @@
 import {HttpStatusCodes, Request, Response} from "@hals/core";
-import {ProductsRepository} from "./products-repository.type";
+import {ProductsRepository, Result} from "./products-repository.type";
 import {PRODUCTS_REPOSITORY} from "../../environment/repositories-config";
 import {
     validateCreateProductDTO,
@@ -92,6 +92,12 @@ export const updateProduct = async (request: Request): Promise<Response> => {
     }
 };
 
+const mapUpdateResultToResponse = (result: Result): Response => ({
+    status: result.success ? HttpStatusCodes.OK : HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    ...result.success && {count: result.affectedCount},
+    ...(!result.success) && {error: 'Error updating products.'}
+});
+
 export const updateProducts = async (request: Request): Promise<Response> => {
     const dto: UpdateProductsDTO = mapToUpdateProductsDTO(request);
 
@@ -102,8 +108,8 @@ export const updateProducts = async (request: Request): Promise<Response> => {
         addRequestPageDataToResponse(request, response);
 
     try {
-        const products: Product[] = await repository.updateProducts(dto);
-        return addPageData(mapProductsToResponse(products, HttpStatusCodes.OK));
+        const result: Result = await repository.updateProducts(dto);
+        return mapUpdateResultToResponse(result);
     } catch (error) {
         return mapToInternalServerErrorResponse(error);
     }

@@ -52,10 +52,9 @@ export const MongoProductsRepository: ProductsRepository = {
         return {success: updateResult.acknowledged, affectedCount: updateResult.modifiedCount};
     },
 
-    deleteProduct: async (dto: DeleteProductDTO): Promise<Product> => {
-        const result = (await ProductModel.findByIdAndDelete(dto._id));
-        if (result.ok === 0) throw new Error(`Error deleting product "${dto._id}".`);
-        return result.value;
+    deleteProduct: async (dto: DeleteProductDTO): Promise<Result> => {
+        const result: DeleteResult = await ProductModel.deleteOne({_id: dto._id});
+        return {success: result.acknowledged, affectedCount: result.deletedCount};
     },
 
     deleteProducts: async (dto: ProductsDTO): Promise<Product[]> => {

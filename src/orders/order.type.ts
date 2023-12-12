@@ -1,10 +1,10 @@
-export type Orders = {
+export type Order = {
     _id: string
     clientId: string,
-    cart: ProductCountPair,
+    cart: ProductCount,
     status: OrderStatus,
 };
 
-export type ProductCountPair = Record<string, number>;
+export type ProductCount = Record<string, number>;
 
 export type OrderStatus = "complete" | "pending" | "cancelled";

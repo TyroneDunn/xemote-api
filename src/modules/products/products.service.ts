@@ -125,9 +125,6 @@ export const deleteProducts = async (request: Request): Promise<Response> => {
     const validationOutcome: ValidationOutcome = await validateDeleteProductsDTO(dto);
     if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
 
-    const addPageData = (response: Response) =>
-        addRequestPageDataToResponse(request, response);
-
     try {
         const result: Result = await repository.deleteProducts(dto);
         return mapDeleteResultToResponse(result);

@@ -13,8 +13,13 @@ export type ProductsRepository = {
     getProducts: (dto: ProductsDTO) => Promise<Product[]>,
     createProduct: (dto: CreateProductDTO) => Promise<Product>,
     updateProduct: (dto: UpdateProductDTO) => Promise<Product>,
-    updateProducts: (dto: UpdateProductsDTO) => Promise<Product[]>,
-    deleteProduct: (dto: DeleteProductDTO) => Promise<Product>,
-    deleteProducts: (dto: ProductsDTO) => Promise<Product[]>,
+    updateProducts: (dto: UpdateProductsDTO) => Promise<Result>,
+    deleteProduct: (dto: DeleteProductDTO) => Promise<Result>,
+    deleteProducts: (dto: ProductsDTO) => Promise<Result>,
     exists: (dto: GetProductDTO) => Promise<boolean>,
+};
+
+export type Result = {
+    success: boolean,
+    affectedCount: number
 };

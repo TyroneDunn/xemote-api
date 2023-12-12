@@ -5,7 +5,6 @@ import {
     LocalStrategy,
     HashingAlgorithm,
     buildConfig,
-    buildLocalAuthStrategy,
 } from "@hals/core";
 import {
     API_PORT,
@@ -20,7 +19,7 @@ import {
     SESSION_SECRET,
 } from "../environment/environment";
 import {corsOptions} from "./cors-options-config";
-import {ProductsController} from "../modules/products/products.controller";
+import {ProductsController} from "../products/products.controller";
 
 const localAuthStrategy: LocalStrategy = {
     usersDbName: 'users',

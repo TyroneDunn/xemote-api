@@ -1,4 +1,4 @@
-import {ValidationOutcome} from "../../shared/validate/validation-dtos.type";
+import {ValidationOutcome} from "../shared/validate/validation-dtos.type";
 import {
     CreateProductDTO,
     DeleteProductDTO,
@@ -7,9 +7,9 @@ import {
     UpdateProductDTO,
     UpdateProductsDTO,
 } from "./products-dtos.type";
-import {BadRequestError, NotFoundError} from "../../shared/errors.type";
+import {BadRequestError, NotFoundError} from "../shared/errors.type";
 import {ProductsRepository} from "./products-repository.type";
-import {PRODUCTS_REPOSITORY} from "../../environment/repositories-config";
+import {PRODUCTS_REPOSITORY} from "../environment/repositories-config";
 
 const repository: ProductsRepository = PRODUCTS_REPOSITORY;
 

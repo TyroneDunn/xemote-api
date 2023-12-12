@@ -1,6 +1,6 @@
 import {HttpStatusCodes, Request, Response} from "@hals/core";
 import {ProductsRepository, Result} from "./products-repository.type";
-import {PRODUCTS_REPOSITORY} from "../../environment/repositories-config";
+import {PRODUCTS_REPOSITORY} from "../environment/repositories-config";
 import {
     validateCreateProductDTO,
     validateDeleteProductDTO,
@@ -11,8 +11,8 @@ import {
     validateUpdateProductsDTO
 } from "./products-dto-validator.utility";
 import {Product} from "./product.type";
-import {ValidationOutcome} from "../../shared/validate/validation-dtos.type";
-import {mapToErrorResponse} from "../../shared/validate/validation-dtos.utility";
+import {ValidationOutcome} from "../shared/validate/validation-dtos.type";
+import {mapToErrorResponse} from "../shared/validate/validation-dtos.utility";
 import {
     addRequestPageDataToResponse,
     mapProductsToResponse,

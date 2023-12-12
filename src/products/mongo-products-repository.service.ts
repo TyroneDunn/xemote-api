@@ -11,7 +11,7 @@ import {
     UpdateProductsDTO,
 } from "./products-dtos.type";
 import {DeleteResult} from "mongodb";
-import {Price} from "../../shared/price.type";
+import {Price} from "../shared/price.type";
 import {UpdateWriteOpResult} from "mongoose";
 
 export const MongoProductsRepository: ProductsRepository = {

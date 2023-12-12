@@ -3,7 +3,7 @@ import {Document, Schema} from "mongoose";
 import database from "../../environment/mongoose-database";
 import {Price} from "../../shared/price.type";
 
-interface ProductsDocument extends Document, Product {
+export interface ProductsDocument extends Document, Product {
     _id: string,
     name: string,
     costPrice: Price,

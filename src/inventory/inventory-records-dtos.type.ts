@@ -41,5 +41,9 @@ export type InventoryRecordUpdateFields = {
     countDelta: number
 };
 
-export type UpdateInventoryRecordsDTO = {};
+export type UpdateInventoryRecordsDTO = {
+    filter: InventoryRecordsFilter,
+    timestamps?: Timestamps,
+    updateFields: InventoryRecordUpdateFields,
+};
 export type DeleteInventoryRecordDTO = {};

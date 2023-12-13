@@ -20,7 +20,7 @@ import {
     mapToCreateInventoryRecordDTO,
     mapToDeleteInventoryRecordDTO,
     mapToDeleteInventoryRecordsDTO,
-    mapToGetInventoryRecordDTO,
+    mapRequestToGetInventoryRecordDTO,
     mapToUpdateInventoryRecordDTO
 } from "./inventory-records-dtos.utility";
 import {
@@ -42,7 +42,7 @@ import {mapResultToSuccessResponse} from "../shared/result.utility";
 const repository: InventoryRepository = INVENTORY_REPOSITORY;
 
 export const getRecord = async (request: Request): Promise<Response> => {
-    const dto: GetInventoryRecordDTO = mapToGetInventoryRecordDTO(request);
+    const dto: GetInventoryRecordDTO = mapRequestToGetInventoryRecordDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateGetInventoryRecordDTO(dto);
     if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);

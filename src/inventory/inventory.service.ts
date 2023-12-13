@@ -40,8 +40,21 @@ export const getRecord = async (request: Request): Promise<Response> => {
     }
 };
 
-export const getRecords = (dto: InventoryRecordsDTO): Promise<Response> => {
+export const getRecords = async (request: Request): Promise<Response> => {
+    const dto: InventoryRecordsDTO = mapRequestToInventoryRecordsDTO(request);
 
+    const validationOutcome: ValidationOutcome = await validateGetInventoryRecordDTO(dto);
+    if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);
+
+    try {
+        const records: InventoryRecord[] = await repository.getRecords(dto);
+
+        const addPageData = (response: Response): Response =>
+            addRequestPageDataToResponse(request, response);
+        return addPageData(mapInventoryRecordsToSuccessResponse(records));
+    } catch (error) {
+        return mapToInternalServerErrorResponse(error);
+    }
 };
 
 export const createRecord = (dto: CreateInventoryRecordDTO): Promise<Response> => {

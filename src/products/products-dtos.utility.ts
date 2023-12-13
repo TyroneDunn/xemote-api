@@ -106,4 +106,3 @@ export const mapProductsToResponse = (products: Product[], status: number): Resp
         collection: [products],
         count: products.length,
     });
-

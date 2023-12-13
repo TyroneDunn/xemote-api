@@ -20,7 +20,7 @@ import {
     mapRequestToCreateInventoryRecordDTO,
     mapRequestToDeleteInventoryRecordDTO,
     mapRequestToGetInventoryRecordDTO,
-    mapToUpdateInventoryRecordDTO
+    mapRequestToUpdateInventoryRecordDTO
 } from "./inventory-records-dtos.utility";
 import {
     validateCreateInventoryRecordDTO,
@@ -86,7 +86,7 @@ export const createRecord = async (request: Request): Promise<Response> => {
 };
 
 export const updateRecord = async (request: Request): Promise<Response> => {
-    const dto: UpdateInventoryRecordDTO = mapToUpdateInventoryRecordDTO(request);
+    const dto: UpdateInventoryRecordDTO = mapRequestToUpdateInventoryRecordDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateUpdateInventoryRecordDTO(dto);
     if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);

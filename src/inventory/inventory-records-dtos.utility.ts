@@ -11,3 +11,8 @@ export const mapInventoryRecordToSuccessResponse = (record: InventoryRecord): Re
     count: 1
 });
 
+export const mapInventoryRecordsToSuccessResponse = (records: InventoryRecord[]): Response => ({
+    status: HttpStatusCodes.OK,
+    collection: records,
+    count: records.length
+});

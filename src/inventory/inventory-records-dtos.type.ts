@@ -30,6 +30,16 @@ export type CreateInventoryRecordDTO = {
     count: number,
 };
 
-export type UpdateInventoryRecordDTO = {};
+export type UpdateInventoryRecordDTO = {
+    _id: string,
+    updateFields: InventoryRecordUpdateFields,
+};
+
+export type InventoryRecordUpdateFields = {
+    productId: string,
+    count: number,
+    countDelta: number
+};
+
 export type UpdateInventoryRecordsDTO = {};
 export type DeleteInventoryRecordDTO = {};

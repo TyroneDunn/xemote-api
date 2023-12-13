@@ -3,16 +3,16 @@ import {HttpStatusCodes, Request, Response} from "@hals/core";
 import {
     CreateProductDTO,
     DeleteProductDTO,
-    ProductsDTO,
     GetProductDTO,
+    ProductsDTO,
     ProductsSortOptions,
     UpdateProductDTO,
     UpdateProductsDTO
 } from "./products-dtos.type";
 import {NumberRange} from "../shared/number-range.type";
-import {DateRange} from "../shared/date-range.type";
 import {Price} from "../shared/price.type";
 import {OrderOptions} from "../shared/order-options.type";
+import {mapRequestToTimestamps} from "../shared/hals.utility";
 
 export const mapToGetProductDTO = (request: Request): GetProductDTO => ({
     _id: request.paramMap['id'],
@@ -21,7 +21,7 @@ export const mapToGetProductDTO = (request: Request): GetProductDTO => ({
 export const mapRequestToProductsDTO = (request: Request): ProductsDTO =>
     ({
         ...mapToProductsFilter(request),
-        ...mapToTimestamps(request),
+        ...mapRequestToTimestamps(request),
         ...mapToProductsSort(request),
         ...mapToPage(request),
     });
@@ -40,7 +40,7 @@ export const mapToUpdateProductDTO = (request: Request): UpdateProductDTO => ({
 
 export const mapToUpdateProductsDTO = (request: Request): UpdateProductsDTO => ({
     ...mapToProductsFilter(request),
-    ...mapToTimestamps(request),
+    ...mapRequestToTimestamps(request),
     ...mapToProductsSort(request),
     ...mapToPage(request),
     ...mapToUpdateFields(request)
@@ -65,25 +65,6 @@ const mapToProductsFilter = (request: Request) =>
             },
         }
     });
-
-const mapToTimestamps = (request: Request) => ({
-    ...(request.queryParamMap['createdAt'] && !request.queryParamMap['updatedAt']) && {
-        timestamps: {
-            createdAt: (JSON.parse(request.queryParamMap['createdAt']) as DateRange)
-        },
-    },
-    ...(request.queryParamMap['updatedAt'] && !request.queryParamMap['createdAt']) && {
-        timestamps: {
-            updatedAt: (JSON.parse(request.queryParamMap['updatedAt']) as DateRange)
-        }
-    },
-    ...(request.queryParamMap['createdAt'] && request.queryParamMap['updatedAt']) && {
-        timestamps: {
-            createdAt: (JSON.parse(request.queryParamMap['createdAt']) as DateRange),
-            updatedAt: (JSON.parse(request.queryParamMap['updatedAt']) as DateRange)
-        },
-    },
-});
 
 const mapToProductsSort = (request: Request) => ({
     ...(request.queryParamMap['sort'] && request.queryParamMap['order']) && {

@@ -17,7 +17,7 @@ import {
     mapInventoryRecordToSuccessResponse,
     mapRequestToInventoryRecordsDTO,
     mapRequestToUpdateInventoryRecordsDTO,
-    mapToCreateInventoryRecordDTO,
+    mapRequestToCreateInventoryRecordDTO,
     mapToDeleteInventoryRecordDTO,
     mapToDeleteInventoryRecordsDTO,
     mapRequestToGetInventoryRecordDTO,
@@ -73,7 +73,7 @@ export const getRecords = async (request: Request): Promise<Response> => {
 };
 
 export const createRecord = async (request: Request): Promise<Response> => {
-    const dto: CreateInventoryRecordDTO = mapToCreateInventoryRecordDTO(request);
+    const dto: CreateInventoryRecordDTO = mapRequestToCreateInventoryRecordDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateCreateInventoryRecordDTO(dto);
     if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);

@@ -17,12 +17,14 @@ import {
     mapInventoryRecordToSuccessResponse,
     mapRequestToInventoryRecordsDTO,
     mapToCreateInventoryRecordDTO,
-    mapToGetInventoryRecordDTO
+    mapToGetInventoryRecordDTO,
+    mapToUpdateInventoryRecordDTO
 } from "./inventory-records-dtos.utility";
 import {
     validateCreateInventoryRecordDTO,
     validateGetInventoryRecordDTO,
-    validateGetInventoryRecordsDTO
+    validateGetInventoryRecordsDTO,
+    validateUpdateInventoryRecordDTO
 } from "./inventory-records-dtos-validator.service";
 import {
     addRequestPageDataToResponse,
@@ -76,8 +78,18 @@ export const createRecord = async (request: Request): Promise<Response> => {
     }
 };
 
-export const updateRecord = (dto: UpdateInventoryRecordDTO): Promise<Response> => {
+export const updateRecord = async (request: Request): Promise<Response> => {
+    const dto: UpdateInventoryRecordDTO = mapToUpdateInventoryRecordDTO(request);
 
+    const validationOutcome: ValidationOutcome = await validateUpdateInventoryRecordDTO(dto);
+    if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);
+
+    try {
+        const record: InventoryRecord = await repository.updateRecord(dto);
+        return mapInventoryRecordToSuccessResponse(record);
+    } catch (error) {
+        return mapToInternalServerErrorResponse(error);
+    }
 };
 
 export const updateRecords = (dto: UpdateInventoryRecordsDTO): Promise<Response> => {

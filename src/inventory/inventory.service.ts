@@ -16,6 +16,7 @@ import {
     mapInventoryRecordsToSuccessResponse,
     mapInventoryRecordToSuccessResponse,
     mapRequestToInventoryRecordsDTO,
+    mapRequestToUpdateInventoryRecordsDTO,
     mapToCreateInventoryRecordDTO,
     mapToGetInventoryRecordDTO,
     mapToUpdateInventoryRecordDTO
@@ -24,12 +25,15 @@ import {
     validateCreateInventoryRecordDTO,
     validateGetInventoryRecordDTO,
     validateGetInventoryRecordsDTO,
-    validateUpdateInventoryRecordDTO
+    validateUpdateInventoryRecordDTO,
+    validateUpdateInventoryRecordsDTO
 } from "./inventory-records-dtos-validator.service";
 import {
     addRequestPageDataToResponse,
     mapToInternalServerErrorResponse
 } from "../shared/hals.utility";
+import {Result} from "../shared/result.type";
+import {mapResultToSuccessResponse} from "../shared/result.utility";
 
 const repository: InventoryRepository = INVENTORY_REPOSITORY;
 
@@ -92,8 +96,18 @@ export const updateRecord = async (request: Request): Promise<Response> => {
     }
 };
 
-export const updateRecords = (dto: UpdateInventoryRecordsDTO): Promise<Response> => {
+export const updateRecords = async (request: Request): Promise<Response> => {
+    const dto: UpdateInventoryRecordsDTO = mapRequestToUpdateInventoryRecordsDTO(request);
 
+    const validationOutcome: ValidationOutcome = await validateUpdateInventoryRecordsDTO(dto);
+    if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);
+
+    try {
+        const result: Result = await repository.updateRecords(dto);
+        return mapResultToSuccessResponse(result);
+    } catch (error) {
+        return mapToInternalServerErrorResponse(error);
+    }
 };
 
 export const deleteRecord = (dto: DeleteInventoryRecordDTO): Promise<Response> => {

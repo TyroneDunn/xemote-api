@@ -8,12 +8,36 @@ import {
     UpdateInventoryRecordDTO,
     UpdateInventoryRecordsDTO,
 } from "./inventory-records-dtos.type";
-import {Response} from "@hals/core";
+import {Request, Response} from "@hals/core";
+import {ValidationOutcome} from "../shared/validate/validation-dtos.type";
+import {mapToErrorResponse} from "../shared/validate/validation-dtos.utility";
+import {InventoryRecord} from "./inventory-record.type";
+import {
+    mapInventoryRecordsToSuccessResponse,
+    mapInventoryRecordToSuccessResponse,
+    mapRequestToInventoryRecordsDTO,
+    mapToGetInventoryRecordDTO
+} from "./inventory-records-dtos.utility";
+import {validateGetInventoryRecordDTO} from "./inventory-records-dtos-validator.service";
+import {
+    addRequestPageDataToResponse,
+    mapToInternalServerErrorResponse
+} from "../shared/hals.utility";
 
 const repository: InventoryRepository = INVENTORY_REPOSITORY;
 
-export const getRecord = (dto: GetInventoryRecordDTO): Promise<Response> => {
+export const getRecord = async (request: Request): Promise<Response> => {
+    const dto: GetInventoryRecordDTO = mapToGetInventoryRecordDTO(request);
 
+    const validationOutcome: ValidationOutcome = await validateGetInventoryRecordDTO(dto);
+    if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);
+
+    try {
+        const record: InventoryRecord = await repository.getRecord(dto);
+        return mapInventoryRecordToSuccessResponse(record);
+    } catch (error) {
+        return mapToInternalServerErrorResponse(error);
+    }
 };
 
 export const getRecords = (dto: InventoryRecordsDTO): Promise<Response> => {

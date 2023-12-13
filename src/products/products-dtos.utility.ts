@@ -1,5 +1,5 @@
 import {Product, ProductType} from "./product.type";
-import {Request, Response} from "@hals/core";
+import {HttpStatusCodes, Request, Response} from "@hals/core";
 import {
     CreateProductDTO,
     DeleteProductDTO,
@@ -112,9 +112,9 @@ const mapToUpdateFields = (request: Request) => ({
     }
 });
 
-export const mapProductToResponse = (product: Product, status: number): Response =>
+export const mapProductToSuccessResponse = (product: Product): Response =>
     ({
-        status: status,
+        status: HttpStatusCodes.OK,
         collection: [product],
         count: 1,
     });

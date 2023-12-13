@@ -16,7 +16,7 @@ import {mapToErrorResponse} from "../shared/validate/validation-dtos.utility";
 import {
     addRequestPageDataToResponse,
     mapProductsToResponse,
-    mapProductToResponse,
+    mapProductToSuccessResponse,
     mapRequestToProductsDTO,
     mapToCreateProductDTO,
     mapToDeleteProductDTO,
@@ -44,7 +44,7 @@ export const getProduct = async (request: Request): Promise<Response> => {
 
     try {
         const product: Product = await repository.getProduct(dto);
-        return mapProductToResponse(product, HttpStatusCodes.OK);
+        return mapProductToSuccessResponse(product);
     } catch (error) {
         return mapToInternalServerErrorResponse(error);
     }
@@ -73,7 +73,7 @@ export const createProduct = async (request: Request): Promise<Response> => {
 
     try {
         const product: Product = await repository.createProduct(dto);
-        return mapProductToResponse(product, HttpStatusCodes.CREATED);
+        return mapProductToSuccessResponse(product);
     } catch (error) {
         return mapToInternalServerErrorResponse(error);
     }
@@ -87,7 +87,7 @@ export const updateProduct = async (request: Request): Promise<Response> => {
 
     try {
         const product: Product = await repository.updateProduct(dto);
-        return mapProductToResponse(product, HttpStatusCodes.OK);
+        return mapProductToSuccessResponse(product);
     } catch (error) {
         return mapToInternalServerErrorResponse(error);
     }

@@ -18,11 +18,13 @@ import {
     mapRequestToInventoryRecordsDTO,
     mapRequestToUpdateInventoryRecordsDTO,
     mapToCreateInventoryRecordDTO,
+    mapToDeleteInventoryRecordDTO,
     mapToGetInventoryRecordDTO,
     mapToUpdateInventoryRecordDTO
 } from "./inventory-records-dtos.utility";
 import {
     validateCreateInventoryRecordDTO,
+    validateDeleteInventoryRecordDTO,
     validateGetInventoryRecordDTO,
     validateGetInventoryRecordsDTO,
     validateUpdateInventoryRecordDTO,
@@ -110,8 +112,18 @@ export const updateRecords = async (request: Request): Promise<Response> => {
     }
 };
 
-export const deleteRecord = (dto: DeleteInventoryRecordDTO): Promise<Response> => {
+export const deleteRecord = async (request: Request): Promise<Response> => {
+    const dto: DeleteInventoryRecordDTO = mapToDeleteInventoryRecordDTO(request);
 
+    const validationOutcome: ValidationOutcome = await validateDeleteInventoryRecordDTO(dto);
+    if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);
+
+    try {
+        const result: Result = await repository.deleteRecord(dto);
+        return mapResultToSuccessResponse(result);
+    } catch (error) {
+        return mapToInternalServerErrorResponse(error);
+    }
 };
 
 export const deleteRecords = (dto: InventoryRecordsDTO): Promise<Response> => {

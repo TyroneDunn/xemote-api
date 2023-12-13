@@ -46,4 +46,5 @@ export type UpdateInventoryRecordsDTO = {
     timestamps?: Timestamps,
     updateFields: InventoryRecordUpdateFields,
 };
-export type DeleteInventoryRecordDTO = {};
+
+export type DeleteInventoryRecordDTO = { _id: string };

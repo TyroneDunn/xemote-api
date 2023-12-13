@@ -3,6 +3,7 @@ import {Pagination} from "../shared/pagination.type";
 import {NumberRange} from "../shared/number-range.type";
 import {Order} from "../orders/order.type";
 
+export type GetInventoryRecordDTO = {_id: string};
 
 export type InventoryRecordsDTO = {
     filter?: InventoryRecordsFilter,

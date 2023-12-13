@@ -18,7 +18,7 @@ import {
     mapRequestToInventoryRecordsDTO,
     mapRequestToUpdateInventoryRecordsDTO,
     mapRequestToCreateInventoryRecordDTO,
-    mapToDeleteInventoryRecordDTO,
+    mapRequestToDeleteInventoryRecordDTO,
     mapToDeleteInventoryRecordsDTO,
     mapRequestToGetInventoryRecordDTO,
     mapToUpdateInventoryRecordDTO
@@ -115,7 +115,7 @@ export const updateRecords = async (request: Request): Promise<Response> => {
 };
 
 export const deleteRecord = async (request: Request): Promise<Response> => {
-    const dto: DeleteInventoryRecordDTO = mapToDeleteInventoryRecordDTO(request);
+    const dto: DeleteInventoryRecordDTO = mapRequestToDeleteInventoryRecordDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateDeleteInventoryRecordDTO(dto);
     if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);

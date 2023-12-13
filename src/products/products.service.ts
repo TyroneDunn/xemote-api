@@ -14,9 +14,7 @@ import {Product} from "./product.type";
 import {ValidationOutcome} from "../shared/validate/validation-dtos.type";
 import {mapToErrorResponse} from "../shared/validate/validation-dtos.utility";
 import {
-    addRequestPageDataToResponse,
-    mapProductsToResponse,
-    mapProductToSuccessResponse,
+    mapProductsToResponse, mapProductToSuccessResponse,
     mapRequestToProductsDTO,
     mapToCreateProductDTO,
     mapToDeleteProductDTO,
@@ -33,6 +31,10 @@ import {
     UpdateProductsDTO,
 } from "./products-dtos.type";
 import {Result} from "../shared/result.type";
+import {
+    addRequestPageDataToResponse,
+    mapToInternalServerErrorResponse
+} from "../shared/hals.utility";
 
 const repository: ProductsRepository = PRODUCTS_REPOSITORY;
 
@@ -133,11 +135,6 @@ export const deleteProducts = async (request: Request): Promise<Response> => {
         return mapToInternalServerErrorResponse(error);
     }
 };
-
-const mapToInternalServerErrorResponse = (error): Response => ({
-    status: HttpStatusCodes.INTERNAL_SERVER_ERROR,
-    error: error.message,
-});
 
 const mapUpdateResultToResponse = (result: Result): Response => ({
     status: result.success ? HttpStatusCodes.OK : HttpStatusCodes.INTERNAL_SERVER_ERROR,

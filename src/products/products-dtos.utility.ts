@@ -126,9 +126,3 @@ export const mapProductsToResponse = (products: Product[], status: number): Resp
         count: products.length,
     });
 
-export const addRequestPageDataToResponse = (request: Request, response: Response): Response =>
-    ({
-        ...response,
-        index: parseInt(request.queryParamMap['index']),
-        limit: parseInt(request.queryParamMap['limit']),
-    });

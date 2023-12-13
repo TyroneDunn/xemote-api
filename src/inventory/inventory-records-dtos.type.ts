@@ -25,7 +25,11 @@ export type InventoryRecordsSort = {
 export type InventoryRecordsSortOption =
     | "count";
 
-export type CreateInventoryRecordDTO = {};
+export type CreateInventoryRecordDTO = {
+    productId: string,
+    count: number,
+};
+
 export type UpdateInventoryRecordDTO = {};
 export type UpdateInventoryRecordsDTO = {};
 export type DeleteInventoryRecordDTO = {};

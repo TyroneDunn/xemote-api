@@ -18,7 +18,10 @@ import {
     mapRequestToInventoryRecordsDTO,
     mapToGetInventoryRecordDTO
 } from "./inventory-records-dtos.utility";
-import {validateGetInventoryRecordDTO} from "./inventory-records-dtos-validator.service";
+import {
+    validateGetInventoryRecordDTO,
+    validateGetInventoryRecordsDTO
+} from "./inventory-records-dtos-validator.service";
 import {
     addRequestPageDataToResponse,
     mapToInternalServerErrorResponse
@@ -43,7 +46,7 @@ export const getRecord = async (request: Request): Promise<Response> => {
 export const getRecords = async (request: Request): Promise<Response> => {
     const dto: InventoryRecordsDTO = mapRequestToInventoryRecordsDTO(request);
 
-    const validationOutcome: ValidationOutcome = await validateGetInventoryRecordDTO(dto);
+    const validationOutcome: ValidationOutcome = await validateGetInventoryRecordsDTO(dto);
     if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);
 
     try {

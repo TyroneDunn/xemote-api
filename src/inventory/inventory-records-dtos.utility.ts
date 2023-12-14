@@ -24,13 +24,13 @@ export const mapInventoryRecordToSuccessResponse = (record: InventoryRecord): Re
 
 export const mapRequestToInventoryRecordsDTO = (request: Request): InventoryRecordsDTO =>
     ({
-        ...mapToInventoryRecordsFilter(request),
+        ...mapRequestToInventoryRecordsFilter(request),
         ...mapRequestToTimestamps(request),
         ...mapToInventoryRecordsSort(request),
         ...mapRequestToPage(request),
     });
 
-const mapToInventoryRecordsFilter = (request: Request) => ({
+const mapRequestToInventoryRecordsFilter = (request: Request) => ({
     filter: {
         ...request.queryParamMap['productId']
         && {productId: request.queryParamMap['productId']},
@@ -61,10 +61,10 @@ export const mapRequestToCreateInventoryRecordDTO = (request: Request): CreateIn
 
 export const mapRequestToUpdateInventoryRecordDTO = (request: Request): UpdateInventoryRecordDTO => ({
     _id: request.paramMap['id'],
-    ...mapToUpdateFields(request.payload)
+    ...mapRequestToInvetoryRecordUpdateFields(request.payload)
 });
 
-const mapToUpdateFields = (payload: Object) => ({
+const mapRequestToInvetoryRecordUpdateFields = (payload: Object) => ({
     updateFields: {
         ...payload['newProductId'] && {newProductId: payload['newProductId']},
         ...payload['newCount'] && {newCount: payload['newCount']},
@@ -73,11 +73,11 @@ const mapToUpdateFields = (payload: Object) => ({
 });
 
 export const mapRequestToUpdateInventoryRecordsDTO = (request: Request): UpdateInventoryRecordsDTO => ({
-    ...mapToInventoryRecordsFilter(request),
+    ...mapRequestToInventoryRecordsFilter(request),
     ...mapRequestToTimestamps(request),
     ...mapToInventoryRecordsSort(request),
     ...mapRequestToPage(request),
-    ...mapToUpdateFields(request),
+    ...mapRequestToInvetoryRecordUpdateFields(request),
 });
 
 export const mapRequestToDeleteInventoryRecordDTO = (request: Request): DeleteInventoryRecordDTO =>

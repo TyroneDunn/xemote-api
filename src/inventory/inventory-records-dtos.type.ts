@@ -13,7 +13,7 @@ export type InventoryRecordsDTO = {
 };
 
 export type InventoryRecordsFilter = {
-    productId: string,
+    productId?: string,
     countRange?: NumberRange,
 };
 

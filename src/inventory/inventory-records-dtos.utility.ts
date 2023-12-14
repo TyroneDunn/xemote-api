@@ -3,8 +3,14 @@ import {
     CreateInventoryRecordDTO,
     DeleteInventoryRecordDTO,
     GetInventoryRecordDTO,
+    InventoryRecordsDTO,
+    InventoryRecordsSortOption,
+    UpdateInventoryRecordDTO,
 } from "./inventory-records-dtos.type";
 import {InventoryRecord} from "./inventory-record.type";
+import {mapRequestToPage, mapRequestToTimestamps} from "../shared/hals.utility";
+import {NumberRange} from "../shared/number-range.type";
+import {OrderOptions} from "../shared/order-options.type";
 
 export const mapRequestToGetInventoryRecordDTO = (request: Request): GetInventoryRecordDTO =>
     ({_id: request.paramMap['id']});
@@ -13,6 +19,32 @@ export const mapInventoryRecordToSuccessResponse = (record: InventoryRecord): Re
     status: HttpStatusCodes.OK,
     collection: [record],
     count: 1
+});
+
+export const mapRequestToInventoryRecordsDTO = (request: Request): InventoryRecordsDTO =>
+    ({
+        ...mapToInventoryRecordsFilter(request),
+        ...mapRequestToTimestamps(request),
+        ...mapToInventoryRecordsSort(request),
+        ...mapRequestToPage(request),
+    });
+
+const mapToInventoryRecordsFilter = (request: Request) => ({
+    filter: {
+        ...request.queryParamMap['productId']
+        && {productId: request.queryParamMap['productId']},
+        ...request.queryParamMap['countRange']
+        && {countRange: JSON.parse(request.queryParamMap['countRange']) as NumberRange},
+    }
+});
+
+const mapToInventoryRecordsSort = (request: Request) => ({
+    ...(request.queryParamMap['sort'] && request.queryParamMap['order']) && {
+        sort: {
+            field: request.queryParamMap['sort'] as InventoryRecordsSortOption,
+            order: request.queryParamMap['order'] as OrderOptions,
+        }
+    }
 });
 
 export const mapInventoryRecordsToSuccessResponse = (records: InventoryRecord[]): Response => ({

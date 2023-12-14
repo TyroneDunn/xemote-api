@@ -12,7 +12,7 @@ import {
 import {NumberRange} from "../shared/number-range.type";
 import {Price} from "../shared/price.type";
 import {OrderOptions} from "../shared/order-options.type";
-import {mapRequestToTimestamps} from "../shared/hals.utility";
+import {mapRequestToPage, mapRequestToTimestamps} from "../shared/hals.utility";
 
 export const mapToGetProductDTO = (request: Request): GetProductDTO => ({
     _id: request.paramMap['id'],
@@ -23,7 +23,7 @@ export const mapRequestToProductsDTO = (request: Request): ProductsDTO =>
         ...mapToProductsFilter(request),
         ...mapRequestToTimestamps(request),
         ...mapToProductsSort(request),
-        ...mapToPage(request),
+        ...mapRequestToPage(request),
     });
 
 export const mapToCreateProductDTO = (request: Request): CreateProductDTO => ({
@@ -42,7 +42,7 @@ export const mapToUpdateProductsDTO = (request: Request): UpdateProductsDTO => (
     ...mapToProductsFilter(request),
     ...mapRequestToTimestamps(request),
     ...mapToProductsSort(request),
-    ...mapToPage(request),
+    ...mapRequestToPage(request),
     ...mapToUpdateFields(request)
 });
 
@@ -71,15 +71,6 @@ const mapToProductsSort = (request: Request) => ({
         sort: {
             field: request.queryParamMap['sort'] as ProductsSortOptions,
             order: request.queryParamMap['order'] as OrderOptions,
-        }
-    },
-});
-
-const mapToPage = (request: Request) => ({
-    ...(request.queryParamMap['index'] && request.queryParamMap['limit']) && {
-        page: {
-            index: parseInt(request.queryParamMap['index']),
-            limit: parseInt(request.queryParamMap['limit'])
         }
     },
 });

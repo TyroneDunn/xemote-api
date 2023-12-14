@@ -11,8 +11,8 @@ import {
     validateUpdateProductsDTO
 } from "./products-dto-validator.utility";
 import {Product} from "./product.type";
-import {ValidationOutcome} from "../shared/validate/validation-dtos.type";
-import {mapToErrorResponse} from "../shared/validate/validation-dtos.utility";
+import {ValidationOutcome} from "../shared/validation-dtos.type";
+import {mapToErrorResponse} from "../shared/validation-dtos.utility";
 import {
     mapProductsToResponse, mapProductToSuccessResponse,
     mapRequestToProductsDTO,

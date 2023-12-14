@@ -9,8 +9,8 @@ import {
     UpdateInventoryRecordsDTO,
 } from "./inventory-records-dtos.type";
 import {Request, Response} from "@hals/core";
-import {ValidationOutcome} from "../shared/validate/validation-dtos.type";
-import {mapToErrorResponse} from "../shared/validate/validation-dtos.utility";
+import {ValidationOutcome} from "../shared/validation-dtos.type";
+import {mapToErrorResponse} from "../shared/validation-dtos.utility";
 import {InventoryRecord} from "./inventory-record.type";
 import {
     mapInventoryRecordsToSuccessResponse,

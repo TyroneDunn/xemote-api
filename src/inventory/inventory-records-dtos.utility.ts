@@ -58,5 +58,18 @@ export const mapRequestToCreateInventoryRecordDTO = (request: Request): CreateIn
     count: parseInt(request.payload['count'])
 });
 
+export const mapRequestToUpdateInventoryRecordDTO = (request: Request): UpdateInventoryRecordDTO => ({
+    _id: request.paramMap['id'],
+    ...mapToUpdateFields(request.payload)
+});
+
+const mapToUpdateFields = (payload: Object) => ({
+    updateFields: {
+        ...payload['newProductId'] && {newProductId: payload['newProductId']},
+        ...payload['newCount'] && {newCount: payload['newCount']},
+        ...payload['countDelta'] && {countDelta: payload['countDelta']},
+    }
+});
+
 export const mapRequestToDeleteInventoryRecordDTO = (request: Request): DeleteInventoryRecordDTO =>
     ({_id: request.paramMap['id']});

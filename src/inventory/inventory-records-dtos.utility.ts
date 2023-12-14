@@ -6,6 +6,7 @@ import {
     InventoryRecordsDTO,
     InventoryRecordsSortOption,
     UpdateInventoryRecordDTO,
+    UpdateInventoryRecordsDTO
 } from "./inventory-records-dtos.type";
 import {InventoryRecord} from "./inventory-record.type";
 import {mapRequestToPage, mapRequestToTimestamps} from "../shared/hals.utility";
@@ -69,6 +70,14 @@ const mapToUpdateFields = (payload: Object) => ({
         ...payload['newCount'] && {newCount: payload['newCount']},
         ...payload['countDelta'] && {countDelta: payload['countDelta']},
     }
+});
+
+export const mapRequestToUpdateInventoryRecordsDTO = (request: Request): UpdateInventoryRecordsDTO => ({
+    ...mapToInventoryRecordsFilter(request),
+    ...mapRequestToTimestamps(request),
+    ...mapToInventoryRecordsSort(request),
+    ...mapRequestToPage(request),
+    ...mapToUpdateFields(request),
 });
 
 export const mapRequestToDeleteInventoryRecordDTO = (request: Request): DeleteInventoryRecordDTO =>

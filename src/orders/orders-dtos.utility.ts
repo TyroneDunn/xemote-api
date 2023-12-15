@@ -74,5 +74,13 @@ const mapRequestToUpdateFields = (request: Request) => ({
     }
 });
 
+export const mapRequestToUpdateOrdersDTO = (request: Request): UpdateOrdersDTO => ({
+    ...mapRequestToOrdersFilter(request),
+    ...mapRequestToTimestamps(request),
+    ...mapRequestToOrdersSort(request),
+    ...mapRequestToPage(request),
+    ...mapRequestToUpdateFields(request)
+});
+
 export const mapRequestToDeleteOrderDTO = (request: Request): DeleteOrderDTO =>
     ({_id: request.paramMap['id']});

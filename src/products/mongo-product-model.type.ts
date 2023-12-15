@@ -3,7 +3,7 @@ import {Document, Schema} from "mongoose";
 import database from "../environment/mongoose-database";
 import {Price} from "../shared/price.type";
 
-export interface ProductsDocument extends Document, Product {
+export interface ProductDocument extends Document, Product {
     _id: string,
     name: string,
     costPrice: Price,
@@ -25,7 +25,7 @@ const CostPriceSchema = new Schema(
     {_id: false, }
 );
 
-const ProductSchema = new Schema<ProductsDocument>(
+const ProductSchema = new Schema<ProductDocument>(
     {
         name: {
             type: String,
@@ -46,5 +46,5 @@ const ProductSchema = new Schema<ProductsDocument>(
     {timestamps: true}
 );
 
-const ProductModel = database.model<ProductsDocument>('products', ProductSchema);
+const ProductModel = database.model<ProductDocument>('products', ProductSchema);
 export {ProductModel};

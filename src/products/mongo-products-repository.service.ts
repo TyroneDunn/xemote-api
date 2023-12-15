@@ -1,4 +1,4 @@
-import {ProductsRepository, Result} from "./products-repository.type";
+import {ProductsRepository} from "./products-repository.type";
 import {ProductModel} from "./mongo-product-model.type";
 import {Product} from "./product.type";
 import {
@@ -13,6 +13,7 @@ import {
 import {DeleteResult} from "mongodb";
 import {Price} from "../shared/price.type";
 import {UpdateWriteOpResult} from "mongoose";
+import {Result} from "../shared/result.type";
 
 export const MongoProductsRepository: ProductsRepository = {
     getProduct: (dto: GetProductDTO): Promise<Product> =>

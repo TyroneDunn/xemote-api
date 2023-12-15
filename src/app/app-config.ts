@@ -1,10 +1,11 @@
 import {
-    App,
-    Config,
-    NodeEnvironmentOption,
-    LocalStrategy,
+    Application,
+    buildSchema,
     HashingAlgorithm,
-    buildConfig,
+    LocalStrategy,
+    newApplication,
+    NodeEnvironmentOption,
+    Schema,
 } from "@hals/core";
 import {
     API_PORT,
@@ -32,7 +33,7 @@ const localAuthStrategy: LocalStrategy = {
     passwordLength: PASSWORD_LENGTH,
 };
 
-export const config: Config = buildConfig(
+export const schema: Schema = buildSchema(
     `${NODE_ENV as NodeEnvironmentOption}`,
     "Express",
     `${API_TITLE}`,
@@ -42,9 +43,9 @@ export const config: Config = buildConfig(
     localAuthStrategy
 );
 
-App.init(config, [
-    ProductsController,
-])
+const app: Application = newApplication(schema, [
+    ProductsController
+]);
 
-const run = App.run;
+const run = app.run;
 export default run;

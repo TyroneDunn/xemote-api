@@ -1,5 +1,5 @@
 import {HttpStatusCodes, Request, Response} from "@hals/core";
-import {ProductsRepository, Result} from "./products-repository.type";
+import {ProductsRepository} from "./products-repository.type";
 import {PRODUCTS_REPOSITORY} from "../environment/repositories-config";
 import {
     validateCreateProductDTO,
@@ -11,12 +11,10 @@ import {
     validateUpdateProductsDTO
 } from "./products-dto-validator.utility";
 import {Product} from "./product.type";
-import {ValidationOutcome} from "../shared/validate/validation-dtos.type";
-import {mapToErrorResponse} from "../shared/validate/validation-dtos.utility";
+import {ValidationOutcome} from "../shared/validation-dtos.type";
+import {mapToErrorResponse} from "../shared/validation-dtos.utility";
 import {
-    addRequestPageDataToResponse,
-    mapProductsToResponse,
-    mapProductToResponse,
+    mapProductsToResponse, mapProductToSuccessResponse,
     mapRequestToProductsDTO,
     mapToCreateProductDTO,
     mapToDeleteProductDTO,
@@ -32,6 +30,11 @@ import {
     UpdateProductDTO,
     UpdateProductsDTO,
 } from "./products-dtos.type";
+import {Result} from "../shared/result.type";
+import {
+    addRequestPageDataToResponse,
+    mapToInternalServerErrorResponse
+} from "../shared/hals.utility";
 
 const repository: ProductsRepository = PRODUCTS_REPOSITORY;
 
@@ -43,7 +46,7 @@ export const getProduct = async (request: Request): Promise<Response> => {
 
     try {
         const product: Product = await repository.getProduct(dto);
-        return mapProductToResponse(product, HttpStatusCodes.OK);
+        return mapProductToSuccessResponse(product);
     } catch (error) {
         return mapToInternalServerErrorResponse(error);
     }
@@ -72,7 +75,7 @@ export const createProduct = async (request: Request): Promise<Response> => {
 
     try {
         const product: Product = await repository.createProduct(dto);
-        return mapProductToResponse(product, HttpStatusCodes.CREATED);
+        return mapProductToSuccessResponse(product);
     } catch (error) {
         return mapToInternalServerErrorResponse(error);
     }
@@ -86,7 +89,7 @@ export const updateProduct = async (request: Request): Promise<Response> => {
 
     try {
         const product: Product = await repository.updateProduct(dto);
-        return mapProductToResponse(product, HttpStatusCodes.OK);
+        return mapProductToSuccessResponse(product);
     } catch (error) {
         return mapToInternalServerErrorResponse(error);
     }
@@ -132,11 +135,6 @@ export const deleteProducts = async (request: Request): Promise<Response> => {
         return mapToInternalServerErrorResponse(error);
     }
 };
-
-const mapToInternalServerErrorResponse = (error): Response => ({
-    status: HttpStatusCodes.INTERNAL_SERVER_ERROR,
-    error: error.message,
-});
 
 const mapUpdateResultToResponse = (result: Result): Response => ({
     status: result.success ? HttpStatusCodes.OK : HttpStatusCodes.INTERNAL_SERVER_ERROR,

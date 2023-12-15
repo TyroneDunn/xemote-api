@@ -1,12 +1,13 @@
 import {Product} from "./product.type";
 import {
+    CreateProductDTO,
+    DeleteProductDTO,
     GetProductDTO,
     ProductsDTO,
-    CreateProductDTO,
     UpdateProductDTO,
     UpdateProductsDTO,
-    DeleteProductDTO,
 } from "./products-dtos.type";
+import {Result} from "../shared/result.type";
 
 export type ProductsRepository = {
     getProduct: (dto: GetProductDTO) => Promise<Product>,
@@ -17,9 +18,4 @@ export type ProductsRepository = {
     deleteProduct: (dto: DeleteProductDTO) => Promise<Result>,
     deleteProducts: (dto: ProductsDTO) => Promise<Result>,
     exists: (dto: GetProductDTO) => Promise<boolean>,
-};
-
-export type Result = {
-    success: boolean,
-    affectedCount: number
 };

@@ -59,7 +59,7 @@ const updateRecordMethod: Method = {
 };
 
 const deleteRecordsMethod: Method = {
-    type: "PATCH",
+    type: "DELETE",
     paramKeys: [],
     queryParamKeys: InventoryQueryParamsKeys,
     sideEffects: [],
@@ -68,7 +68,7 @@ const deleteRecordsMethod: Method = {
 };
 
 const deleteRecordMethod: Method = {
-    type: "PATCH",
+    type: "DELETE",
     paramKeys: [],
     queryParamKeys: [],
     sideEffects: [],

@@ -60,7 +60,7 @@ const updateOrderMethod: Method = {
 };
 
 const deleteOrdersMethod: Method = {
-    type: "PATCH",
+    type: "DELETE",
     paramKeys: [],
     queryParamKeys: OrdersQueryParamsKeys,
     sideEffects: [],
@@ -69,7 +69,7 @@ const deleteOrdersMethod: Method = {
 };
 
 const deleteOrderMethod: Method = {
-    type: "PATCH",
+    type: "DELETE",
     paramKeys: [],
     queryParamKeys: [],
     sideEffects: [],

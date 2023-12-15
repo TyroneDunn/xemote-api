@@ -54,7 +54,10 @@ export const MongoInventoryRepository: InventoryRepository = {
         return {success: result.acknowledged, affectedCount: result.deletedCount};
     },
 
-    deleteRecords: (dto: InventoryRecordsDTO): Promise<Result> => {
+    deleteRecords: async (dto: InventoryRecordsDTO): Promise<Result> => {
+        const filter = mapDTOToFilter(dto);
+        const result: DeleteResult = await InventoryRecordsModel.deleteMany(filter);
+        return {success: result.acknowledged, affectedCount: result.deletedCount};
     },
 
     exists: async (dto: GetInventoryRecordDTO): Promise<boolean> => {

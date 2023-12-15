@@ -38,7 +38,11 @@ export type OrdersFilter = {
     markupRange?: NumberRange,
 };
 
-export type OrderUpdateFields = {}
+export type OrderUpdateFields = {
+    newClientId: string,
+    newCart: ProductCount,
+    newStatus: OrderStatus,
+};
 
 export type DeleteOrderDTO = { _id: string };
 

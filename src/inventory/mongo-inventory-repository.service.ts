@@ -1,8 +1,11 @@
 import {InventoryRepository} from "./inventory-repository.type";
 import {
     CreateInventoryRecordDTO,
-    DeleteInventoryRecordDTO, GetInventoryRecordDTO,
-    InventoryRecordsDTO, UpdateInventoryRecordDTO, UpdateInventoryRecordsDTO
+    DeleteInventoryRecordDTO,
+    GetInventoryRecordDTO,
+    InventoryRecordsDTO,
+    UpdateInventoryRecordDTO,
+    UpdateInventoryRecordsDTO
 } from "./inventory-records-dtos.type";
 import {InventoryRecord} from "./inventory-record.type";
 import {Result} from "../shared/result.type";

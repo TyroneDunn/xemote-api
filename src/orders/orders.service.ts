@@ -1,6 +1,6 @@
 import {Request, Response} from "@hals/core";
 import {OrdersRepository} from "./orders-repository.type";
-import {ORDERS_REPOSITORY} from "../environment/repositories-config";
+import {ORDERS_REPOSITORY} from "../repositories.config";
 import {ValidationOutcome} from "../shared/validation-dtos.type";
 import {mapToErrorResponse} from "../shared/validation-dtos.utility";
 import {

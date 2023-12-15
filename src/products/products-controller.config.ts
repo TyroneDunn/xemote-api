@@ -5,7 +5,7 @@ import {
 import {configureProductsController, ProductsController} from "./products-controller.utility";
 import {configureProductsService, ProductsService} from "./products.service";
 import {ProductsRepository} from "./products-repository.type";
-import {PRODUCTS_REPOSITORY} from "../environment/repositories-config";
+import {PRODUCTS_REPOSITORY} from "../repositories.config";
 
 const productsRepository: ProductsRepository = PRODUCTS_REPOSITORY;
 const productsDtoValidator: ProductsDtoValidator = configureProductsDtoValidator(productsRepository);

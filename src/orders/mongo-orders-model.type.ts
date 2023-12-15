@@ -1,6 +1,6 @@
 import {Order, OrderStatus, ProductCount} from "./order.type";
 import {Schema} from "mongoose";
-import database from "../environment/mongoose-database";
+import database from "../mongoose-database.config";
 
 export interface OrdersDocument extends Document, Order {
     clientId: string,

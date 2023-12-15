@@ -18,7 +18,7 @@ import {
     PASSWORD_LENGTH,
     PASSWORD_SALT,
     SESSION_SECRET,
-} from "../environment/environment";
+} from "../environment";
 import {corsOptions} from "./cors-options-config";
 import productsController from "../products/products-controller.config";
 

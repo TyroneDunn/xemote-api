@@ -27,6 +27,7 @@ import {
     addRequestPageDataToResponse,
     mapToInternalServerErrorResponse
 } from "../shared/hals.utility";
+import {mapDeleteResultToResponse, mapUpdateResultToResponse} from "../shared/result.utility";
 
 export type ProductsService = {
     getProduct: (request: Request) => Promise<Response>,
@@ -135,19 +136,3 @@ export const configureProductsService = (
             }
         },
     });
-
-const mapUpdateResultToResponse = (result: Result): Response => ({
-    status: result.success ? HttpStatusCodes.OK : HttpStatusCodes.INTERNAL_SERVER_ERROR,
-    ...result.success && {count: result.affectedCount},
-    ...(!result.success) && {error: 'Error updating products.'}
-});
-
-const mapDeleteResultToResponse = (result: Result): Response => ({
-    status: result.success && result.affectedCount > 0
-        ? HttpStatusCodes.OK
-        : result.success && result.affectedCount === 0
-            ? HttpStatusCodes.NOT_FOUND
-            : HttpStatusCodes.INTERNAL_SERVER_ERROR,
-    ...result.success && {count: result.affectedCount},
-    ...(!result.success) && {error: 'Error deleting product(s).'}
-});

@@ -1,6 +1,6 @@
 import {Document, Schema} from 'mongoose';
 import {User} from "./user.type";
-import database from "../../mongoose-database.config";
+import database from "../../mongodb.config";
 import {UserPermissions} from "./user-permissions.type";
 
 interface UserDocument extends Document, User {

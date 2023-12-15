@@ -1,6 +1,6 @@
 import {Product, ProductType} from "./product.type";
 import {Document, Schema} from "mongoose";
-import database from "../mongoose-database.config";
+import database from "../mongodb.config";
 import {Price} from "../shared/price.type";
 
 export interface ProductDocument extends Document, Product {

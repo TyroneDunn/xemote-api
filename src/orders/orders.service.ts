@@ -23,7 +23,7 @@ import {
     mapOrderToSuccessResponse,
     mapRequestToOrdersDTO,
     mapRequestToUpdateOrdersDTO,
-    mapToCreateOrderDTO,
+    mapRequestToCreateOrderDTO,
     mapToDeleteOrderDTO,
     mapToDeleteOrdersDTO,
     mapRequestToGetOrderDTO,
@@ -73,7 +73,7 @@ export const getOrders = async (request: Request): Promise<Response> => {
 };
 
 export const createOrder = async (request: Request): Promise<Response> => {
-    const dto: CreateOrderDTO = mapToCreateOrderDTO(request);
+    const dto: CreateOrderDTO = mapRequestToCreateOrderDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateCreateOrderDTO(dto);
     if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);

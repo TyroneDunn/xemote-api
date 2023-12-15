@@ -3,7 +3,7 @@ import {
     CreateInventoryRecordDTO,
     DeleteInventoryRecordDTO,
     GetInventoryRecordDTO,
-    InventoryRecordsDTO,
+    InventoryRecordsDTO, InventoryRecordUpdateFields,
     UpdateInventoryRecordDTO,
     UpdateInventoryRecordsDTO
 } from "./inventory-records-dtos.type";
@@ -34,8 +34,12 @@ export const MongoInventoryRepository: InventoryRepository = {
             count: dto.count,
         }).save(),
 
-    updateRecord: (dto: UpdateInventoryRecordDTO): Promise<InventoryRecord> => {
-    },
+    updateRecord: (dto: UpdateInventoryRecordDTO): Promise<InventoryRecord> =>
+        InventoryRecordsModel.findOneAndUpdate(
+            {_id: dto._id},
+            mapUpdateFieldsToUpdateQuery(dto.updateFields),
+            {new: true},
+        ),
 
     updateRecords: (dto: UpdateInventoryRecordsDTO): Promise<Result> => {
     },
@@ -96,4 +100,10 @@ const mapDTOToFilter = (dto: InventoryRecordsDTO) => ({
             }
         }
     },
+});
+
+const mapUpdateFieldsToUpdateQuery = (updateFields: InventoryRecordUpdateFields) => ({
+    ...updateFields.newProductId && {productId: updateFields.newProductId},
+    ...updateFields.newCount && {count: updateFields.newCount},
+    ...updateFields.countDelta && {$inc: {count: updateFields.countDelta}},
 });

@@ -26,7 +26,7 @@ import {
     mapToCreateOrderDTO,
     mapToDeleteOrderDTO,
     mapToDeleteOrdersDTO,
-    mapToGetOrderDTO,
+    mapRequestToGetOrderDTO,
     mapToUpdateOrderDTO
 } from "./orders-dtos.utility";
 import {
@@ -42,7 +42,7 @@ import {
 const repository: OrdersRepository = ORDERS_REPOSITORY;
 
 export const getOrder = async (request: Request): Promise<Response> => {
-    const dto: GetOrderDTO = mapToGetOrderDTO(request);
+    const dto: GetOrderDTO = mapRequestToGetOrderDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateGetOrderDTO(dto);
     if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);

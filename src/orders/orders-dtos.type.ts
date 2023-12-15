@@ -32,7 +32,7 @@ export type UpdateOrdersDTO = {
 
 export type OrdersFilter = {
     clientId: string,
-    product: string,
+    productId: string,
     status: string,
     countRange: NumberRange,
 };

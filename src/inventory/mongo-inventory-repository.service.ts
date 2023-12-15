@@ -6,9 +6,11 @@ import {
 } from "./inventory-records-dtos.type";
 import {InventoryRecord} from "./inventory-record.type";
 import {Result} from "../shared/result.type";
+import InventoryRecordsModel from "./mongo-inventory-records-model.type";
 
 export const MongoInventoryRepository: InventoryRepository = {
-    getRecord: (dto: GetInventoryRecordDTO): Promise<InventoryRecord> => {},
+    getRecord: (dto: GetInventoryRecordDTO): Promise<InventoryRecord> =>
+        InventoryRecordsModel.findById(dto._id),
 
     getRecords: (dto: InventoryRecordsDTO): Promise<InventoryRecord[]> => {},
 

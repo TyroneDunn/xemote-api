@@ -5,9 +5,9 @@ import {
 import {configureProductsController, ProductsController} from "./products-controller.utility";
 import {configureProductsService, ProductsService} from "./products.service";
 import {ProductsRepository} from "./products-repository.type";
-import {MongoProductsRepository} from "./mongo-products-repository.service";
+import {PRODUCTS_REPOSITORY} from "../environment/repositories-config";
 
-const productsRepository: ProductsRepository = MongoProductsRepository;
+const productsRepository: ProductsRepository = PRODUCTS_REPOSITORY;
 const productsDtoValidator: ProductsDtoValidator = configureProductsDtoValidator(productsRepository);
 const productsService: ProductsService = configureProductsService(productsRepository, productsDtoValidator);
 const productsController: ProductsController = configureProductsController(productsService);

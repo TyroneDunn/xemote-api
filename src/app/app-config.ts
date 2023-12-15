@@ -20,7 +20,7 @@ import {
     SESSION_SECRET,
 } from "../environment/environment";
 import {corsOptions} from "./cors-options-config";
-import {ProductsController} from "../products/products.controller";
+import productsController from "../products/products-controller.config";
 
 const localAuthStrategy: LocalStrategy = {
     usersDbName: 'users',
@@ -44,7 +44,7 @@ export const schema: Schema = buildSchema(
 );
 
 const app: Application = newApplication(schema, [
-    ProductsController
+    productsController
 ]);
 
 const run = app.run;

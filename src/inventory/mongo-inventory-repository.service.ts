@@ -11,6 +11,7 @@ import {InventoryRecord} from "./inventory-record.type";
 import {Result} from "../shared/result.type";
 import InventoryRecordsModel from "./mongo-inventory-records-model.type";
 import {DeleteResult} from "mongodb";
+import {UpdateWriteOpResult} from "mongoose";
 
 export const MongoInventoryRepository: InventoryRepository = {
     getRecord: (dto: GetInventoryRecordDTO): Promise<InventoryRecord> =>
@@ -41,7 +42,11 @@ export const MongoInventoryRepository: InventoryRepository = {
             {new: true},
         ),
 
-    updateRecords: (dto: UpdateInventoryRecordsDTO): Promise<Result> => {
+    updateRecords: async (dto: UpdateInventoryRecordsDTO): Promise<Result> => {
+        const filter = mapUpdateInventoryRecordsDTOToFilter(dto);
+        const query = mapUpdateFieldsToUpdateQuery(dto.updateFields);
+        const result: UpdateWriteOpResult = await InventoryRecordsModel.updateMany(filter, query);
+        return {success: result.acknowledged, affectedCount: result.modifiedCount};
     },
 
     deleteRecord: async (dto: DeleteInventoryRecordDTO): Promise<Result> => {
@@ -106,4 +111,44 @@ const mapUpdateFieldsToUpdateQuery = (updateFields: InventoryRecordUpdateFields)
     ...updateFields.newProductId && {productId: updateFields.newProductId},
     ...updateFields.newCount && {count: updateFields.newCount},
     ...updateFields.countDelta && {$inc: {count: updateFields.countDelta}},
+});
+
+const mapUpdateInventoryRecordsDTOToFilter = (dto: UpdateInventoryRecordsDTO) => ({
+    ...dto.filter.productId && {productId: dto.filter.productId},
+    ...dto.filter.countRange && {
+        ...(dto.filter.countRange.start && !dto.filter.countRange.end)
+        && {count: {$gt: dto.filter.countRange.start}},
+        ...(!dto.filter.countRange.start && dto.filter.countRange.end)
+        && {count: {$lt: dto.filter.countRange.end}},
+        ...(dto.filter.countRange.start && dto.filter.countRange.end) && {
+            count: {
+                $gt: dto.filter.countRange.start,
+                $lt: dto.filter.countRange.end
+            }
+        },
+    },
+    ...dto.timestamps && {
+        ...dto.timestamps.createdAt && {
+            ...(dto.timestamps.createdAt.start && !dto.timestamps.createdAt.end) && {
+                createdAt: {$gt: dto.timestamps.createdAt.start}
+            },
+            ...(!dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
+                createdAt: {$lt: dto.timestamps.createdAt.end}
+            },
+            ...(dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
+                createdAt: {$gt: dto.timestamps.createdAt.start, $lt: dto.timestamps.createdAt.end}
+            }
+        },
+        ...dto.timestamps.updatedAt && {
+            ...(dto.timestamps.updatedAt.start && !dto.timestamps.updatedAt.end) && {
+                updatedAt: {$gt: dto.timestamps.updatedAt.start}
+            },
+            ...(!dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
+                updatedAt: {$lt: dto.timestamps.updatedAt.end}
+            },
+            ...(dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
+                updatedAt: {$gt: dto.timestamps.updatedAt.start, $lt: dto.timestamps.updatedAt.end}
+            }
+        }
+    },
 });

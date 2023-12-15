@@ -17,3 +17,9 @@ export const mapOrderToSuccessResponse = (order: Order): Response => ({
     collection: [order],
     count: 1,
 });
+
+export const mapOrdersToSuccessResponse = (orders: Order[]): Response => ({
+    status: HttpStatusCodes.OK,
+    collection: [orders],
+    count: orders.length,
+});

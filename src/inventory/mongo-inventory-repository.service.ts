@@ -32,5 +32,12 @@ export const MongoInventoryRepository: InventoryRepository = {
 
     deleteRecords: (dto: InventoryRecordsDTO): Promise<Result> => {},
 
-    exists: (dto: GetInventoryRecordDTO): Promise<boolean> => {}
+    exists: async (dto: GetInventoryRecordDTO): Promise<boolean> => {
+        try {
+            const record: InventoryRecord = await InventoryRecordsModel.findById(dto._id);
+            return !!record;
+        } catch (error) {
+            return false;
+        }
+    }
 };

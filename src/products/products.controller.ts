@@ -1,13 +1,5 @@
-import {Controller, Method} from "@hals/core";
-import {
-    createProduct,
-    deleteProduct,
-    deleteProducts,
-    getProduct,
-    getProducts,
-    updateProduct,
-    updateProducts,
-} from "./products.service";
+import {Controller, Method, Request, Response} from "@hals/core";
+import {ProductsService} from "./products.service";
 
 export const ProductsQueryParamKeys: string[] = [
     'name',
@@ -24,79 +16,81 @@ export const ProductsQueryParamKeys: string[] = [
     'limit'
 ];
 
-const getProductsMethod: Method = {
+const getProductsMethod = (getProducts: (request: Request) => Promise<Response>): Method => ({
     type: "GET",
     paramKeys: [],
     queryParamKeys: ProductsQueryParamKeys,
     sideEffects: [],
     middleware: [],
     requestHandler: getProducts
-};
+});
 
-const getProductMethod: Method = {
+const getProductMethod = (getProduct: (request: Request) => Promise<Response>): Method => ({
     type: "GET",
     paramKeys: ['id'],
     queryParamKeys: [],
     sideEffects: [],
     middleware: [],
     requestHandler: getProduct
-};
+});
 
-const createProductMethod: Method = {
+const createProductMethod = (createProduct: (request: Request) => Promise<Response>): Method => ({
     type: "POST",
     paramKeys: [],
     queryParamKeys: [],
     sideEffects: [],
     middleware: [],
     requestHandler: createProduct
-};
+});
 
-const updateProductsMethod: Method = {
+const updateProductsMethod = (updateProducts: (request: Request) => Promise<Response>): Method => ({
     type: "PATCH",
     paramKeys: [],
     queryParamKeys: ProductsQueryParamKeys,
     sideEffects: [],
     middleware: [],
     requestHandler: updateProducts
-};
+});
 
-const updateProductMethod: Method = {
+const updateProductMethod = (updateProduct: (request: Request) => Promise<Response>): Method => ({
     type: "PATCH",
     paramKeys: ['id'],
     queryParamKeys: [],
     sideEffects: [],
     middleware: [],
     requestHandler: updateProduct
-};
+});
 
-const deleteProductsMethod: Method = {
+const deleteProductsMethod = (deleteProducts: (request: Request) => Promise<Response>): Method => ({
     type: "DELETE",
     paramKeys: [],
     queryParamKeys: ProductsQueryParamKeys,
     sideEffects: [],
     middleware: [],
     requestHandler: deleteProducts
-};
+});
 
-const deleteProductMethod: Method = {
+const deleteProductMethod = (deleteProduct: (request: Request) => Promise<Response>): Method => ({
     type: "DELETE",
     paramKeys: ['id'],
     queryParamKeys: [],
     sideEffects: [],
     middleware: [],
     requestHandler: deleteProduct
-};
+});
 
-export const ProductsController: Controller = {
+export type ProductsController = Controller;
+
+export const configureProductsController = (service: ProductsService): Controller => ({
     path: 'products/',
     guard: true,
     methods: [
-        getProductsMethod,
-        getProductMethod,
-        createProductMethod,
-        updateProductsMethod,
-        updateProductMethod,
-        deleteProductsMethod,
-        deleteProductMethod,
+        getProductsMethod(service.getProducts),
+        getProductMethod(service.getProducts),
+        createProductMethod(service.createProduct),
+        updateProductsMethod(service.updateProducts),
+        updateProductMethod(service.updateProduct),
+        deleteProductsMethod(service.deleteProducts),
+        deleteProductMethod(service.deleteProduct),
     ]
-};
+});

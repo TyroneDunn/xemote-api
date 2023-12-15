@@ -14,7 +14,11 @@ export const MongoInventoryRepository: InventoryRepository = {
 
     getRecords: (dto: InventoryRecordsDTO): Promise<InventoryRecord[]> => {},
 
-    createRecord: (dto: CreateInventoryRecordDTO): Promise<InventoryRecord> => {},
+    createRecord: (dto: CreateInventoryRecordDTO): Promise<InventoryRecord> =>
+        new InventoryRecordsModel({
+            productId: dto.productId,
+            count: dto.count,
+        }).save(),
 
     updateRecord: (dto: UpdateInventoryRecordDTO): Promise<InventoryRecord> => {},
 

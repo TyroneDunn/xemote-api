@@ -3,7 +3,8 @@ import {
     CreateInventoryRecordDTO,
     DeleteInventoryRecordDTO,
     GetInventoryRecordDTO,
-    InventoryRecordsDTO, InventoryRecordUpdateFields,
+    InventoryRecordsDTO,
+    InventoryRecordUpdateFields,
     UpdateInventoryRecordDTO,
     UpdateInventoryRecordsDTO
 } from "./inventory-records-dtos.type";

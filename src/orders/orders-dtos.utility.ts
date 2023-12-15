@@ -29,3 +29,16 @@ export const mapRequestToCreateOrderDTO = (request: Request): CreateOrderDTO => 
     status: request.payload['status'] as OrderStatus,
     cart: request.payload['cart'] as ProductCount,
 });
+
+export const mapRequestToUpdateOrderDTO = (request: Request): UpdateOrderDTO => ({
+    _id: request.paramMap['id'],
+    ...mapRequestToUpdateFields(request)
+});
+
+const mapRequestToUpdateFields = (request: Request) => ({
+    updateFields: {
+        ...request.payload['newClientId'] && {newClientId: request.payload['newClientId']},
+        ...request.payload['newStatus'] && {newStatus: request.payload['newStatus']},
+        ...request.payload['newCart'] && {newCart: request.payload['newCart'] as ProductCount}
+    }
+});

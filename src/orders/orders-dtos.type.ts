@@ -2,6 +2,7 @@ import {Timestamps} from "../shared/timestamps.type";
 import {Pagination} from "../shared/pagination.type";
 import {NumberRange} from "../shared/number-range.type";
 import {Sort} from "../shared/sort.type";
+import {OrderStatus, ProductCount} from "./order.type";
 
 export type GetOrderDTO = { _id: string };
 
@@ -12,7 +13,11 @@ export type OrdersDTO = {
     page?: Pagination,
 };
 
-export type CreateOrderDTO = {};
+export type CreateOrderDTO = {
+    clientId: string,
+    cart: ProductCount,
+    status: OrderStatus,
+};
 
 export type UpdateOrderDTO = {
     _id: string,

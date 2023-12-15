@@ -42,3 +42,6 @@ const mapRequestToUpdateFields = (request: Request) => ({
         ...request.payload['newCart'] && {newCart: request.payload['newCart'] as ProductCount}
     }
 });
+
+export const mapRequestToDeleteOrderDTO = (request: Request): DeleteOrderDTO =>
+    ({_id: request.paramMap['id']});

@@ -31,11 +31,10 @@ export type UpdateOrdersDTO = {
 };
 
 export type OrdersFilter = {
-    name?: string,
-    nameRegex?: string,
-    typeRegex?: string,
-    costPriceRange?: NumberRange,
-    markupRange?: NumberRange,
+    clientId: string,
+    product: string,
+    status: string,
+    countRange: NumberRange,
 };
 
 export type OrderUpdateFields = {

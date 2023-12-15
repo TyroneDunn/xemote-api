@@ -25,7 +25,6 @@ import {
     mapRequestToUpdateOrdersDTO,
     mapRequestToCreateOrderDTO,
     mapRequestToDeleteOrderDTO,
-    mapRequestToDeleteOrdersDTO,
     mapRequestToGetOrderDTO,
     mapRequestToUpdateOrderDTO
 } from "./orders-dtos.utility";
@@ -129,7 +128,7 @@ export const deleteOrder = async (request: Request): Promise<Response> => {
 };
 
 export const deleteOrders = async (request: Request): Promise<Response> => {
-    const dto: OrdersDTO = mapRequestToDeleteOrdersDTO(request);
+    const dto: OrdersDTO = mapRequestToOrdersDTO(request);
 
     const validationOutcome: ValidationOutcome = await validateDeleteOrdersDTO(dto);
     if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);

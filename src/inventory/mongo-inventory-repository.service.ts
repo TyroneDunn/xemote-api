@@ -7,6 +7,7 @@ import {
 import {InventoryRecord} from "./inventory-record.type";
 import {Result} from "../shared/result.type";
 import InventoryRecordsModel from "./mongo-inventory-records-model.type";
+import {DeleteResult} from "mongodb";
 
 export const MongoInventoryRepository: InventoryRepository = {
     getRecord: (dto: GetInventoryRecordDTO): Promise<InventoryRecord> =>
@@ -24,7 +25,10 @@ export const MongoInventoryRepository: InventoryRepository = {
 
     updateRecords: (dto: UpdateInventoryRecordsDTO): Promise<Result> => {},
 
-    deleteRecord: (dto: DeleteInventoryRecordDTO): Promise<Result> => {},
+    deleteRecord: async (dto: DeleteInventoryRecordDTO): Promise<Result> => {
+        const result: DeleteResult = await InventoryRecordsModel.deleteOne({_id: dto._id});
+        return {success: result.acknowledged, affectedCount: result.deletedCount};
+    },
 
     deleteRecords: (dto: InventoryRecordsDTO): Promise<Result> => {},
 

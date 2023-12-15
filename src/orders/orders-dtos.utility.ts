@@ -1,4 +1,4 @@
-import {Request, Response} from "@hals/core";
+import {HttpStatusCodes, Request, Response} from "@hals/core";
 import {
     CreateOrderDTO,
     DeleteOrderDTO,
@@ -11,3 +11,9 @@ import {Order} from "./order.type";
 
 export const mapRequestToGetOrderDTO = (request: Request): GetOrderDTO =>
     ({ _id: request.paramMap['id'] });
+
+export const mapOrderToSuccessResponse = (order: Order): Response => ({
+    status: HttpStatusCodes.OK,
+    collection: [order],
+    count: 1,
+});

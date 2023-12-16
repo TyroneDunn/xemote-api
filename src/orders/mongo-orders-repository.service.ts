@@ -53,9 +53,12 @@ export const MongoOrdersRepository: OrdersRepository = {
         return {success: result.acknowledged, affectedCount: result.deletedCount};
     },
 
-    deleteOrders(dto: OrdersDTO): Promise<CommandResult> {
-        return Promise.resolve(undefined);
+    deleteOrders: async (dto: OrdersDTO): Promise<CommandResult> => {
+        const filter = mapOrdersDtoToFilter(dto);
+        const result: DeleteResult = await OrdersModel.deleteMany(filter);
+        return {success: result.acknowledged, affectedCount: result.deletedCount};
     },
+
     exists: async (dto: GetOrderDTO): Promise<boolean> => {
         try {
             const order: Order = await OrdersModel.findById(dto._id);

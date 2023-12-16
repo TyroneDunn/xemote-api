@@ -1,5 +1,4 @@
 import {Controller, Method, Request, Response} from "@hals/core";
-
 import {ProductsService} from "./products-service.type";
 
 export const ProductsQueryParamKeys: string[] = [

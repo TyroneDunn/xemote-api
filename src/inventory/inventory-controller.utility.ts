@@ -68,6 +68,8 @@ const deleteRecordMethod = (deleteRecord: (request: Request) => Promise<Response
     requestHandler: deleteRecord
 });
 
+export type InventoryController = Controller;
+
 export const configureInventoryController = (service: InventoryService): Controller => ({
     path: 'inventory/',
     guard: true,

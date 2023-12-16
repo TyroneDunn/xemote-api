@@ -49,5 +49,4 @@ const app: Application = newApplication(schema, [
     inventoryController
 ]);
 
-const run = app.run;
-export default run;
+export default app;

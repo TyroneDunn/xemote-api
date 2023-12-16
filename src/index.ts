@@ -1,3 +1,3 @@
-import run from "./app/app-config";
+import app from "./app/app.module";
 
-run();
+app.run();

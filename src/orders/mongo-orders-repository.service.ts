@@ -9,6 +9,7 @@ import {
 import {Order} from "./order.type";
 import {CommandResult} from "../shared/command-result/command-result.type";
 import OrdersModel from "./mongo-orders-model.type";
+import {DeleteResult} from "mongodb";
 
 export const MongoOrdersRepository: OrdersRepository = {
     getOrder: (dto: GetOrderDTO): Promise<Order> => OrdersModel.findById(dto._id),
@@ -30,9 +31,12 @@ export const MongoOrdersRepository: OrdersRepository = {
     updateOrders(dto: UpdateOrdersDTO): Promise<CommandResult> {
         return Promise.resolve(undefined);
     },
-    deleteOrder(dto: DeleteOrderDTO): Promise<CommandResult> {
-        return Promise.resolve(undefined);
+
+    deleteOrder: async (dto: DeleteOrderDTO): Promise<CommandResult> => {
+        const result: DeleteResult = await OrdersModel.deleteOne({_id: dto._id});
+        return {success: result.acknowledged, affectedCount: result.deletedCount};
     },
+
     deleteOrders(dto: OrdersDTO): Promise<CommandResult> {
         return Promise.resolve(undefined);
     },

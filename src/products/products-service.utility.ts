@@ -3,7 +3,9 @@ import {ProductsRepository} from "./products-repository.type";
 import {ProductsDtoValidator} from "./products-dto-validator.utility";
 import {Product} from "./product.type";
 import {ValidationOutcome} from "../shared/validation-outcome/validation-outcome.type";
-import {mapValidationOutcomeToErrorResponse} from "../shared/validation-outcome/validation-outcome.utility";
+import {
+    mapValidationOutcomeToErrorResponse
+} from "../shared/validation-outcome/validation-outcome.utility";
 import {
     mapProductsToResponse,
     mapProductToSuccessResponse,
@@ -23,21 +25,13 @@ import {
     UpdateProductsDTO,
 } from "./products-dtos.type";
 import {CommandResult} from "../shared/command-result/command-result.type";
+import {addRequestPageDataToResponse} from "../shared/hals/hals.utility";
 import {
-    addRequestPageDataToResponse
-} from "../shared/hals/hals.utility";
-import {mapDeleteResultToResponse, mapUpdateResultToResponse} from "../shared/command-result/command-result.utility";
+    mapDeleteResultToResponse,
+    mapUpdateResultToResponse
+} from "../shared/command-result/command-result.utility";
 import {mapToInternalServerErrorResponse} from "../shared/errors/errors.utility";
-
-export type ProductsService = {
-    getProduct: (request: Request) => Promise<Response>,
-    getProducts: (request: Request) => Promise<Response>,
-    createProduct: (request: Request) => Promise<Response>,
-    updateProduct: (request: Request) => Promise<Response>,
-    updateProducts: (request: Request) => Promise<Response>,
-    deleteProduct: (request: Request) => Promise<Response>,
-    deleteProducts: (request: Request) => Promise<Response>,
-};
+import {ProductsService} from "./products-service.type";
 
 export const configureProductsService = (
     repository: ProductsRepository,

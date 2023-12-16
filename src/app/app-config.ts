@@ -20,7 +20,7 @@ import {
     SESSION_SECRET,
 } from "../environment";
 import {corsOptions} from "./cors-options-config";
-import productsController from "../products/products-controller.config";
+import productsController from "../products/products.module";
 
 const localAuthStrategy: LocalStrategy = {
     usersDbName: 'users',

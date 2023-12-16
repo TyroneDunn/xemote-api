@@ -9,10 +9,10 @@ import {
     UpdateOrdersDTO
 } from "./orders-dtos.type";
 import {Order, OrderStatus, ProductCount} from "./order.type";
-import {NumberRange} from "../shared/number-range.type";
-import {OrderOptions} from "../shared/order-options.type";
-import {mapRequestToPage} from "../shared/pagination.utility";
-import {mapRequestToTimestamps} from "../shared/timestamps.utility";
+import {NumberRange} from "../shared/number-range/number-range.type";
+import {OrderOptions} from "../shared/order-options/order-options.type";
+import {mapRequestToPage} from "../shared/pagination/pagination.utility";
+import {mapRequestToTimestamps} from "../shared/timestamps/timestamps.utility";
 
 export const mapRequestToGetOrderDTO = (request: Request): GetOrderDTO =>
     ({_id: request.paramMap['id']});

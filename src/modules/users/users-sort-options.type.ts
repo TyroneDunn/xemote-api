@@ -1,4 +1,4 @@
-import {OrderOptions} from "../../shared/order-options.type";
+import {OrderOptions} from "../../shared/order-options/order-options.type";
 
 export type UserSortOptions = {
     sortOption: 'username' | 'id' | 'dateCreated' | 'lastUpdated',

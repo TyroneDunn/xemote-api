@@ -7,7 +7,7 @@ import {
     UpdateProductDTO,
     UpdateProductsDTO,
 } from "./products-dtos.type";
-import {Result} from "../shared/result.type";
+import {Result} from "../shared/result/result.type";
 
 export type ProductsRepository = {
     getProduct: (dto: GetProductDTO) => Promise<Product>,

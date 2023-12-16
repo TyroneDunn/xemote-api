@@ -1,4 +1,4 @@
-import {Result} from "../shared/result.type";
+import {Result} from "../shared/result/result.type";
 import {Order} from "./order.type";
 import {
     CreateOrderDTO,

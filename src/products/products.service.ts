@@ -2,8 +2,8 @@ import {HttpStatusCodes, Request, Response} from "@hals/core";
 import {ProductsRepository} from "./products-repository.type";
 import {ProductsDtoValidator} from "./products-dto-validator.utility";
 import {Product} from "./product.type";
-import {ValidationOutcome} from "../shared/validation-dtos.type";
-import {mapToErrorResponse} from "../shared/validation-dtos.utility";
+import {ValidationOutcome} from "../shared/validation/validation-dtos.type";
+import {mapToErrorResponse} from "../shared/validation/validation-dtos.utility";
 import {
     mapProductsToResponse,
     mapProductToSuccessResponse,
@@ -22,12 +22,12 @@ import {
     UpdateProductDTO,
     UpdateProductsDTO,
 } from "./products-dtos.type";
-import {Result} from "../shared/result.type";
+import {Result} from "../shared/result/result.type";
 import {
     addRequestPageDataToResponse
-} from "../shared/hals.utility";
-import {mapDeleteResultToResponse, mapUpdateResultToResponse} from "../shared/result.utility";
-import {mapToInternalServerErrorResponse} from "../shared/errors.utility";
+} from "../shared/hals/hals.utility";
+import {mapDeleteResultToResponse, mapUpdateResultToResponse} from "../shared/result/result.utility";
+import {mapToInternalServerErrorResponse} from "../shared/errors/errors.utility";
 
 export type ProductsService = {
     getProduct: (request: Request) => Promise<Response>,

@@ -1,8 +1,8 @@
 import {UserSortOptions} from "./users-sort-options.type";
 import {UserPermissions} from "./user-permissions.type";
-import {Pagination} from "../../shared/pagination.type";
+import {Pagination} from "../../shared/pagination/pagination.type";
 import {UsersFilter} from "./users-filter.type";
-import {Timestamps} from "../../shared/timestamps.type";
+import {Timestamps} from "../../shared/timestamps/timestamps.type";
 
 export type GetUserDTO = { username: string };
 

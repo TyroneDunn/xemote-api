@@ -9,11 +9,11 @@ import {
     UpdateProductDTO,
     UpdateProductsDTO
 } from "./products-dtos.type";
-import {NumberRange} from "../shared/number-range.type";
-import {Price} from "../shared/price.type";
-import {OrderOptions} from "../shared/order-options.type";
-import {mapRequestToPage} from "../shared/pagination.utility";
-import {mapRequestToTimestamps} from "../shared/timestamps.utility";
+import {NumberRange} from "../shared/number-range/number-range.type";
+import {Price} from "../shared/price/price.type";
+import {OrderOptions} from "../shared/order-options/order-options.type";
+import {mapRequestToPage} from "../shared/pagination/pagination.utility";
+import {mapRequestToTimestamps} from "../shared/timestamps/timestamps.utility";
 
 export const mapToGetProductDTO = (request: Request): GetProductDTO => ({
     _id: request.paramMap['id'],

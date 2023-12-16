@@ -1,7 +1,7 @@
-import {Timestamps} from "../shared/timestamps.type";
-import {Pagination} from "../shared/pagination.type";
-import {NumberRange} from "../shared/number-range.type";
-import {Sort} from "../shared/sort.type";
+import {Timestamps} from "../shared/timestamps/timestamps.type";
+import {Pagination} from "../shared/pagination/pagination.type";
+import {NumberRange} from "../shared/number-range/number-range.type";
+import {Sort} from "../shared/sort/sort.type";
 import {OrderStatus, ProductCount} from "./order.type";
 
 export type GetOrderDTO = { _id: string };

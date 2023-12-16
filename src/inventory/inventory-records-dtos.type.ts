@@ -1,7 +1,7 @@
-import {Timestamps} from "../shared/timestamps.type";
-import {Pagination} from "../shared/pagination.type";
-import {NumberRange} from "../shared/number-range.type";
-import {OrderOptions} from "../shared/order-options.type";
+import {Timestamps} from "../shared/timestamps/timestamps.type";
+import {Pagination} from "../shared/pagination/pagination.type";
+import {NumberRange} from "../shared/number-range/number-range.type";
+import {OrderOptions} from "../shared/order-options/order-options.type";
 
 export type GetInventoryRecordDTO = { _id: string };
 

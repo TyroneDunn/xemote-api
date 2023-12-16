@@ -6,7 +6,7 @@ import {
     ForbiddenError,
     NotFoundError,
     UnauthorizedError
-} from "./errors.type";
+} from "../errors/errors.type";
 
 export const mapToErrorResponse = (validationOutcome: ValidationOutcome): Response => {
     if (validationOutcome.error instanceof BadRequestError) return ({

@@ -11,4 +11,3 @@ const ordersService: OrdersService = configureOrdersService(ordersRepository, or
 const ordersController: OrdersController = configureOrdersController(ordersService);
 
 export default ordersController;
-

@@ -3,6 +3,4 @@ export type HashUtility = {
     validateHash: (password: string, hash: string) => boolean,
 }
 
-export type GenerateHash = (password: string) => string;
-export type ValidateHash = (password: string, hash: string) => boolean;
 export type GenerateSalt = () => string;

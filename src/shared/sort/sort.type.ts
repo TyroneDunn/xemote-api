@@ -1,4 +1,4 @@
-import {OrderOption} from "../order-option/order-option.type";
+import {OrderOption} from "./order-option.type";
 
 export type Sort<T> = {
     field: T,

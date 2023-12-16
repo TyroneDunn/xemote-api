@@ -10,7 +10,7 @@ import {
 } from "./orders-dtos.type";
 import {Order, OrderStatus, ProductCount} from "./order.type";
 import {NumberRange} from "../shared/number-range/number-range.type";
-import {OrderOption} from "../shared/order-option/order-option.type";
+import {OrderOption} from "../shared/sort/order-option.type";
 import {mapRequestToPage} from "../shared/page/page.utility";
 import {mapRequestToTimestamps} from "../shared/timestamps/timestamps.utility";
 

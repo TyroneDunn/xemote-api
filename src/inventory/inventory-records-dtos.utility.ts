@@ -10,7 +10,7 @@ import {
 } from "./inventory-records-dtos.type";
 import {InventoryRecord} from "./inventory-record.type";
 import {NumberRange} from "../shared/number-range/number-range.type";
-import {OrderOption} from "../shared/order-option/order-option.type";
+import {OrderOption} from "../shared/sort/order-option.type";
 import {mapRequestToPage} from "../shared/page/page.utility";
 import {mapRequestToTimestamps} from "../shared/timestamps/timestamps.utility";
 

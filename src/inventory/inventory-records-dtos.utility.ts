@@ -9,9 +9,10 @@ import {
     UpdateInventoryRecordsDTO
 } from "./inventory-records-dtos.type";
 import {InventoryRecord} from "./inventory-record.type";
-import {mapRequestToPage, mapRequestToTimestamps} from "../shared/hals.utility";
 import {NumberRange} from "../shared/number-range.type";
 import {OrderOptions} from "../shared/order-options.type";
+import {mapRequestToPage} from "../shared/pagination.utility";
+import {mapRequestToTimestamps} from "../shared/timestamps.utility";
 
 export const mapRequestToGetInventoryRecordDTO = (request: Request): GetInventoryRecordDTO =>
     ({_id: request.paramMap['id']});

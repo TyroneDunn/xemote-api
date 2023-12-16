@@ -12,7 +12,8 @@ import {
 import {NumberRange} from "../shared/number-range.type";
 import {Price} from "../shared/price.type";
 import {OrderOptions} from "../shared/order-options.type";
-import {mapRequestToPage, mapRequestToTimestamps} from "../shared/hals.utility";
+import {mapRequestToPage} from "../shared/pagination.utility";
+import {mapRequestToTimestamps} from "../shared/timestamps.utility";
 
 export const mapToGetProductDTO = (request: Request): GetProductDTO => ({
     _id: request.paramMap['id'],

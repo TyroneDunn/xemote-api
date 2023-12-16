@@ -9,9 +9,10 @@ import {
     UpdateOrdersDTO
 } from "./orders-dtos.type";
 import {Order, OrderStatus, ProductCount} from "./order.type";
-import {mapRequestToPage, mapRequestToTimestamps} from "../shared/hals.utility";
 import {NumberRange} from "../shared/number-range.type";
 import {OrderOptions} from "../shared/order-options.type";
+import {mapRequestToPage} from "../shared/pagination.utility";
+import {mapRequestToTimestamps} from "../shared/timestamps.utility";
 
 export const mapRequestToGetOrderDTO = (request: Request): GetOrderDTO =>
     ({_id: request.paramMap['id']});

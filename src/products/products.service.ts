@@ -24,10 +24,10 @@ import {
 } from "./products-dtos.type";
 import {Result} from "../shared/result.type";
 import {
-    addRequestPageDataToResponse,
-    mapToInternalServerErrorResponse
+    addRequestPageDataToResponse
 } from "../shared/hals.utility";
 import {mapDeleteResultToResponse, mapUpdateResultToResponse} from "../shared/result.utility";
+import {mapToInternalServerErrorResponse} from "../shared/errors.utility";
 
 export type ProductsService = {
     getProduct: (request: Request) => Promise<Response>,

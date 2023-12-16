@@ -13,7 +13,7 @@ import {
 import {DeleteResult} from "mongodb";
 import {Price} from "../shared/price/price.type";
 import {UpdateWriteOpResult} from "mongoose";
-import {Result} from "../shared/result/result.type";
+import {CommandResult} from "../shared/command-result/command-result.type";
 
 export const MongoProductsRepository: ProductsRepository = {
     getProduct: (dto: GetProductDTO): Promise<Product> =>
@@ -46,19 +46,19 @@ export const MongoProductsRepository: ProductsRepository = {
             {new: true},
         ),
 
-    updateProducts: async (dto: UpdateProductsDTO): Promise<Result> => {
+    updateProducts: async (dto: UpdateProductsDTO): Promise<CommandResult> => {
         const filter = mapUpdateProductsDtoToFilter(dto);
         const updateQuery = mapUpdateFieldsToUpdateQuery(dto.updateFields);
         const updateResult: UpdateWriteOpResult = await ProductModel.updateMany(filter, updateQuery);
         return {success: updateResult.acknowledged, affectedCount: updateResult.modifiedCount};
     },
 
-    deleteProduct: async (dto: DeleteProductDTO): Promise<Result> => {
+    deleteProduct: async (dto: DeleteProductDTO): Promise<CommandResult> => {
         const result: DeleteResult = await ProductModel.deleteOne({_id: dto._id});
         return {success: result.acknowledged, affectedCount: result.deletedCount};
     },
 
-    deleteProducts: async (dto: ProductsDTO): Promise<Result> => {
+    deleteProducts: async (dto: ProductsDTO): Promise<CommandResult> => {
         const filter = mapProductsDtoToProductsFilter(dto);
         const result: DeleteResult = await ProductModel.deleteMany(filter);
         return {success: result.acknowledged, affectedCount: result.deletedCount};

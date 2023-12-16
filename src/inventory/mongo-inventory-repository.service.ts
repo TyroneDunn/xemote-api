@@ -9,7 +9,7 @@ import {
     UpdateInventoryRecordsDTO
 } from "./inventory-records-dtos.type";
 import {InventoryRecord} from "./inventory-record.type";
-import {Result} from "../shared/result/result.type";
+import {CommandResult} from "../shared/command-result/command-result.type";
 import InventoryRecordsModel from "./mongo-inventory-records-model.type";
 import {DeleteResult} from "mongodb";
 import {UpdateWriteOpResult} from "mongoose";
@@ -43,19 +43,19 @@ export const MongoInventoryRepository: InventoryRepository = {
             {new: true},
         ),
 
-    updateRecords: async (dto: UpdateInventoryRecordsDTO): Promise<Result> => {
+    updateRecords: async (dto: UpdateInventoryRecordsDTO): Promise<CommandResult> => {
         const filter = mapUpdateInventoryRecordsDTOToFilter(dto);
         const query = mapUpdateFieldsToUpdateQuery(dto.updateFields);
         const result: UpdateWriteOpResult = await InventoryRecordsModel.updateMany(filter, query);
         return {success: result.acknowledged, affectedCount: result.modifiedCount};
     },
 
-    deleteRecord: async (dto: DeleteInventoryRecordDTO): Promise<Result> => {
+    deleteRecord: async (dto: DeleteInventoryRecordDTO): Promise<CommandResult> => {
         const result: DeleteResult = await InventoryRecordsModel.deleteOne({_id: dto._id});
         return {success: result.acknowledged, affectedCount: result.deletedCount};
     },
 
-    deleteRecords: async (dto: InventoryRecordsDTO): Promise<Result> => {
+    deleteRecords: async (dto: InventoryRecordsDTO): Promise<CommandResult> => {
         const filter = mapDTOToFilter(dto);
         const result: DeleteResult = await InventoryRecordsModel.deleteMany(filter);
         return {success: result.acknowledged, affectedCount: result.deletedCount};

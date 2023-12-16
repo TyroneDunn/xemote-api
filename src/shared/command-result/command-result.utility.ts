@@ -1,12 +1,12 @@
-import {Result} from "./result.type";
+import {CommandResult} from "./command-result.type";
 import {HttpStatusCodes, Response} from "@hals/core";
 
-export const mapResultToSuccessResponse = (result: Result): Response => ({
+export const mapCommandResultToSuccessResponse = (result: CommandResult): Response => ({
     status: HttpStatusCodes.OK,
     count: result.affectedCount
 });
 
-export const mapUpdateResultToResponse = (result: Result): Response => ({
+export const mapUpdateResultToResponse = (result: CommandResult): Response => ({
     status: result.success ? HttpStatusCodes.OK : HttpStatusCodes.INTERNAL_SERVER_ERROR,
     ...result.success && {count: result.affectedCount},
     ...(!result.success) && {
@@ -15,7 +15,7 @@ export const mapUpdateResultToResponse = (result: Result): Response => ({
     }
 });
 
-export const mapDeleteResultToResponse = (result: Result): Response => ({
+export const mapDeleteResultToResponse = (result: CommandResult): Response => ({
     status: result.success && result.affectedCount > 0
         ? HttpStatusCodes.OK
         : result.success && result.affectedCount === 0

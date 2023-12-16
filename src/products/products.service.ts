@@ -22,11 +22,11 @@ import {
     UpdateProductDTO,
     UpdateProductsDTO,
 } from "./products-dtos.type";
-import {Result} from "../shared/result/result.type";
+import {CommandResult} from "../shared/command-result/command-result.type";
 import {
     addRequestPageDataToResponse
 } from "../shared/hals/hals.utility";
-import {mapDeleteResultToResponse, mapUpdateResultToResponse} from "../shared/result/result.utility";
+import {mapDeleteResultToResponse, mapUpdateResultToResponse} from "../shared/command-result/command-result.utility";
 import {mapToInternalServerErrorResponse} from "../shared/errors/errors.utility";
 
 export type ProductsService = {
@@ -103,7 +103,7 @@ export const configureProductsService = (
             if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
 
             try {
-                const result: Result = await repository.updateProducts(dto);
+                const result: CommandResult = await repository.updateProducts(dto);
                 return mapUpdateResultToResponse(result);
             } catch (error) {
                 return mapToInternalServerErrorResponse(error);
@@ -116,7 +116,7 @@ export const configureProductsService = (
             if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
 
             try {
-                const result: Result = await repository.deleteProduct(dto);
+                const result: CommandResult = await repository.deleteProduct(dto);
                 return mapDeleteResultToResponse(result);
             } catch (error) {
                 return mapToInternalServerErrorResponse(error);
@@ -129,7 +129,7 @@ export const configureProductsService = (
             if (validationOutcome.error) return mapToErrorResponse(validationOutcome);
 
             try {
-                const result: Result = await repository.deleteProducts(dto);
+                const result: CommandResult = await repository.deleteProducts(dto);
                 return mapDeleteResultToResponse(result);
             } catch (error) {
                 return mapToInternalServerErrorResponse(error);

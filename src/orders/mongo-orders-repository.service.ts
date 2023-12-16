@@ -10,7 +10,7 @@ import {Order} from "./order.type";
 import {CommandResult} from "../shared/command-result/command-result.type";
 import OrdersModel from "./mongo-orders-model.type";
 import {DeleteResult} from "mongodb";
-import {ProductModel} from "../products/mongo-product-model.type";
+import {UpdateWriteOpResult} from "mongoose";
 
 export const MongoOrdersRepository: OrdersRepository = {
     getOrder: (dto: GetOrderDTO): Promise<Order> => OrdersModel.findById(dto._id),
@@ -35,14 +35,17 @@ export const MongoOrdersRepository: OrdersRepository = {
         }).save(),
 
     updateOrder: (dto: UpdateOrderDTO): Promise<Order> =>
-        ProductModel.findOneAndUpdate(
+        OrdersModel.findOneAndUpdate(
             {_id: dto._id},
             mapUpdateFieldsToUpdateQuery(dto.updateFields),
             {new: true}
         ),
 
-    updateOrders(dto: UpdateOrdersDTO): Promise<CommandResult> {
-        return Promise.resolve(undefined);
+    updateOrders: async (dto: UpdateOrdersDTO): Promise<CommandResult> => {
+        const filter = mapUpdateOrdersDtoToFilter(dto);
+        const updateQuery = mapUpdateFieldsToUpdateQuery(dto.updateFields);
+        const updateResult: UpdateWriteOpResult = await OrdersModel.updateMany(filter, updateQuery);
+        return {success: updateResult.acknowledged, affectedCount: updateResult.modifiedCount};
     },
 
     deleteOrder: async (dto: DeleteOrderDTO): Promise<CommandResult> => {
@@ -107,4 +110,44 @@ const mapUpdateFieldsToUpdateQuery = (updateFields: OrderUpdateFields) => ({
     ...updateFields.newClientId && {clientId: updateFields.newClientId},
     ...updateFields.newStatus && {status: updateFields.newStatus},
     ...updateFields.newCart && {cart: updateFields.newCart},
+});
+
+const mapUpdateOrdersDtoToFilter = (dto: UpdateOrdersDTO) => ({
+    ...dto.filter.clientId && {clientId: dto.filter.clientId},
+    ...dto.filter.productId && {productId: dto.filter.productId},
+    ...dto.filter.status && {status: dto.filter.status},
+    ...dto.filter.countRange && {
+        ...(dto.filter.countRange.start && !dto.filter.countRange.end) && {count: {$gt: dto.filter.countRange.start}},
+        ...(!dto.filter.countRange.start && dto.filter.countRange.end) && {count: {$lt: dto.filter.countRange.end}},
+        ...(dto.filter.countRange.start && dto.filter.countRange.end) && {
+            count: {
+                $gt: dto.filter.countRange.start,
+                $lt: dto.filter.countRange.end
+            }
+        },
+    },
+    ...dto.timestamps && {
+        ...dto.timestamps.createdAt && {
+            ...(dto.timestamps.createdAt.start && !dto.timestamps.createdAt.end) && {
+                createdAt: {$gt: dto.timestamps.createdAt.start}
+            },
+            ...(!dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
+                createdAt: {$lt: dto.timestamps.createdAt.end}
+            },
+            ...(dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
+                createdAt: {$gt: dto.timestamps.createdAt.start, $lt: dto.timestamps.createdAt.end}
+            }
+        },
+        ...dto.timestamps.updatedAt && {
+            ...(dto.timestamps.updatedAt.start && !dto.timestamps.updatedAt.end) && {
+                updatedAt: {$gt: dto.timestamps.updatedAt.start}
+            },
+            ...(!dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
+                updatedAt: {$lt: dto.timestamps.updatedAt.end}
+            },
+            ...(dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
+                updatedAt: {$gt: dto.timestamps.updatedAt.start, $lt: dto.timestamps.updatedAt.end}
+            }
+        }
+    },
 });

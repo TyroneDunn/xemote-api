@@ -1,5 +1,5 @@
 import {Application, buildSchema, newApplication, NodeEnvironmentOption, Schema} from "@hals/core";
-import {API_PORT, API_TITLE, API_VERSION, NODE_ENV} from "../environments/environments";
+import {API_PORT, API_TITLE, API_VERSION, NODE_ENV} from "../environments";
 import corsOptions from "./cors-options-config";
 import authStrategy from "./auth-strategy-config";
 import productsController from "./products/products.module";

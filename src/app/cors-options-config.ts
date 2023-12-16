@@ -1,5 +1,5 @@
 import {CorsOptions} from "cors";
-import {APP_URL} from "../environments/environments";
+import {APP_URL} from "../environments";
 import {HttpStatusCodes} from "@hals/core";
 
 const corsOptions: CorsOptions = {

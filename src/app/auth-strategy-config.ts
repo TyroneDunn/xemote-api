@@ -6,7 +6,7 @@ import {
     PASSWORD_LENGTH,
     PASSWORD_SALT,
     SESSION_SECRET
-} from "../environments/environments";
+} from "../environments";
 
 const authStrategy: LocalStrategy = {
     usersDbName: 'users',

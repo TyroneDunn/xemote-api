@@ -1,10 +1,10 @@
 import {Request, Response} from "@hals/core";
 import {OrdersRepository} from "./orders-repository.type";
-import {ValidationOutcome} from "../shared/validation-outcome/validation-outcome.type";
+import {ValidationOutcome} from "../../shared/validation-outcome/validation-outcome.type";
 import {
     mapValidationOutcomeToErrorResponse
-} from "../shared/validation-outcome/validation-outcome.utility";
-import {addRequestPageDataToResponse} from "../shared/hals/hals.utility";
+} from "../../shared/validation-outcome/validation-outcome.utility";
+import {addRequestPageDataToResponse} from "../../shared/hals/hals.utility";
 import {
     CreateOrderDTO,
     DeleteOrderDTO,
@@ -14,8 +14,8 @@ import {
     UpdateOrdersDTO
 } from "./orders-dtos.type";
 import {Order} from "./order.type";
-import {mapCommandResultToSuccessResponse} from "../shared/command-result/command-result.utility";
-import {CommandResult} from "../shared/command-result/command-result.type";
+import {mapCommandResultToSuccessResponse} from "../../shared/command-result/command-result.utility";
+import {CommandResult} from "../../shared/command-result/command-result.type";
 import {
     mapOrdersToSuccessResponse,
     mapOrderToSuccessResponse,
@@ -27,7 +27,7 @@ import {
     mapRequestToUpdateOrdersDTO
 } from "./orders-dtos.utility";
 import {OrdersDtosValidator,} from "./orders-dtos-validator.utility";
-import {mapToInternalServerErrorResponse} from "../shared/errors/errors.utility";
+import {mapToInternalServerErrorResponse} from "../../shared/errors/errors.utility";
 import {OrdersService} from "./orders-service.type";
 
 export const configureOrdersService = (

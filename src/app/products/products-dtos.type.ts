@@ -1,9 +1,9 @@
 import {ProductType} from "./product.type";
-import {Page} from "../shared/page/page.type";
-import {Price} from "../shared/price/price.type";
-import {NumberRange} from "../shared/number-range/number-range.type";
-import {OrderOption} from "../shared/sort/order-option.type";
-import {Timestamps} from "../shared/timestamps/timestamps.type";
+import {Page} from "../../shared/page/page.type";
+import {Price} from "../../shared/price/price.type";
+import {NumberRange} from "../../shared/number-range/number-range.type";
+import {OrderOption} from "../../shared/sort/order-option.type";
+import {Timestamps} from "../../shared/timestamps/timestamps.type";
 
 export type GetProductDTO = { _id: string };
 

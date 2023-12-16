@@ -1,4 +1,4 @@
-import {CommandResult} from "../shared/command-result/command-result.type";
+import {CommandResult} from "../../shared/command-result/command-result.type";
 import {Order} from "./order.type";
 import {
     CreateOrderDTO,

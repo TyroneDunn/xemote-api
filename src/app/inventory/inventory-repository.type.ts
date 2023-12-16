@@ -7,7 +7,7 @@ import {
     UpdateInventoryRecordsDTO,
     DeleteInventoryRecordDTO
 } from "./inventory-records-dtos.type";
-import {CommandResult} from "../shared/command-result/command-result.type";
+import {CommandResult} from "../../shared/command-result/command-result.type";
 
 
 // todo : functions should return either record or error. Find a way to implement this functional

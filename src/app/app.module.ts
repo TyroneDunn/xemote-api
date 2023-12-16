@@ -18,11 +18,11 @@ import {
     PASSWORD_LENGTH,
     PASSWORD_SALT,
     SESSION_SECRET,
-} from "../environment";
+} from "../environments/environments";
 import corsOptions from "./cors-options-config";
-import productsController from "../products/products.module";
-import inventoryController from "../inventory/inventory.module";
-import ordersController from "../orders/orders.module";
+import productsController from "./products/products.module";
+import inventoryController from "./inventory/inventory.module";
+import ordersController from "./orders/orders.module";
 
 const localAuthStrategy: LocalStrategy = {
     usersDbName: 'users',

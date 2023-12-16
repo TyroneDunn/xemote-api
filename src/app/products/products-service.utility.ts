@@ -2,10 +2,10 @@ import {HttpStatusCodes, Request, Response} from "@hals/core";
 import {ProductsRepository} from "./products-repository.type";
 import {ProductsDtoValidator} from "./products-dto-validator.utility";
 import {Product} from "./product.type";
-import {ValidationOutcome} from "../shared/validation-outcome/validation-outcome.type";
+import {ValidationOutcome} from "../../shared/validation-outcome/validation-outcome.type";
 import {
     mapValidationOutcomeToErrorResponse
-} from "../shared/validation-outcome/validation-outcome.utility";
+} from "../../shared/validation-outcome/validation-outcome.utility";
 import {
     mapProductsToResponse,
     mapProductToSuccessResponse,
@@ -24,13 +24,13 @@ import {
     UpdateProductDTO,
     UpdateProductsDTO,
 } from "./products-dtos.type";
-import {CommandResult} from "../shared/command-result/command-result.type";
-import {addRequestPageDataToResponse} from "../shared/hals/hals.utility";
+import {CommandResult} from "../../shared/command-result/command-result.type";
+import {addRequestPageDataToResponse} from "../../shared/hals/hals.utility";
 import {
     mapDeleteResultToResponse,
     mapUpdateResultToResponse
-} from "../shared/command-result/command-result.utility";
-import {mapToInternalServerErrorResponse} from "../shared/errors/errors.utility";
+} from "../../shared/command-result/command-result.utility";
+import {mapToInternalServerErrorResponse} from "../../shared/errors/errors.utility";
 import {ProductsService} from "./products-service.type";
 
 export const configureProductsService = (

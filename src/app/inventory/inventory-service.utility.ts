@@ -8,10 +8,10 @@ import {
     UpdateInventoryRecordsDTO,
 } from "./inventory-records-dtos.type";
 import {Request, Response} from "@hals/core";
-import {ValidationOutcome} from "../shared/validation-outcome/validation-outcome.type";
+import {ValidationOutcome} from "../../shared/validation-outcome/validation-outcome.type";
 import {
     mapValidationOutcomeToErrorResponse
-} from "../shared/validation-outcome/validation-outcome.utility";
+} from "../../shared/validation-outcome/validation-outcome.utility";
 import {InventoryRecord} from "./inventory-record.type";
 import {
     mapInventoryRecordsToSuccessResponse,
@@ -23,10 +23,10 @@ import {
     mapRequestToUpdateInventoryRecordDTO,
     mapRequestToUpdateInventoryRecordsDTO
 } from "./inventory-records-dtos.utility";
-import {addRequestPageDataToResponse} from "../shared/hals/hals.utility";
-import {CommandResult} from "../shared/command-result/command-result.type";
-import {mapCommandResultToSuccessResponse} from "../shared/command-result/command-result.utility";
-import {mapToInternalServerErrorResponse} from "../shared/errors/errors.utility";
+import {addRequestPageDataToResponse} from "../../shared/hals/hals.utility";
+import {CommandResult} from "../../shared/command-result/command-result.type";
+import {mapCommandResultToSuccessResponse} from "../../shared/command-result/command-result.utility";
+import {mapToInternalServerErrorResponse} from "../../shared/errors/errors.utility";
 import {InventoryRecordsDtosValidator} from "./inventory-records-dtos-validator.utility";
 import {InventoryService} from "./inventory-service.type";
 

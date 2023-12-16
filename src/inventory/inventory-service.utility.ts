@@ -28,16 +28,7 @@ import {CommandResult} from "../shared/command-result/command-result.type";
 import {mapCommandResultToSuccessResponse} from "../shared/command-result/command-result.utility";
 import {mapToInternalServerErrorResponse} from "../shared/errors/errors.utility";
 import {InventoryRecordsDtosValidator} from "./inventory-records-dtos-validator.utility";
-
-export type InventoryService = {
-    getRecord: (request: Request) => Promise<Response>,
-    getRecords: (request: Request) => Promise<Response>,
-    createRecord: (request: Request) => Promise<Response>,
-    updateRecord: (request: Request) => Promise<Response>,
-    updateRecords: (request: Request) => Promise<Response>,
-    deleteRecord: (request: Request) => Promise<Response>,
-    deleteRecords: (request: Request) => Promise<Response>,
-};
+import {InventoryService} from "./inventory-service.type";
 
 export const configureInventoryService = (
     repository: InventoryRepository,

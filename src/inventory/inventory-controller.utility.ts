@@ -1,5 +1,5 @@
 import {Controller, Method, Request, Response} from "@hals/core";
-import {InventoryService} from "./inventory.service";
+import {InventoryService} from "./inventory-service.type";
 
 export const InventoryQueryParamsKeys: string[] = [
     'countRange',

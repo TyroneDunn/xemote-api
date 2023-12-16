@@ -11,9 +11,8 @@ import {CommandResult} from "../shared/command-result/command-result.type";
 import OrdersModel from "./mongo-orders-model.type";
 
 export const MongoOrdersRepository: OrdersRepository = {
-    getOrder(dto: GetOrderDTO): Promise<Order> {
-        return Promise.resolve(undefined);
-    },
+    getOrder: (dto: GetOrderDTO): Promise<Order> => OrdersModel.findById(dto._id),
+
     getOrders(dto: OrdersDTO): Promise<Order[]> {
         return Promise.resolve([]);
     },

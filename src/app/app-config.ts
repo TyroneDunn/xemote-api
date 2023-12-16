@@ -21,6 +21,7 @@ import {
 } from "../environment";
 import {corsOptions} from "./cors-options-config";
 import productsController from "../products/products.module";
+import inventoryController from "../inventory/inventory.module";
 
 const localAuthStrategy: LocalStrategy = {
     usersDbName: 'users',
@@ -44,7 +45,8 @@ export const schema: Schema = buildSchema(
 );
 
 const app: Application = newApplication(schema, [
-    productsController
+    productsController,
+    inventoryController
 ]);
 
 const run = app.run;

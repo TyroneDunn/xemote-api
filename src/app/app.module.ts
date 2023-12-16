@@ -19,7 +19,7 @@ import {
     PASSWORD_SALT,
     SESSION_SECRET,
 } from "../environment";
-import {corsOptions} from "./cors-options-config";
+import corsOptions from "./cors-options-config";
 import productsController from "../products/products.module";
 import inventoryController from "../inventory/inventory.module";
 

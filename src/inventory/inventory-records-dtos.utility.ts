@@ -11,7 +11,7 @@ import {
 import {InventoryRecord} from "./inventory-record.type";
 import {NumberRange} from "../shared/number-range/number-range.type";
 import {OrderOption} from "../shared/order-option/order-option.type";
-import {mapRequestToPage} from "../shared/pagination/pagination.utility";
+import {mapRequestToPage} from "../shared/page/page.utility";
 import {mapRequestToTimestamps} from "../shared/timestamps/timestamps.utility";
 
 export const mapRequestToGetInventoryRecordDTO = (request: Request): GetInventoryRecordDTO =>

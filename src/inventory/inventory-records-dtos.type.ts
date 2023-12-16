@@ -1,5 +1,5 @@
 import {Timestamps} from "../shared/timestamps/timestamps.type";
-import {Pagination} from "../shared/pagination/pagination.type";
+import {Page} from "../shared/page/page.type";
 import {NumberRange} from "../shared/number-range/number-range.type";
 import {OrderOption} from "../shared/order-option/order-option.type";
 
@@ -9,7 +9,7 @@ export type InventoryRecordsDTO = {
     filter?: InventoryRecordsFilter,
     timestamps?: Timestamps,
     sort?: InventoryRecordsSort,
-    page?: Pagination
+    page?: Page
 };
 
 export type InventoryRecordsFilter = {

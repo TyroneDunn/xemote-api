@@ -1,5 +1,5 @@
 import {Timestamps} from "../shared/timestamps/timestamps.type";
-import {Pagination} from "../shared/pagination/pagination.type";
+import {Page} from "../shared/page/page.type";
 import {NumberRange} from "../shared/number-range/number-range.type";
 import {Sort} from "../shared/sort/sort.type";
 import {OrderStatus, ProductCount} from "./order.type";
@@ -10,7 +10,7 @@ export type OrdersDTO = {
     filter?: OrdersFilter,
     timestamps?: Timestamps,
     sort?: OrdersSort,
-    page?: Pagination,
+    page?: Page,
 };
 
 export type CreateOrderDTO = {

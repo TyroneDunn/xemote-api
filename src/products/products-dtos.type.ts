@@ -1,5 +1,5 @@
 import {ProductType} from "./product.type";
-import {Pagination} from "../shared/pagination/pagination.type";
+import {Page} from "../shared/page/page.type";
 import {Price} from "../shared/price/price.type";
 import {NumberRange} from "../shared/number-range/number-range.type";
 import {OrderOption} from "../shared/order-option/order-option.type";
@@ -11,7 +11,7 @@ export type ProductsDTO = {
     filter?: ProductsFilter,
     timestamps?: Timestamps,
     sort?: ProductsSort,
-    page?: Pagination,
+    page?: Page,
 };
 
 export type CreateProductDTO = {

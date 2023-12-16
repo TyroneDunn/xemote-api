@@ -1,6 +1,6 @@
 import {UserSortOptions} from "./users-sort-options.type";
 import {UserPermissions} from "./user-permissions.type";
-import {Pagination} from "../../shared/pagination/pagination.type";
+import {Page} from "../../shared/page/page.type";
 import {UsersFilter} from "./users-filter.type";
 import {Timestamps} from "../../shared/timestamps/timestamps.type";
 
@@ -10,7 +10,7 @@ export type GetUsersDTO = {
     filter?: UsersFilter,
     timestamps?: Timestamps,
     sort?: UserSortOptions,
-    page?: Pagination,
+    page?: Page,
 };
 
 export type RegisterUserDTO = {

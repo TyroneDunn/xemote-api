@@ -12,7 +12,7 @@ import {
 import {NumberRange} from "../shared/number-range/number-range.type";
 import {Price} from "../shared/price/price.type";
 import {OrderOption} from "../shared/order-option/order-option.type";
-import {mapRequestToPage} from "../shared/pagination/pagination.utility";
+import {mapRequestToPage} from "../shared/page/page.utility";
 import {mapRequestToTimestamps} from "../shared/timestamps/timestamps.utility";
 
 export const mapToGetProductDTO = (request: Request): GetProductDTO => ({

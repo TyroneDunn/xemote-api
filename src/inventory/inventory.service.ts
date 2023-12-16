@@ -27,7 +27,7 @@ import {addRequestPageDataToResponse} from "../shared/hals/hals.utility";
 import {CommandResult} from "../shared/command-result/command-result.type";
 import {mapCommandResultToSuccessResponse} from "../shared/command-result/command-result.utility";
 import {mapToInternalServerErrorResponse} from "../shared/errors/errors.utility";
-import {InventoryRecordsDtosValidator} from "./inventory-records-dtos-validator.service";
+import {InventoryRecordsDtosValidator} from "./inventory-records-dtos-validator.utility";
 
 export type InventoryService = {
     getRecord: (request: Request) => Promise<Response>,

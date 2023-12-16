@@ -10,7 +10,7 @@ import {
     UpdateProductsDTO
 } from "./products-dtos.type";
 import {NumberRange} from "../../shared/number-range/number-range.type";
-import {Price} from "../../shared/price/price.type";
+import {Price} from "./price.type";
 import {OrderOption} from "../../shared/sort/order-option.type";
 import {mapRequestToPage} from "../../shared/page/page.utility";
 import {mapRequestToTimestamps} from "../../shared/timestamps/timestamps.utility";

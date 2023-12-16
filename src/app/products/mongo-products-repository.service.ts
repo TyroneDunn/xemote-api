@@ -11,7 +11,7 @@ import {
     UpdateProductsDTO,
 } from "./products-dtos.type";
 import {DeleteResult} from "mongodb";
-import {Price} from "../../shared/price/price.type";
+import {Price} from "./price.type";
 import {UpdateWriteOpResult} from "mongoose";
 import {CommandResult} from "../../shared/command-result/command-result.type";
 

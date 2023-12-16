@@ -1,4 +1,4 @@
-import {Price} from "../../shared/price/price.type";
+import {Price} from "./price.type";
 
 export type Product = {
     _id: string,

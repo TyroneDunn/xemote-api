@@ -1,5 +1,4 @@
 import {InventoryRepository} from "./inventory-repository.type";
-import {INVENTORY_REPOSITORY} from "../environment/repositories-config";
 import {
     CreateInventoryRecordDTO,
     DeleteInventoryRecordDTO,
@@ -9,134 +8,139 @@ import {
     UpdateInventoryRecordsDTO,
 } from "./inventory-records-dtos.type";
 import {Request, Response} from "@hals/core";
-import {ValidationOutcome} from "../shared/validation-dtos.type";
-import {mapToErrorResponse} from "../shared/validation-dtos.utility";
+import {ValidationOutcome} from "../shared/validation-outcome/validation-outcome.type";
+import {
+    mapValidationOutcomeToErrorResponse
+} from "../shared/validation-outcome/validation-outcome.utility";
 import {InventoryRecord} from "./inventory-record.type";
 import {
     mapInventoryRecordsToSuccessResponse,
     mapInventoryRecordToSuccessResponse,
-    mapRequestToInventoryRecordsDTO,
-    mapRequestToUpdateInventoryRecordsDTO,
     mapRequestToCreateInventoryRecordDTO,
     mapRequestToDeleteInventoryRecordDTO,
     mapRequestToGetInventoryRecordDTO,
-    mapRequestToUpdateInventoryRecordDTO
+    mapRequestToInventoryRecordsDTO,
+    mapRequestToUpdateInventoryRecordDTO,
+    mapRequestToUpdateInventoryRecordsDTO
 } from "./inventory-records-dtos.utility";
-import {
-    validateCreateInventoryRecordDTO,
-    validateDeleteInventoryRecordDTO,
-    validateDeleteInventoryRecordsDTO,
-    validateGetInventoryRecordDTO,
-    validateGetInventoryRecordsDTO,
-    validateUpdateInventoryRecordDTO,
-    validateUpdateInventoryRecordsDTO
-} from "./inventory-records-dtos-validator.service";
-import {
-    addRequestPageDataToResponse,
-    mapToInternalServerErrorResponse
-} from "../shared/hals.utility";
-import {Result} from "../shared/result.type";
-import {mapResultToSuccessResponse} from "../shared/result.utility";
+import {addRequestPageDataToResponse} from "../shared/hals/hals.utility";
+import {CommandResult} from "../shared/command-result/command-result.type";
+import {mapCommandResultToSuccessResponse} from "../shared/command-result/command-result.utility";
+import {mapToInternalServerErrorResponse} from "../shared/errors/errors.utility";
+import {InventoryRecordsDtosValidator} from "./inventory-records-dtos-validator.service";
 
-const repository: InventoryRepository = INVENTORY_REPOSITORY;
-
-export const getRecord = async (request: Request): Promise<Response> => {
-    const dto: GetInventoryRecordDTO = mapRequestToGetInventoryRecordDTO(request);
-
-    const validationOutcome: ValidationOutcome = await validateGetInventoryRecordDTO(dto);
-    if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);
-
-    try {
-        const record: InventoryRecord = await repository.getRecord(dto);
-        return mapInventoryRecordToSuccessResponse(record);
-    } catch (error) {
-        return mapToInternalServerErrorResponse(error);
-    }
+export type InventoryService = {
+    getRecord: (request: Request) => Promise<Response>,
+    getRecords: (request: Request) => Promise<Response>,
+    createRecord: (request: Request) => Promise<Response>,
+    updateRecord: (request: Request) => Promise<Response>,
+    updateRecords: (request: Request) => Promise<Response>,
+    deleteRecord: (request: Request) => Promise<Response>,
+    deleteRecords: (request: Request) => Promise<Response>,
 };
 
-export const getRecords = async (request: Request): Promise<Response> => {
-    const dto: InventoryRecordsDTO = mapRequestToInventoryRecordsDTO(request);
+export const configureInventoryService = (
+    repository: InventoryRepository,
+    validator: InventoryRecordsDtosValidator
+): InventoryService => ({
+    getRecord: async (request: Request): Promise<Response> => {
+        const dto: GetInventoryRecordDTO = mapRequestToGetInventoryRecordDTO(request);
 
-    const validationOutcome: ValidationOutcome = await validateGetInventoryRecordsDTO(dto);
-    if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);
+        const validationOutcome: ValidationOutcome = await validator.validateGetInventoryRecordDto(dto);
+        if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
 
-    try {
-        const records: InventoryRecord[] = await repository.getRecords(dto);
+        try {
+            const record: InventoryRecord = await repository.getRecord(dto);
+            return mapInventoryRecordToSuccessResponse(record);
+        } catch (error) {
+            return mapToInternalServerErrorResponse(error);
+        }
+    },
 
-        const addPageData = (response: Response): Response =>
-            addRequestPageDataToResponse(request, response);
-        return addPageData(mapInventoryRecordsToSuccessResponse(records));
-    } catch (error) {
-        return mapToInternalServerErrorResponse(error);
-    }
-};
+    getRecords: async (request: Request): Promise<Response> => {
+        const dto: InventoryRecordsDTO = mapRequestToInventoryRecordsDTO(request);
 
-export const createRecord = async (request: Request): Promise<Response> => {
-    const dto: CreateInventoryRecordDTO = mapRequestToCreateInventoryRecordDTO(request);
+        const validationOutcome: ValidationOutcome = await validator.validateInventoryRecordsDto(dto);
+        if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
 
-    const validationOutcome: ValidationOutcome = await validateCreateInventoryRecordDTO(dto);
-    if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);
+        try {
+            const records: InventoryRecord[] = await repository.getRecords(dto);
 
-    try {
-        const record: InventoryRecord = await repository.createRecord(dto);
-        return mapInventoryRecordToSuccessResponse(record);
-    } catch (error) {
-        return mapToInternalServerErrorResponse(error);
-    }
-};
+            const addPageData = (response: Response): Response =>
+                addRequestPageDataToResponse(request, response);
+            return addPageData(mapInventoryRecordsToSuccessResponse(records));
+        } catch (error) {
+            return mapToInternalServerErrorResponse(error);
+        }
+    },
 
-export const updateRecord = async (request: Request): Promise<Response> => {
-    const dto: UpdateInventoryRecordDTO = mapRequestToUpdateInventoryRecordDTO(request);
+    createRecord: async (request: Request): Promise<Response> => {
+        const dto: CreateInventoryRecordDTO = mapRequestToCreateInventoryRecordDTO(request);
 
-    const validationOutcome: ValidationOutcome = await validateUpdateInventoryRecordDTO(dto);
-    if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);
+        const validationOutcome: ValidationOutcome = await validator.validateCreateInventoryRecordDto(dto);
+        if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
 
-    try {
-        const record: InventoryRecord = await repository.updateRecord(dto);
-        return mapInventoryRecordToSuccessResponse(record);
-    } catch (error) {
-        return mapToInternalServerErrorResponse(error);
-    }
-};
+        try {
+            const record: InventoryRecord = await repository.createRecord(dto);
+            return mapInventoryRecordToSuccessResponse(record);
+        } catch (error) {
+            return mapToInternalServerErrorResponse(error);
+        }
+    },
 
-export const updateRecords = async (request: Request): Promise<Response> => {
-    const dto: UpdateInventoryRecordsDTO = mapRequestToUpdateInventoryRecordsDTO(request);
+    updateRecord: async (request: Request): Promise<Response> => {
+        const dto: UpdateInventoryRecordDTO = mapRequestToUpdateInventoryRecordDTO(request);
 
-    const validationOutcome: ValidationOutcome = await validateUpdateInventoryRecordsDTO(dto);
-    if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);
+        const validationOutcome: ValidationOutcome = await validator.validateUpdateInventoryRecordDto(dto);
+        if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
 
-    try {
-        const result: Result = await repository.updateRecords(dto);
-        return mapResultToSuccessResponse(result);
-    } catch (error) {
-        return mapToInternalServerErrorResponse(error);
-    }
-};
+        try {
+            const record: InventoryRecord = await repository.updateRecord(dto);
+            return mapInventoryRecordToSuccessResponse(record);
+        } catch (error) {
+            return mapToInternalServerErrorResponse(error);
+        }
+    },
 
-export const deleteRecord = async (request: Request): Promise<Response> => {
-    const dto: DeleteInventoryRecordDTO = mapRequestToDeleteInventoryRecordDTO(request);
+    updateRecords: async (request: Request): Promise<Response> => {
+        const dto: UpdateInventoryRecordsDTO = mapRequestToUpdateInventoryRecordsDTO(request);
 
-    const validationOutcome: ValidationOutcome = await validateDeleteInventoryRecordDTO(dto);
-    if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);
+        const validationOutcome: ValidationOutcome = await validator.validateUpdateInventoryRecordsDto(dto);
+        if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
 
-    try {
-        const result: Result = await repository.deleteRecord(dto);
-        return mapResultToSuccessResponse(result);
-    } catch (error) {
-        return mapToInternalServerErrorResponse(error);
-    }
-};
+        try {
+            const result: CommandResult = await repository.updateRecords(dto);
+            return mapCommandResultToSuccessResponse(result);
+        } catch (error) {
+            return mapToInternalServerErrorResponse(error);
+        }
+    },
 
-export const deleteRecords = async (request: Request): Promise<Response> => {
-    const dto: InventoryRecordsDTO = mapRequestToInventoryRecordsDTO(request);
+    deleteRecord: async (request: Request): Promise<Response> => {
+        const dto: DeleteInventoryRecordDTO = mapRequestToDeleteInventoryRecordDTO(request);
 
-    const validationOutcome: ValidationOutcome = await validateDeleteInventoryRecordsDTO(dto);
-    if (validationOutcome.error !== undefined) return mapToErrorResponse(validationOutcome);
+        const validationOutcome: ValidationOutcome = await validator.validateDeleteInventoryRecordDto(dto);
+        if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
 
-    try {
-        const result: Result = await repository.deleteRecords(dto);
-        return mapResultToSuccessResponse(result);
-    } catch (error) {
-        return mapToInternalServerErrorResponse(error);
-    }
-};
+        try {
+            const result: CommandResult = await repository.deleteRecord(dto);
+            return mapCommandResultToSuccessResponse(result);
+        } catch (error) {
+            return mapToInternalServerErrorResponse(error);
+        }
+    },
+
+    deleteRecords: async (request: Request): Promise<Response> => {
+        const dto: InventoryRecordsDTO = mapRequestToInventoryRecordsDTO(request);
+
+        const validationOutcome: ValidationOutcome = await validator.validateInventoryRecordsDto(dto);
+        if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
+
+        try {
+            const result: CommandResult = await repository.deleteRecords(dto);
+            return mapCommandResultToSuccessResponse(result);
+        } catch (error) {
+            return mapToInternalServerErrorResponse(error);
+        }
+    },
+});

@@ -7,7 +7,7 @@ import {
     getOrders,
     updateOrder,
     updateOrders
-} from "./orders.service";
+} from "./orders-service.utility";
 
 export const OrdersQueryParamsKeys: string[] = [
     'clientId',

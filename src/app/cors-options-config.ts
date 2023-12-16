@@ -1,6 +1,6 @@
 import {CorsOptions} from "cors";
 import {APP_URL} from "../environment";
-import {OK} from "../shared/http-status-code.constant";
+import {HttpStatusCodes} from "@hals/core";
 
 export const corsOptions: CorsOptions = {
     origin: [
@@ -9,6 +9,6 @@ export const corsOptions: CorsOptions = {
     ],
     allowedHeaders: 'Content-Type,credentials',
     credentials: true,
-    optionsSuccessStatus: OK,
+    optionsSuccessStatus: HttpStatusCodes.OK,
     methods: ["GET", "POST", "DELETE", "PATCH"],
 };

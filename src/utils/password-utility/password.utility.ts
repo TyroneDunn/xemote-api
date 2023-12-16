@@ -1,5 +1,5 @@
 import {GenerateSalt, HashUtility} from "./password.type";
-const crypto = require('crypto');
+import crypto from "crypto";
 
 export const hashUtility = (
     salt: string,

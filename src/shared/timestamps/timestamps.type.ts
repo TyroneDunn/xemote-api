@@ -1,4 +1,4 @@
-import {DateRange} from "../date-range/date-range.type";
+import {DateRange} from "./date-range.type";
 
 export type Timestamps = {
     createdAt?: DateRange,

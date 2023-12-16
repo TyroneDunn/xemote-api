@@ -1,5 +1,5 @@
 import {Request} from "@hals/core";
-import {DateRange} from "../date-range/date-range.type";
+import {DateRange} from "./date-range.type";
 
 export const mapRequestToTimestamps = (request: Request) => ({
     ...(request.queryParamMap['createdAt'] && !request.queryParamMap['updatedAt']) && {

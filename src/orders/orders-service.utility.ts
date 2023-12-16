@@ -26,7 +26,7 @@ import {
     mapRequestToUpdateOrderDTO,
     mapRequestToUpdateOrdersDTO
 } from "./orders-dtos.utility";
-import {OrdersDtosValidator,} from "./orders-dtos-validator.service";
+import {OrdersDtosValidator,} from "./orders-dtos-validator.utility";
 import {mapToInternalServerErrorResponse} from "../shared/errors/errors.utility";
 import {OrdersService} from "./orders-service.type";
 

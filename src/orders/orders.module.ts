@@ -3,7 +3,7 @@ import {OrdersService} from "./orders-service.type";
 import {configureOrdersService} from "./orders-service.utility";
 import {OrdersRepository} from "./orders-repository.type";
 import {MongoOrdersRepository} from "./mongo-orders-repository.service";
-import {configureOrdersDtosValidator, OrdersDtosValidator} from "./orders-dtos-validator.service";
+import {configureOrdersDtosValidator, OrdersDtosValidator} from "./orders-dtos-validator.utility";
 
 const ordersRepository: OrdersRepository = MongoOrdersRepository;
 const ordersDtosValidator: OrdersDtosValidator = configureOrdersDtosValidator(ordersRepository);

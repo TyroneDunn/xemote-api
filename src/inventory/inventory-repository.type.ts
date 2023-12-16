@@ -7,15 +7,18 @@ import {
     UpdateInventoryRecordsDTO,
     DeleteInventoryRecordDTO
 } from "./inventory-records-dtos.type";
-import {Result} from "../shared/result.type";
+import {CommandResult} from "../shared/command-result/command-result.type";
 
+
+// todo : functions should return either record or error. Find a way to implement this functional
+//  pattern in a clean manner.
 export type InventoryRepository = {
     getRecord: (dto: GetInventoryRecordDTO) => Promise<InventoryRecord>,
     getRecords: (dto: InventoryRecordsDTO) => Promise<InventoryRecord[]>,
     createRecord: (dto: CreateInventoryRecordDTO) => Promise<InventoryRecord>,
     updateRecord: (dto: UpdateInventoryRecordDTO) => Promise<InventoryRecord>,
-    updateRecords: (dto: UpdateInventoryRecordsDTO) => Promise<Result>,
-    deleteRecord: (dto: DeleteInventoryRecordDTO) => Promise<Result>,
-    deleteRecords: (dto: InventoryRecordsDTO) => Promise<Result>,
+    updateRecords: (dto: UpdateInventoryRecordsDTO) => Promise<CommandResult>,
+    deleteRecord: (dto: DeleteInventoryRecordDTO) => Promise<CommandResult>,
+    deleteRecords: (dto: InventoryRecordsDTO) => Promise<CommandResult>,
     exists: (dto: GetInventoryRecordDTO) => Promise<boolean>,
 };

@@ -11,7 +11,7 @@ import {
 } from "./products-dtos.type";
 import {NumberRange} from "../shared/number-range/number-range.type";
 import {Price} from "../shared/price/price.type";
-import {OrderOptions} from "../shared/order-options/order-options.type";
+import {OrderOption} from "../shared/order-option/order-option.type";
 import {mapRequestToPage} from "../shared/pagination/pagination.utility";
 import {mapRequestToTimestamps} from "../shared/timestamps/timestamps.utility";
 
@@ -71,7 +71,7 @@ const mapToProductsSort = (request: Request) => ({
     ...(request.queryParamMap['sort'] && request.queryParamMap['order']) && {
         sort: {
             field: request.queryParamMap['sort'] as ProductsSortOptions,
-            order: request.queryParamMap['order'] as OrderOptions,
+            order: request.queryParamMap['order'] as OrderOption,
         }
     },
 });

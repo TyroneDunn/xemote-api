@@ -2,7 +2,7 @@ import {ProductType} from "./product.type";
 import {Pagination} from "../shared/pagination/pagination.type";
 import {Price} from "../shared/price/price.type";
 import {NumberRange} from "../shared/number-range/number-range.type";
-import {OrderOptions} from "../shared/order-options/order-options.type";
+import {OrderOption} from "../shared/order-option/order-option.type";
 import {Timestamps} from "../shared/timestamps/timestamps.type";
 
 export type GetProductDTO = { _id: string };
@@ -60,5 +60,5 @@ export type ProductsSortOptions =
 
 export type ProductsSort = {
     field: ProductsSortOptions,
-    order: OrderOptions,
+    order: OrderOption,
 };

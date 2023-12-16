@@ -10,7 +10,7 @@ import {
 } from "./inventory-records-dtos.type";
 import {InventoryRecord} from "./inventory-record.type";
 import {NumberRange} from "../shared/number-range/number-range.type";
-import {OrderOptions} from "../shared/order-options/order-options.type";
+import {OrderOption} from "../shared/order-option/order-option.type";
 import {mapRequestToPage} from "../shared/pagination/pagination.utility";
 import {mapRequestToTimestamps} from "../shared/timestamps/timestamps.utility";
 
@@ -44,7 +44,7 @@ const mapToInventoryRecordsSort = (request: Request) => ({
     ...(request.queryParamMap['sort'] && request.queryParamMap['order']) && {
         sort: {
             field: request.queryParamMap['sort'] as InventoryRecordsSortOption,
-            order: request.queryParamMap['order'] as OrderOptions,
+            order: request.queryParamMap['order'] as OrderOption,
         }
     }
 });

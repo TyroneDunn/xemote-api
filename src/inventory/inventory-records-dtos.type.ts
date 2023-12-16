@@ -1,7 +1,7 @@
 import {Timestamps} from "../shared/timestamps/timestamps.type";
 import {Pagination} from "../shared/pagination/pagination.type";
 import {NumberRange} from "../shared/number-range/number-range.type";
-import {OrderOptions} from "../shared/order-options/order-options.type";
+import {OrderOption} from "../shared/order-option/order-option.type";
 
 export type GetInventoryRecordDTO = { _id: string };
 
@@ -19,7 +19,7 @@ export type InventoryRecordsFilter = {
 
 export type InventoryRecordsSort = {
     field: InventoryRecordsSortOption,
-    order: OrderOptions,
+    order: OrderOption,
 };
 
 export type InventoryRecordsSortOption =

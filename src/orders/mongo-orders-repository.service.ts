@@ -13,12 +13,17 @@ import OrdersModel from "./mongo-orders-model.type";
 export const MongoOrdersRepository: OrdersRepository = {
     getOrder: (dto: GetOrderDTO): Promise<Order> => OrdersModel.findById(dto._id),
 
-    getOrders(dto: OrdersDTO): Promise<Order[]> {
+    getOrders: (dto: OrdersDTO): Promise<Order[]> => {
         return Promise.resolve([]);
     },
-    createOrder(dto: CreateOrderDTO): Promise<Order> {
-        return Promise.resolve(undefined);
-    },
+
+    createOrder: (dto: CreateOrderDTO): Promise<Order> =>
+        new OrdersModel({
+            clientId: dto.clientId,
+            cart: dto.cart,
+            status: dto.status,
+        }).save(),
+
     updateOrder(dto: UpdateOrderDTO): Promise<Order> {
         return Promise.resolve(undefined);
     },

@@ -3,13 +3,14 @@ import {
     CreateOrderDTO,
     DeleteOrderDTO,
     GetOrderDTO,
-    OrdersDTO,
+    OrdersDTO, OrderUpdateFields,
     UpdateOrderDTO, UpdateOrdersDTO
 } from "./orders-dtos.type";
 import {Order} from "./order.type";
 import {CommandResult} from "../shared/command-result/command-result.type";
 import OrdersModel from "./mongo-orders-model.type";
 import {DeleteResult} from "mongodb";
+import {ProductModel} from "../products/mongo-product-model.type";
 
 export const MongoOrdersRepository: OrdersRepository = {
     getOrder: (dto: GetOrderDTO): Promise<Order> => OrdersModel.findById(dto._id),
@@ -33,9 +34,13 @@ export const MongoOrdersRepository: OrdersRepository = {
             status: dto.status,
         }).save(),
 
-    updateOrder(dto: UpdateOrderDTO): Promise<Order> {
-        return Promise.resolve(undefined);
-    },
+    updateOrder: (dto: UpdateOrderDTO): Promise<Order> =>
+        ProductModel.findOneAndUpdate(
+            {_id: dto._id},
+            mapUpdateFieldsToUpdateQuery(dto.updateFields),
+            {new: true}
+        ),
+
     updateOrders(dto: UpdateOrdersDTO): Promise<CommandResult> {
         return Promise.resolve(undefined);
     },
@@ -96,4 +101,10 @@ const mapOrdersDtoToFilter = (dto: OrdersDTO) => ({
             }
         }
     },
+});
+
+const mapUpdateFieldsToUpdateQuery = (updateFields: OrderUpdateFields) => ({
+    ...updateFields.newClientId && {clientId: updateFields.newClientId},
+    ...updateFields.newStatus && {status: updateFields.newStatus},
+    ...updateFields.newCart && {cart: updateFields.newCart},
 });

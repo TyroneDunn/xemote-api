@@ -1,4 +1,4 @@
-import {ValidationOutcome} from "./validation-dtos.type";
+import {ValidationOutcome} from "./validation-outcome.type";
 import {HttpStatusCodes, Response} from "@hals/core";
 import {
     BadRequestError,
@@ -8,7 +8,7 @@ import {
     UnauthorizedError
 } from "../errors/errors.type";
 
-export const mapToErrorResponse = (validationOutcome: ValidationOutcome): Response => {
+export const mapValidationOutcomeToErrorResponse = (validationOutcome: ValidationOutcome): Response => {
     if (validationOutcome.error instanceof BadRequestError) return ({
         status: HttpStatusCodes.BAD_REQUEST,
         error: validationOutcome.error.message,

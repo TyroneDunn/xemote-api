@@ -1,5 +1,5 @@
 import {OrderStatus, ProductCount} from "./order.type";
-import {NumberRange, Page, Sort, Timestamps} from "@hals/common";
+import {NumberRange, OrderOption, Page, Timestamps} from "@hals/common";
 
 export type GetOrderDTO = { _id: string };
 
@@ -46,4 +46,7 @@ export type OrdersSortOptions =
     | "clientId"
     | "status";
 
-export type OrdersSort = Sort<OrdersSortOptions>;
+export type OrdersSort = {
+    field: OrdersSortOptions,
+    order: OrderOption,
+};

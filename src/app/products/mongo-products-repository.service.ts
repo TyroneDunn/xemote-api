@@ -13,7 +13,7 @@ import {
 import {DeleteResult} from "mongodb";
 import {Price} from "./price.type";
 import {UpdateWriteOpResult} from "mongoose";
-import {CommandResult} from "../../shared/command-result/command-result.type";
+import {CommandResult} from "@hals/common";
 
 export const MongoProductsRepository: ProductsRepository = {
     getProduct: (dto: GetProductDTO): Promise<Product> =>

@@ -8,10 +8,6 @@ import {
     UpdateInventoryRecordsDTO,
 } from "./inventory-records-dtos.type";
 import {Request, Response} from "@hals/core";
-import {ValidationOutcome} from "../../shared/validation-outcome/validation-outcome.type";
-import {
-    mapValidationOutcomeToErrorResponse
-} from "../../shared/validation-outcome/validation-outcome.utility";
 import {InventoryRecord} from "./inventory-record.type";
 import {
     mapInventoryRecordsToSuccessResponse,
@@ -23,12 +19,14 @@ import {
     mapRequestToUpdateInventoryRecordDTO,
     mapRequestToUpdateInventoryRecordsDTO
 } from "./inventory-records-dtos.utility";
-import {addRequestPageDataToResponse} from "../../shared/hals/hals.utility";
-import {CommandResult} from "../../shared/command-result/command-result.type";
-import {mapCommandResultToSuccessResponse} from "../../shared/command-result/command-result.utility";
-import {mapToInternalServerErrorResponse} from "../../shared/errors/errors.utility";
 import {InventoryRecordsDtosValidator} from "./inventory-records-dtos-validator.utility";
 import {InventoryService} from "./inventory-service.type";
+import {
+    addRequestPageDataToResponse, CommandResult, mapCommandResultToSuccessResponse,
+    mapErrorToInternalServerErrorResponse,
+    mapValidationOutcomeToErrorResponse,
+    ValidationOutcome
+} from "@hals/common";
 
 export const configureInventoryService = (
     repository: InventoryRepository,
@@ -44,7 +42,7 @@ export const configureInventoryService = (
             const record: InventoryRecord = await repository.getRecord(dto);
             return mapInventoryRecordToSuccessResponse(record);
         } catch (error) {
-            return mapToInternalServerErrorResponse(error);
+            return mapErrorToInternalServerErrorResponse(error);
         }
     },
 
@@ -61,7 +59,7 @@ export const configureInventoryService = (
                 addRequestPageDataToResponse(request, response);
             return addPageData(mapInventoryRecordsToSuccessResponse(records));
         } catch (error) {
-            return mapToInternalServerErrorResponse(error);
+            return mapErrorToInternalServerErrorResponse(error);
         }
     },
 
@@ -75,7 +73,7 @@ export const configureInventoryService = (
             const record: InventoryRecord = await repository.createRecord(dto);
             return mapInventoryRecordToSuccessResponse(record);
         } catch (error) {
-            return mapToInternalServerErrorResponse(error);
+            return mapErrorToInternalServerErrorResponse(error);
         }
     },
 
@@ -89,7 +87,7 @@ export const configureInventoryService = (
             const record: InventoryRecord = await repository.updateRecord(dto);
             return mapInventoryRecordToSuccessResponse(record);
         } catch (error) {
-            return mapToInternalServerErrorResponse(error);
+            return mapErrorToInternalServerErrorResponse(error);
         }
     },
 
@@ -103,7 +101,7 @@ export const configureInventoryService = (
             const result: CommandResult = await repository.updateRecords(dto);
             return mapCommandResultToSuccessResponse(result);
         } catch (error) {
-            return mapToInternalServerErrorResponse(error);
+            return mapErrorToInternalServerErrorResponse(error);
         }
     },
 
@@ -117,7 +115,7 @@ export const configureInventoryService = (
             const result: CommandResult = await repository.deleteRecord(dto);
             return mapCommandResultToSuccessResponse(result);
         } catch (error) {
-            return mapToInternalServerErrorResponse(error);
+            return mapErrorToInternalServerErrorResponse(error);
         }
     },
 
@@ -131,7 +129,7 @@ export const configureInventoryService = (
             const result: CommandResult = await repository.deleteRecords(dto);
             return mapCommandResultToSuccessResponse(result);
         } catch (error) {
-            return mapToInternalServerErrorResponse(error);
+            return mapErrorToInternalServerErrorResponse(error);
         }
     },
 });

@@ -2,10 +2,6 @@ import {HttpStatusCodes, Request, Response} from "@hals/core";
 import {ProductsRepository} from "./products-repository.type";
 import {ProductsDtoValidator} from "./products-dto-validator.utility";
 import {Product} from "./product.type";
-import {ValidationOutcome} from "../../shared/validation-outcome/validation-outcome.type";
-import {
-    mapValidationOutcomeToErrorResponse
-} from "../../shared/validation-outcome/validation-outcome.utility";
 import {
     mapProductsToResponse,
     mapProductToSuccessResponse,
@@ -24,14 +20,13 @@ import {
     UpdateProductDTO,
     UpdateProductsDTO,
 } from "./products-dtos.type";
-import {CommandResult} from "../../shared/command-result/command-result.type";
-import {addRequestPageDataToResponse} from "../../shared/hals/hals.utility";
-import {
-    mapDeleteResultToResponse,
-    mapUpdateResultToResponse
-} from "../../shared/command-result/command-result.utility";
-import {mapToInternalServerErrorResponse} from "../../shared/errors/errors.utility";
 import {ProductsService} from "./products-service.type";
+import {
+    addRequestPageDataToResponse, CommandResult, mapDeleteResultToResponse,
+    mapErrorToInternalServerErrorResponse, mapUpdateResultToResponse,
+    mapValidationOutcomeToErrorResponse,
+    ValidationOutcome
+} from "@hals/common";
 
 export const configureProductsService = (
     repository: ProductsRepository,
@@ -46,7 +41,7 @@ export const configureProductsService = (
                 const product: Product = await repository.getProduct(dto);
                 return mapProductToSuccessResponse(product);
             } catch (error) {
-                return mapToInternalServerErrorResponse(error);
+                return mapErrorToInternalServerErrorResponse(error);
             }
         },
 
@@ -61,7 +56,7 @@ export const configureProductsService = (
                     addRequestPageDataToResponse(request, response);
                 return addPageData(mapProductsToResponse(products, HttpStatusCodes.OK));
             } catch (error) {
-                return mapToInternalServerErrorResponse(error);
+                return mapErrorToInternalServerErrorResponse(error);
             }
         },
 
@@ -74,7 +69,7 @@ export const configureProductsService = (
                 const product: Product = await repository.createProduct(dto);
                 return mapProductToSuccessResponse(product);
             } catch (error) {
-                return mapToInternalServerErrorResponse(error);
+                return mapErrorToInternalServerErrorResponse(error);
             }
         },
 
@@ -87,7 +82,7 @@ export const configureProductsService = (
                 const product: Product = await repository.updateProduct(dto);
                 return mapProductToSuccessResponse(product);
             } catch (error) {
-                return mapToInternalServerErrorResponse(error);
+                return mapErrorToInternalServerErrorResponse(error);
             }
         },
 
@@ -100,7 +95,7 @@ export const configureProductsService = (
                 const result: CommandResult = await repository.updateProducts(dto);
                 return mapUpdateResultToResponse(result);
             } catch (error) {
-                return mapToInternalServerErrorResponse(error);
+                return mapErrorToInternalServerErrorResponse(error);
             }
         },
 
@@ -113,7 +108,7 @@ export const configureProductsService = (
                 const result: CommandResult = await repository.deleteProduct(dto);
                 return mapDeleteResultToResponse(result);
             } catch (error) {
-                return mapToInternalServerErrorResponse(error);
+                return mapErrorToInternalServerErrorResponse(error);
             }
         },
 
@@ -126,7 +121,7 @@ export const configureProductsService = (
                 const result: CommandResult = await repository.deleteProducts(dto);
                 return mapDeleteResultToResponse(result);
             } catch (error) {
-                return mapToInternalServerErrorResponse(error);
+                return mapErrorToInternalServerErrorResponse(error);
             }
         },
     });

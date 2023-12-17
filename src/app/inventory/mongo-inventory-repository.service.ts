@@ -9,10 +9,10 @@ import {
     UpdateInventoryRecordsDTO
 } from "./inventory-records-dtos.type";
 import {InventoryRecord} from "./inventory-record.type";
-import {CommandResult} from "../../shared/command-result/command-result.type";
 import InventoryRecordsModel from "./mongo-inventory-records-model.type";
 import {DeleteResult} from "mongodb";
 import {UpdateWriteOpResult} from "mongoose";
+import {CommandResult} from "@hals/common";
 
 export const MongoInventoryRepository: InventoryRepository = {
     getRecord: (dto: GetInventoryRecordDTO): Promise<InventoryRecord> =>

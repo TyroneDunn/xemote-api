@@ -9,11 +9,8 @@ import {
     UpdateProductDTO,
     UpdateProductsDTO
 } from "./products-dtos.type";
-import {NumberRange} from "../../shared/number-range/number-range.type";
 import {Price} from "./price.type";
-import {OrderOption} from "../../shared/sort/order-option.type";
-import {mapRequestToPage} from "../../shared/page/page.utility";
-import {mapRequestToTimestamps} from "../../shared/timestamps/timestamps.utility";
+import {mapRequestToPage, mapRequestToTimestamps, NumberRange, OrderOption} from "@hals/common";
 
 export const mapToGetProductDTO = (request: Request): GetProductDTO => ({
     _id: request.paramMap['id'],

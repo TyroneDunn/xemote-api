@@ -1,4 +1,3 @@
-import {CommandResult} from "../../shared/command-result/command-result.type";
 import {Order} from "./order.type";
 import {
     CreateOrderDTO,
@@ -8,6 +7,7 @@ import {
     UpdateOrderDTO,
     UpdateOrdersDTO
 } from "./orders-dtos.type";
+import {CommandResult} from "@hals/common";
 
 export type OrdersRepository = {
     getOrder: (dto: GetOrderDTO) => Promise<Order>,

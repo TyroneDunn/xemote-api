@@ -1,7 +1,4 @@
-import {Timestamps} from "../../shared/timestamps/timestamps.type";
-import {Page} from "../../shared/page/page.type";
-import {NumberRange} from "../../shared/number-range/number-range.type";
-import {OrderOption} from "../../shared/sort/order-option.type";
+import {NumberRange, OrderOption, Page, Timestamps} from "@hals/common";
 
 export type GetInventoryRecordDTO = { _id: string };
 

@@ -7,10 +7,10 @@ import {
     UpdateOrderDTO, UpdateOrdersDTO
 } from "./orders-dtos.type";
 import {Order} from "./order.type";
-import {CommandResult} from "../../shared/command-result/command-result.type";
 import OrdersModel from "./mongo-orders-model.type";
 import {DeleteResult} from "mongodb";
 import {UpdateWriteOpResult} from "mongoose";
+import {CommandResult} from "@hals/common";
 
 export const MongoOrdersRepository: OrdersRepository = {
     getOrder: (dto: GetOrderDTO): Promise<Order> => OrdersModel.findById(dto._id),

@@ -7,7 +7,7 @@ import {
     UpdateProductDTO,
     UpdateProductsDTO,
 } from "./products-dtos.type";
-import {CommandResult} from "../../shared/command-result/command-result.type";
+import {CommandResult} from "@hals/common";
 
 export type ProductsRepository = {
     getProduct: (dto: GetProductDTO) => Promise<Product>,

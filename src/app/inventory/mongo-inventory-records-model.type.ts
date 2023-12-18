@@ -20,7 +20,6 @@ const InventoryRecordSchema = new Schema(
             required: true
         }
     },
-    {_id: false}
 );
 
 const InventoryRecordsModel = database.model<InventoryRecordDocument>('inventory-records', InventoryRecordSchema);

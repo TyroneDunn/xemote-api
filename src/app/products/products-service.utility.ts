@@ -27,7 +27,6 @@ import {
     mapValidationOutcomeToErrorResponse,
     ValidationOutcome
 } from "@hals/common";
-import {InventoryService} from "../inventory/inventory-service.type";
 import {InventoryRepository} from "../inventory/inventory-repository.type";
 
 export const configureProductsService = (

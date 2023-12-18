@@ -73,10 +73,10 @@ export const MongoInventoryRepository: InventoryRepository = {
 
 const mapDTOToFilter = (dto: InventoryRecordsDTO) => ({
     ...dto.filter.countRange && {
-        ...(dto.filter.countRange.start && !dto.filter.countRange.end)
-        && {count: {$gte: dto.filter.countRange.start}},
-        ...(!dto.filter.countRange.start && dto.filter.countRange.end)
-        && {count: {$lt: dto.filter.countRange.end}},
+        ...(dto.filter.countRange.start && !dto.filter.countRange.end) &&
+        {count: {$gte: dto.filter.countRange.start}},
+        ...(!dto.filter.countRange.start && dto.filter.countRange.end) &&
+        {count: {$lte: dto.filter.countRange.end}},
         ...(dto.filter.countRange.start && dto.filter.countRange.end) && {
             count: {
                 $gte: dto.filter.countRange.start,
@@ -86,25 +86,27 @@ const mapDTOToFilter = (dto: InventoryRecordsDTO) => ({
     },
     ...dto.timestamps && {
         ...dto.timestamps.createdAt && {
-            ...(dto.timestamps.createdAt.start && !dto.timestamps.createdAt.end) && {
-                createdAt: {$gte: dto.timestamps.createdAt.start}
-            },
-            ...(!dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
-                createdAt: {$lte: dto.timestamps.createdAt.end}
-            },
+            ...(dto.timestamps.createdAt.start && !dto.timestamps.createdAt.end) &&
+            {createdAt: {$gte: dto.timestamps.createdAt.start}},
+            ...(!dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) &&
+            {createdAt: {$lte: dto.timestamps.createdAt.end}},
             ...(dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
-                createdAt: {$gte: dto.timestamps.createdAt.start, $lte: dto.timestamps.createdAt.end}
+                createdAt: {
+                    $gte: dto.timestamps.createdAt.start,
+                    $lte: dto.timestamps.createdAt.end
+                }
             }
         },
         ...dto.timestamps.updatedAt && {
-            ...(dto.timestamps.updatedAt.start && !dto.timestamps.updatedAt.end) && {
-                updatedAt: {$gte: dto.timestamps.updatedAt.start}
-            },
-            ...(!dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
-                updatedAt: {$lte: dto.timestamps.updatedAt.end}
-            },
+            ...(dto.timestamps.updatedAt.start && !dto.timestamps.updatedAt.end) &&
+            {updatedAt: {$gte: dto.timestamps.updatedAt.start}},
+            ...(!dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) &&
+            {updatedAt: {$lte: dto.timestamps.updatedAt.end}},
             ...(dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
-                updatedAt: {$gte: dto.timestamps.updatedAt.start, $lte: dto.timestamps.updatedAt.end}
+                updatedAt: {
+                    $gte: dto.timestamps.updatedAt.start,
+                    $lte: dto.timestamps.updatedAt.end
+                }
             }
         }
     },
@@ -117,10 +119,10 @@ const mapUpdateFieldsToUpdateQuery = (updateFields: InventoryRecordUpdateFields)
 
 const mapUpdateInventoryRecordsDTOToFilter = (dto: UpdateInventoryRecordsDTO) => ({
     ...dto.filter.countRange && {
-        ...(dto.filter.countRange.start && !dto.filter.countRange.end)
-        && {count: {$gte: dto.filter.countRange.start}},
-        ...(!dto.filter.countRange.start && dto.filter.countRange.end)
-        && {count: {$lte: dto.filter.countRange.end}},
+        ...(dto.filter.countRange.start && !dto.filter.countRange.end) &&
+        {count: {$gte: dto.filter.countRange.start}},
+        ...(!dto.filter.countRange.start && dto.filter.countRange.end) &&
+        {count: {$lte: dto.filter.countRange.end}},
         ...(dto.filter.countRange.start && dto.filter.countRange.end) && {
             count: {
                 $gte: dto.filter.countRange.start,
@@ -130,25 +132,27 @@ const mapUpdateInventoryRecordsDTOToFilter = (dto: UpdateInventoryRecordsDTO) =>
     },
     ...dto.timestamps && {
         ...dto.timestamps.createdAt && {
-            ...(dto.timestamps.createdAt.start && !dto.timestamps.createdAt.end) && {
-                createdAt: {$gte: dto.timestamps.createdAt.start}
-            },
-            ...(!dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
-                createdAt: {$lte: dto.timestamps.createdAt.end}
-            },
+            ...(dto.timestamps.createdAt.start && !dto.timestamps.createdAt.end) &&
+            {createdAt: {$gte: dto.timestamps.createdAt.start}},
+            ...(!dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) &&
+            {createdAt: {$lte: dto.timestamps.createdAt.end}},
             ...(dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
-                createdAt: {$gte: dto.timestamps.createdAt.start, $lte: dto.timestamps.createdAt.end}
+                createdAt: {
+                    $gte: dto.timestamps.createdAt.start,
+                    $lte: dto.timestamps.createdAt.end
+                }
             }
         },
         ...dto.timestamps.updatedAt && {
-            ...(dto.timestamps.updatedAt.start && !dto.timestamps.updatedAt.end) && {
-                updatedAt: {$gte: dto.timestamps.updatedAt.start}
-            },
-            ...(!dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
-                updatedAt: {$lte: dto.timestamps.updatedAt.end}
-            },
+            ...(dto.timestamps.updatedAt.start && !dto.timestamps.updatedAt.end) &&
+            {updatedAt: {$gte: dto.timestamps.updatedAt.start}},
+            ...(!dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) &&
+            {updatedAt: {$lte: dto.timestamps.updatedAt.end}},
             ...(dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
-                updatedAt: {$gte: dto.timestamps.updatedAt.start, $lte: dto.timestamps.updatedAt.end}
+                updatedAt: {
+                    $gte: dto.timestamps.updatedAt.start,
+                    $lte: dto.timestamps.updatedAt.end
+                }
             }
         }
     },

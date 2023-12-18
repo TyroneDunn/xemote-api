@@ -443,6 +443,10 @@ export const configureProductsDtoValidator = (repository: ProductsRepository): P
     },
 
     validateDeleteProductDTO: async (dto: DeleteProductDTO): Promise<ValidationOutcome> => {
+        if (!dto._id)
+            return {error: {type: "BadRequest", message: 'ID required.'}};
+        if (!(await repository.exists(dto)))
+            return {error: {type: "NotFound", message: `Product "${dto._id}" not found.`}}
         return {};
     },
 });

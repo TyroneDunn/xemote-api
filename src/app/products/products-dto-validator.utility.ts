@@ -248,7 +248,7 @@ export const configureProductsDtoValidator = (repository: ProductsRepository): P
         if (!(await repository.exists(dto)))
             return {error: {type: "NotFound", message: `Product "${dto._id}" not found.`}}
         if (!dto.updateFields)
-            return {error: {type: "BadRequest", message: 'Invalid request. Update field' +
+            return {error: {type: "BadRequest", message: 'Invalid request. Update field(s)' +
                         ' required.'}};
         if (dto.updateFields.newName && dto.updateFields.newName === '')
             return {error: {type: "BadRequest", message: 'Invalid name. Name cannot be empty' +

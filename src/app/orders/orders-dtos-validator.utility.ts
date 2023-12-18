@@ -8,6 +8,7 @@ import {
 } from "./orders-dtos.type";
 import {OrdersRepository} from "./orders-repository.type";
 import {ValidationOutcome} from "@hals/common";
+import {ProductsRepository} from "../products/products-repository.type";
 
 export type OrdersDtosValidator = {
     validateGetOrderDto: (dto: GetOrderDTO) => Promise<ValidationOutcome>,
@@ -19,11 +20,14 @@ export type OrdersDtosValidator = {
 };
 
 export const configureOrdersDtosValidator =
-    (repository: OrdersRepository): OrdersDtosValidator => ({
+    (
+        ordersRepository: OrdersRepository,
+        productsRepository: ProductsRepository
+    ): OrdersDtosValidator => ({
         validateGetOrderDto: async (dto: GetOrderDTO): Promise<ValidationOutcome> => {
             if (!dto._id)
                 return {error: {type: "BadRequest", message: 'ID required.'}};
-            if (!(await repository.exists(dto)))
+            if (!(await ordersRepository.exists(dto)))
                 return {error: {type: "NotFound", message: `Order "${dto._id}" not found.`}};
             return {};
         },
@@ -142,6 +146,24 @@ export const configureOrdersDtosValidator =
         },
 
         validateCreateOrderDto: async (dto: CreateOrderDTO): Promise<ValidationOutcome> => {
+            if (!dto.clientId)
+                return {error: {type: "BadRequest", message: 'Client ID required.'}};
+            if (!dto.status)
+                return {error: {type: "BadRequest", message: 'Status required.'}};
+            if (dto.status)
+                if (dto.status !== "complete"
+                    && dto.status !== "pending"
+                    && dto.status !== "cancelled")
+                    return {error: {type: "BadRequest", message: 'Invalid status. Status must be' +
+                                ' "complete", "pending" or "cancelled".'}};
+            if (!dto.cart)
+                return {error: {type: "BadRequest", message: 'Cart required.'}};
+            for (let product in dto.cart) {
+                if (!(await productsRepository.exists({_id: product})))
+                    return {error: {type: "NotFound", message: `Invalid cart. Product "${product}" does not exist.`}};
+                if (dto.cart[product] < 1)
+                    return {error: {type: "BadRequest", message: `Invalid card. Product ${product} count must be greater than 1.`}};
+            }
             return {};
         },
 

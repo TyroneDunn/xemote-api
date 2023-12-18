@@ -135,6 +135,13 @@ export const configureInventoryRecordsDtosValidator =
         },
 
         validateCreateInventoryRecordDto: async (dto: CreateInventoryRecordDTO): Promise<ValidationOutcome> => {
+            if (!dto.productId)
+                return {error: {type: "BadRequest", message: 'Product ID required.'}};
+            if (!dto.count)
+                return {error: {type: "BadRequest", message: 'Count required.'}};
+            if (dto.count < 0)
+                return {error: {type: "BadRequest", message: 'Invalid count.Count must be' +
+                            ' greater than 0.'}};
             return {};
         },
 

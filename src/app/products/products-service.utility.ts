@@ -123,6 +123,10 @@ export const configureProductsService = (
             if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
 
             try {
+                const products: Product[] = await repository.getProducts(dto);
+                products.forEach(async (product) => {
+                    await inventoryRepository.deleteRecord({productId: product._id});
+                });
                 const result: CommandResult = await repository.deleteProducts(dto);
                 return mapDeleteResultToResponse(result);
             } catch (error) {

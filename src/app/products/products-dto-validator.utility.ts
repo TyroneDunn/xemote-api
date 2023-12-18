@@ -115,6 +115,38 @@ export const configureProductsDtoValidator = (repository: ProductsRepository): P
     },
 
     validateCreateProductDTO: async (dto: CreateProductDTO): Promise<ValidationOutcome> => {
+        if (!dto.name)
+            return {error: {type: "BadRequest", message: 'Name required.'}};
+        if (!dto.type)
+            return {error: {type: "BadRequest", message: 'Type required.'}};
+        if (dto.type !== "Xemote Gateway"
+            && "Xemote Accessory"
+            && "Wireless Temperature Sensor"
+            && "Wireless Humidity Sensor"
+            && "Wireless AC Current Meter"
+            && "Wireless Event-Based Sensor"
+            && "Wireless Infrared Beam Sensor"
+            && "Wireless 4-30mA Sensor")
+            return {error: {type: "BadRequest", message: 'Invalid type. Type must be "Xemote' +
+                        ' Accessory", "Xemote Gateway", "Wireless Temperature Sensor", "Wireless' +
+                        ' Humidity Sensor", "Wireless Ac Current Meter", "Wireless Event-Based' +
+                        ' Sensor", "Wireless Infrared Beam Sensor", or "Wireless 4-30mA Sensor".'}};
+        if (!dto.name)
+            return {error: {type: "BadRequest", message: 'Name required.'}};
+        if (!dto.costPrice)
+            return {error: {type: "BadRequest", message: 'Cost price required.'}};
+        if (!dto.costPrice.price)
+            return {error: {type: "BadRequest", message: 'Price required.'}};
+        if (!dto.costPrice.currency)
+            return {error: {type: "BadRequest", message: 'Currency required.'}};
+        if (dto.costPrice.currency !== "ZAR"
+            && dto.costPrice.currency !== "USD")
+            return {error: {type: "BadRequest", message: 'Invalid currency. Currency must be' +
+                        ' "ZAR" or "USD".'}};
+        if (!dto.markup)
+            return {error: {type: "BadRequest", message: 'Markup required.'}};
+        if (dto.markup < 0)
+            return {error: {type: "BadRequest", message: 'Markup must be greater than 0.'}};
         return {};
     },
 

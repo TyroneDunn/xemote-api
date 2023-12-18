@@ -28,7 +28,12 @@ export const configureInventoryRecordsDtosValidator =
             if (!dto._id)
                 return {error: {type: "BadRequest", message: 'ID required.'}};
             if (!(await inventoryRepository.exists(dto)))
-                return {error: {type: "NotFound", message: `Inventory record "${dto._id}" not found.`}};
+                return {
+                    error: {
+                        type: "NotFound",
+                        message: `Inventory record "${dto._id}" not found.`
+                    }
+                };
             return {};
         },
 
@@ -95,9 +100,19 @@ export const configureInventoryRecordsDtosValidator =
 
             if (dto.sort) {
                 if (dto.sort.field && !dto.sort.order)
-                    return {error: {type: "BadRequest", message: 'Invalid sort. Provide sort order.'}};
+                    return {
+                        error: {
+                            type: "BadRequest",
+                            message: 'Invalid sort. Provide sort order.'
+                        }
+                    };
                 if (!dto.sort.field && dto.sort.order)
-                    return {error: {type: "BadRequest", message: 'Invalid sort. Provide sort field.'}};
+                    return {
+                        error: {
+                            type: "BadRequest",
+                            message: 'Invalid sort. Provide sort field.'
+                        }
+                    };
                 if (dto.sort.field !== "count")
                     return {
                         error: {
@@ -116,9 +131,19 @@ export const configureInventoryRecordsDtosValidator =
 
             if (dto.page) {
                 if (dto.page.index && !dto.page.limit)
-                    return {error: {type: "BadRequest", message: 'Invalid page. Provide page limit.'}};
+                    return {
+                        error: {
+                            type: "BadRequest",
+                            message: 'Invalid page. Provide page limit.'
+                        }
+                    };
                 if (!dto.page.index && dto.page.limit)
-                    return {error: {type: "BadRequest", message: 'Invalid page. Provide page index.'}};
+                    return {
+                        error: {
+                            type: "BadRequest",
+                            message: 'Invalid page. Provide page index.'
+                        }
+                    };
                 if (dto.page.index < 0)
                     return {
                         error: {
@@ -142,13 +167,21 @@ export const configureInventoryRecordsDtosValidator =
             if (!dto.productId)
                 return {error: {type: "BadRequest", message: 'Product ID required.'}};
             if (!(await productsRepository.exists({_id: dto.productId})))
-                return {error: {type: "NotFound", message: `Invalid product ID. Product ${dto.productId}` +
-                            ' not found.'}};
+                return {
+                    error: {
+                        type: "NotFound", message: `Invalid product ID. Product ${dto.productId}` +
+                            ' not found.'
+                    }
+                };
             if (!dto.count)
                 return {error: {type: "BadRequest", message: 'Count required.'}};
             if (dto.count < 0)
-                return {error: {type: "BadRequest", message: 'Invalid count. Count must be' +
-                            ' greater than 0.'}};
+                return {
+                    error: {
+                        type: "BadRequest", message: 'Invalid count. Count must be' +
+                            ' greater than 0.'
+                    }
+                };
             return {};
         },
 
@@ -156,23 +189,45 @@ export const configureInventoryRecordsDtosValidator =
             if (!dto._id)
                 return {error: {type: "BadRequest", message: 'ID required.'}};
             if (!(await inventoryRepository.exists(dto)))
-                return {error: {type: "NotFound", message: `Inventory record "${dto._id}" not found.`}}
+                return {
+                    error: {
+                        type: "NotFound",
+                        message: `Inventory record "${dto._id}" not found.`
+                    }
+                }
             if (!dto.updateFields)
-                return {error: {type: "BadRequest", message: 'Invalid request. Update field(s)' +
-                            ' required.'}};
+                return {
+                    error: {
+                        type: "BadRequest", message: 'Invalid request. Update field(s)' +
+                            ' required.'
+                    }
+                };
             if (dto.updateFields.newProductId)
                 if (!(await productsRepository.exists({_id: dto.updateFields.newProductId})))
-                    return {error: {type: "NotFound", message: `Invalid product ID. Product ${dto.updateFields.newProductId}` +
-                                ' not found.'}};
+                    return {
+                        error: {
+                            type: "NotFound",
+                            message: `Invalid product ID. Product ${dto.updateFields.newProductId}` +
+                                ' not found.'
+                        }
+                    };
             if (dto.updateFields.newCount)
                 if (dto.updateFields.newCount < 0)
-                    return {error: {type: "BadRequest", message: 'Invalid count. Count must be' +
-                                ' greater than 0.'}};
+                    return {
+                        error: {
+                            type: "BadRequest", message: 'Invalid count. Count must be' +
+                                ' greater than 0.'
+                        }
+                    };
             if (dto.updateFields.countDelta) {
                 const record = await inventoryRepository.getRecord({_id: dto._id})
                 if ((record.count + dto.updateFields.countDelta) < 0)
-                    return {error: {type: "BadRequest", message: 'Invalid count delta. Not' +
-                                ' enough products.'}};
+                    return {
+                        error: {
+                            type: "BadRequest", message: 'Invalid count delta. Not' +
+                                ' enough products.'
+                        }
+                    };
             }
             return {};
         },
@@ -239,24 +294,50 @@ export const configureInventoryRecordsDtosValidator =
             }
 
             if (!dto.updateFields)
-                return {error: {type: "BadRequest", message: 'Invalid request. Update field(s)' +
-                            ' required.'}};
+                return {
+                    error: {
+                        type: "BadRequest", message: 'Invalid request. Update field(s)' +
+                            ' required.'
+                    }
+                };
             if (dto.updateFields.newProductId)
                 if (!(await productsRepository.exists({_id: dto.updateFields.newProductId})))
-                    return {error: {type: "NotFound", message: `Invalid product ID. Product ${dto.updateFields.newProductId}` +
-                                ' not found.'}};
+                    return {
+                        error: {
+                            type: "NotFound",
+                            message: `Invalid product ID. Product ${dto.updateFields.newProductId}` +
+                                ' not found.'
+                        }
+                    };
             if (dto.updateFields.newCount)
                 if (dto.updateFields.newCount < 0)
-                    return {error: {type: "BadRequest", message: 'Invalid count. Count must be' +
-                                ' greater than 0.'}};
+                    return {
+                        error: {
+                            type: "BadRequest", message: 'Invalid count. Count must be' +
+                                ' greater than 0.'
+                        }
+                    };
             if (dto.updateFields.countDelta)
-                return {error: {type: "BadRequest", message: 'Invalid update. Cannot update' +
-                            ' multiple records with count delta.'}};
+                return {
+                    error: {
+                        type: "BadRequest", message: 'Invalid update. Cannot update' +
+                            ' multiple records with count delta.'
+                    }
+                };
 
             return {};
         },
 
         validateDeleteInventoryRecordDto: async (dto: DeleteInventoryRecordDTO): Promise<ValidationOutcome> => {
+            if (!dto._id)
+                return {error: {type: "BadRequest", message: 'ID required.'}};
+            if (!(await inventoryRepository.exists(dto)))
+                return {
+                    error: {
+                        type: "NotFound",
+                        message: `Inventory record "${dto._id}" not found.`
+                    }
+                };
             return {};
         },
     });

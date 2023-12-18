@@ -193,6 +193,91 @@ export const configureOrdersDtosValidator =
         },
 
         validateUpdateOrdersDto: async (dto: UpdateOrdersDTO): Promise<ValidationOutcome> => {
+            if (dto.filter.status)
+                if (dto.filter.status !== "complete"
+                    && dto.filter.status !== "pending"
+                    && dto.filter.status !== "cancelled")
+                    return {error: {type: "BadRequest", message: 'Invalid status. Status must be' +
+                                ' "complete", "pending" or "cancelled".'}};
+
+            if (dto.filter.countRange) {
+                if (dto.filter.countRange.start && (dto.filter.countRange.start < 0))
+                    return {
+                        error: {
+                            type: "BadRequest", message: 'Invalid count range. Count range' +
+                                ' start value must be greater than 0.'
+                        }
+                    };
+                if (dto.filter.countRange.end && (dto.filter.countRange.end < 0))
+                    return {
+                        error: {
+                            type: "BadRequest", message: 'Invalid count range. Count range' +
+                                ' end value must be greater than 0.'
+                        }
+                    };
+                if ((dto.filter.countRange.start && dto.filter.countRange.end)
+                    && (dto.filter.countRange.end < dto.filter.countRange.start))
+                    return {
+                        error: {
+                            type: "BadRequest", message: 'Invalid count range. Count range' +
+                                ' end value must be greater than start value.'
+                        }
+                    };
+            }
+
+            if (dto.timestamps) {
+                if (dto.timestamps.createdAt) {
+                    if (dto.timestamps.createdAt.start && isNaN(Date.parse(dto.timestamps.createdAt.start)))
+                        return {
+                            error: {
+                                type: "BadRequest", message: 'Invalid createdAt start' +
+                                    ' date. Provide a valid ISO date string.'
+                            }
+                        };
+                    if (dto.timestamps.createdAt.end && isNaN(Date.parse(dto.timestamps.createdAt.end)))
+                        return {
+                            error: {
+                                type: "BadRequest", message: 'Invalid createdAt end' +
+                                    ' date. Provide a valid ISO date string.'
+                            }
+                        };
+                }
+                if (dto.timestamps.updatedAt) {
+                    if (dto.timestamps.updatedAt.start && isNaN(Date.parse(dto.timestamps.updatedAt.start)))
+                        return {
+                            error: {
+                                type: "BadRequest", message: 'Invalid updatedAt start' +
+                                    ' date. Provide a valid ISO date string.'
+                            }
+                        };
+                    if (dto.timestamps.updatedAt.end && isNaN(Date.parse(dto.timestamps.updatedAt.end)))
+                        return {
+                            error: {
+                                type: "BadRequest", message: 'Invalid updatedAt end' +
+                                    ' date. Provide a valid ISO date string.'
+                            }
+                        };
+                }
+            }
+
+            if (!dto.updateFields)
+                return {error: {type: "BadRequest", message: 'Invalid request. Update field(s)' +
+                            ' required.'}};
+            if (dto.updateFields.newStatus)
+                if (dto.updateFields.newStatus !== "complete"
+                    && dto.updateFields.newStatus !== "pending"
+                    && dto.updateFields.newStatus !== "cancelled")
+                    return {error: {type: "BadRequest", message: 'Invalid status. Status must be' +
+                                ' "complete", "pending" or "cancelled".'}};
+            if (dto.updateFields.newCart) {
+                for (const product in dto.updateFields.newCart) {
+                    if (!(await productsRepository.exists({_id: product})))
+                        return {error: {type: "NotFound", message: `Invalid cart. Product "${product}" does not exist.`}};
+                    if (dto.updateFields.newCart[product] < 1)
+                        return {error: {type: "BadRequest", message: `Invalid cart. Product ${product} count must be greater than 1.`}};
+                }
+            }
+
             return {};
         },
 

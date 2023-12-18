@@ -21,9 +21,9 @@ export type ProductsDtoValidator = {
 export const configureProductsDtoValidator = (repository: ProductsRepository): ProductsDtoValidator => ({
     validateGetProductDTO: async (dto: GetProductDTO): Promise<ValidationOutcome> => {
         if (!dto._id)
-            return {error: {type: "BadRequest", message: 'Product ID required.'}}
+            return {error: {type: "BadRequest", message: 'ID required.'}};
         if (!(await repository.exists(dto)))
-            return {error: {type: "NotFound", message: `Product "${dto._id}" not found.`}}
+            return {error: {type: "NotFound", message: `Product "${dto._id}" not found.`}};
         return {};
     },
 
@@ -34,23 +34,23 @@ export const configureProductsDtoValidator = (repository: ProductsRepository): P
                     type: "BadRequest", message: 'Invalid name. Provide either "name"' +
                         ' or "nameRegex".'
                 }
-            }
+            };
         if (dto.filter.type && dto.filter.typeRegex)
             return {
                 error: {
                     type: "BadRequest", message: 'Invalid type. Provide either "type"' +
                         ' or "typeRegex".'
                 }
-            }
+            };
         if (dto.filter.type)
             if (dto.filter.type !== "Xemote Gateway"
-                && "Xemote Accessory"
-                && "Wireless Temperature Sensor"
-                && "Wireless Humidity Sensor"
-                && "Wireless AC Current Meter"
-                && "Wireless Event-Based Sensor"
-                && "Wireless Infrared Beam Sensor"
-                && "Wireless 4-30mA Sensor")
+                && dto.filter.type !== "Xemote Accessory"
+                && dto.filter.type !== "Wireless Temperature Sensor"
+                && dto.filter.type !== "Wireless Humidity Sensor"
+                && dto.filter.type !== "Wireless AC Current Meter"
+                && dto.filter.type !== "Wireless Event-Based Sensor"
+                && dto.filter.type !== "Wireless Infrared Beam Sensor"
+                && dto.filter.type !== "Wireless 4-30mA Sensor")
                 return {
                     error: {
                         type: "BadRequest", message: 'Invalid filter type. Type must be "Xemote' +
@@ -201,13 +201,13 @@ export const configureProductsDtoValidator = (repository: ProductsRepository): P
         if (!dto.type)
             return {error: {type: "BadRequest", message: 'Type required.'}};
         if (dto.type !== "Xemote Gateway"
-            && "Xemote Accessory"
-            && "Wireless Temperature Sensor"
-            && "Wireless Humidity Sensor"
-            && "Wireless AC Current Meter"
-            && "Wireless Event-Based Sensor"
-            && "Wireless Infrared Beam Sensor"
-            && "Wireless 4-30mA Sensor")
+            && dto.type !== "Xemote Accessory"
+            && dto.type !== "Wireless Temperature Sensor"
+            && dto.type !== "Wireless Humidity Sensor"
+            && dto.type !== "Wireless AC Current Meter"
+            && dto.type !== "Wireless Event-Based Sensor"
+            && dto.type !== "Wireless Infrared Beam Sensor"
+            && dto.type !== "Wireless 4-30mA Sensor")
             return {
                 error: {
                     type: "BadRequest", message: 'Invalid type. Type must be "Xemote' +
@@ -222,6 +222,9 @@ export const configureProductsDtoValidator = (repository: ProductsRepository): P
             return {error: {type: "BadRequest", message: 'Cost price required.'}};
         if (!dto.costPrice.price)
             return {error: {type: "BadRequest", message: 'Price required.'}};
+        if (dto.costPrice.price < 0)
+            return {error: {type: "BadRequest", message: 'Invalid price. Price must be' +
+                        ' greater than 0.'}};
         if (!dto.costPrice.currency)
             return {error: {type: "BadRequest", message: 'Currency required.'}};
         if (dto.costPrice.currency !== "ZAR"
@@ -240,6 +243,46 @@ export const configureProductsDtoValidator = (repository: ProductsRepository): P
     },
 
     validateUpdateProductDTO: async (dto: UpdateProductDTO): Promise<ValidationOutcome> => {
+        if (!dto._id)
+            return {error: {type: "BadRequest", message: 'ID required.'}};
+        if (!(await repository.exists(dto)))
+            return {error: {type: "NotFound", message: `Product "${dto._id}" not found.`}}
+        if (!dto.updateFields)
+            return {error: {type: "BadRequest", message: 'Invalid request. Update field' +
+                        ' required.'}};
+        if (dto.updateFields.newName && dto.updateFields.newName === '')
+            return {error: {type: "BadRequest", message: 'Invalid name. Name cannot be empty' +
+                        ' string.'}};
+        if (dto.updateFields.newType)
+            if (dto.updateFields.newType !== "Xemote Gateway"
+                && dto.updateFields.newType !== "Xemote Accessory"
+                && dto.updateFields.newType !== "Wireless Temperature Sensor"
+                && dto.updateFields.newType !== "Wireless Humidity Sensor"
+                && dto.updateFields.newType !== "Wireless AC Current Meter"
+                && dto.updateFields.newType !== "Wireless Event-Based Sensor"
+                && dto.updateFields.newType !== "Wireless Infrared Beam Sensor"
+                && dto.updateFields.newType !== "Wireless 4-30mA Sensor")
+                return {
+                    error: {
+                        type: "BadRequest", message: 'Invalid type. New yype must be "Xemote' +
+                            ' Accessory", "Xemote Gateway", "Wireless Temperature Sensor", "Wireless' +
+                            ' Humidity Sensor", "Wireless Ac Current Meter", "Wireless Event-Based' +
+                            ' Sensor", "Wireless Infrared Beam Sensor", or "Wireless 4-30mA Sensor".'
+                    }
+                };
+        if (dto.updateFields.newCostPrice) {
+            if (dto.updateFields.newCostPrice.price && dto.updateFields.newCostPrice.price < 0)
+                return {error: {type: "BadRequest", message: 'Invalid price. Price must be' +
+                            ' greater than 0.'}};
+            if (dto.updateFields.newCostPrice.currency)
+                if (dto.updateFields.newCostPrice.currency !== "ZAR" &&
+                    dto.updateFields.newCostPrice.currency !== "USD")
+                    return {error: {type: "BadRequest", message: 'Invalid currency. Currency' +
+                                ' must be "ZAR" or "USD".'}};
+        }
+        if (dto.updateFields.newMarkup && dto.updateFields.newMarkup < 0)
+            return {error: {type: "BadRequest", message: 'Invalid markup. Markup' +
+                        ' must be greater than 0.'}};
         return {};
     },
 

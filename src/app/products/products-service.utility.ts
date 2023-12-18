@@ -110,6 +110,7 @@ export const configureProductsService = (
 
             try {
                 const result: CommandResult = await repository.deleteProduct(dto);
+                await inventoryRepository.deleteRecord({productId: dto._id});
                 return mapDeleteResultToResponse(result);
             } catch (error) {
                 return mapErrorToInternalServerErrorResponse(error);

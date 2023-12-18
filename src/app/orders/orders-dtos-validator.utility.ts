@@ -37,8 +37,12 @@ export const configureOrdersDtosValidator =
                 if (dto.filter.status !== "complete"
                     && dto.filter.status !== "pending"
                     && dto.filter.status !== "cancelled")
-                    return {error: {type: "BadRequest", message: 'Invalid status. Status must be' +
-                                ' "complete", "pending" or "cancelled".'}};
+                    return {
+                        error: {
+                            type: "BadRequest", message: 'Invalid status. Status must be' +
+                                ' "complete", "pending" or "cancelled".'
+                        }
+                    };
             if (dto.filter.countRange) {
                 if (dto.filter.countRange.start && (dto.filter.countRange.start < 0))
                     return {
@@ -101,9 +105,19 @@ export const configureOrdersDtosValidator =
 
             if (dto.sort) {
                 if (dto.sort.field && !dto.sort.order)
-                    return {error: {type: "BadRequest", message: 'Invalid sort. Provide sort order.'}};
+                    return {
+                        error: {
+                            type: "BadRequest",
+                            message: 'Invalid sort. Provide sort order.'
+                        }
+                    };
                 if (!dto.sort.field && dto.sort.order)
-                    return {error: {type: "BadRequest", message: 'Invalid sort. Provide sort field.'}};
+                    return {
+                        error: {
+                            type: "BadRequest",
+                            message: 'Invalid sort. Provide sort field.'
+                        }
+                    };
                 if (dto.sort.field !== "clientId"
                     && dto.sort.field !== "status")
                     return {
@@ -123,9 +137,19 @@ export const configureOrdersDtosValidator =
 
             if (dto.page) {
                 if (dto.page.index && !dto.page.limit)
-                    return {error: {type: "BadRequest", message: 'Invalid page. Provide page limit.'}};
+                    return {
+                        error: {
+                            type: "BadRequest",
+                            message: 'Invalid page. Provide page limit.'
+                        }
+                    };
                 if (!dto.page.index && dto.page.limit)
-                    return {error: {type: "BadRequest", message: 'Invalid page. Provide page index.'}};
+                    return {
+                        error: {
+                            type: "BadRequest",
+                            message: 'Invalid page. Provide page index.'
+                        }
+                    };
                 if (dto.page.index < 0)
                     return {
                         error: {
@@ -154,15 +178,29 @@ export const configureOrdersDtosValidator =
                 if (dto.status !== "complete"
                     && dto.status !== "pending"
                     && dto.status !== "cancelled")
-                    return {error: {type: "BadRequest", message: 'Invalid status. Status must be' +
-                                ' "complete", "pending" or "cancelled".'}};
+                    return {
+                        error: {
+                            type: "BadRequest", message: 'Invalid status. Status must be' +
+                                ' "complete", "pending" or "cancelled".'
+                        }
+                    };
             if (!dto.cart)
                 return {error: {type: "BadRequest", message: 'Cart required.'}};
             for (let product in dto.cart) {
                 if (!(await productsRepository.exists({_id: product})))
-                    return {error: {type: "NotFound", message: `Invalid cart. Product "${product}" does not exist.`}};
+                    return {
+                        error: {
+                            type: "NotFound",
+                            message: `Invalid cart. Product "${product}" does not exist.`
+                        }
+                    };
                 if (dto.cart[product] < 1)
-                    return {error: {type: "BadRequest", message: `Invalid cart. Product ${product} count must be greater than 1.`}};
+                    return {
+                        error: {
+                            type: "BadRequest",
+                            message: `Invalid cart. Product ${product} count must be greater than 1.`
+                        }
+                    };
             }
             return {};
         },
@@ -173,20 +211,38 @@ export const configureOrdersDtosValidator =
             if (!(await ordersRepository.exists(dto)))
                 return {error: {type: "NotFound", message: `Order "${dto._id}" not found.`}}
             if (!dto.updateFields)
-                return {error: {type: "BadRequest", message: 'Invalid request. Update field(s)' +
-                            ' required.'}};
+                return {
+                    error: {
+                        type: "BadRequest", message: 'Invalid request. Update field(s)' +
+                            ' required.'
+                    }
+                };
             if (dto.updateFields.newStatus)
                 if (dto.updateFields.newStatus !== "complete"
                     && dto.updateFields.newStatus !== "pending"
                     && dto.updateFields.newStatus !== "cancelled")
-                    return {error: {type: "BadRequest", message: 'Invalid status. Status must be' +
-                                ' "complete", "pending" or "cancelled".'}};
+                    return {
+                        error: {
+                            type: "BadRequest", message: 'Invalid status. Status must be' +
+                                ' "complete", "pending" or "cancelled".'
+                        }
+                    };
             if (dto.updateFields.newCart) {
                 for (const product in dto.updateFields.newCart) {
                     if (!(await productsRepository.exists({_id: product})))
-                        return {error: {type: "NotFound", message: `Invalid cart. Product "${product}" does not exist.`}};
+                        return {
+                            error: {
+                                type: "NotFound",
+                                message: `Invalid cart. Product "${product}" does not exist.`
+                            }
+                        };
                     if (dto.updateFields.newCart[product] < 1)
-                        return {error: {type: "BadRequest", message: `Invalid cart. Product ${product} count must be greater than 1.`}};
+                        return {
+                            error: {
+                                type: "BadRequest",
+                                message: `Invalid cart. Product ${product} count must be greater than 1.`
+                            }
+                        };
                 }
             }
             return {};
@@ -197,8 +253,12 @@ export const configureOrdersDtosValidator =
                 if (dto.filter.status !== "complete"
                     && dto.filter.status !== "pending"
                     && dto.filter.status !== "cancelled")
-                    return {error: {type: "BadRequest", message: 'Invalid status. Status must be' +
-                                ' "complete", "pending" or "cancelled".'}};
+                    return {
+                        error: {
+                            type: "BadRequest", message: 'Invalid status. Status must be' +
+                                ' "complete", "pending" or "cancelled".'
+                        }
+                    };
 
             if (dto.filter.countRange) {
                 if (dto.filter.countRange.start && (dto.filter.countRange.start < 0))
@@ -261,20 +321,38 @@ export const configureOrdersDtosValidator =
             }
 
             if (!dto.updateFields)
-                return {error: {type: "BadRequest", message: 'Invalid request. Update field(s)' +
-                            ' required.'}};
+                return {
+                    error: {
+                        type: "BadRequest", message: 'Invalid request. Update field(s)' +
+                            ' required.'
+                    }
+                };
             if (dto.updateFields.newStatus)
                 if (dto.updateFields.newStatus !== "complete"
                     && dto.updateFields.newStatus !== "pending"
                     && dto.updateFields.newStatus !== "cancelled")
-                    return {error: {type: "BadRequest", message: 'Invalid status. Status must be' +
-                                ' "complete", "pending" or "cancelled".'}};
+                    return {
+                        error: {
+                            type: "BadRequest", message: 'Invalid status. Status must be' +
+                                ' "complete", "pending" or "cancelled".'
+                        }
+                    };
             if (dto.updateFields.newCart) {
                 for (const product in dto.updateFields.newCart) {
                     if (!(await productsRepository.exists({_id: product})))
-                        return {error: {type: "NotFound", message: `Invalid cart. Product "${product}" does not exist.`}};
+                        return {
+                            error: {
+                                type: "NotFound",
+                                message: `Invalid cart. Product "${product}" does not exist.`
+                            }
+                        };
                     if (dto.updateFields.newCart[product] < 1)
-                        return {error: {type: "BadRequest", message: `Invalid cart. Product ${product} count must be greater than 1.`}};
+                        return {
+                            error: {
+                                type: "BadRequest",
+                                message: `Invalid cart. Product ${product} count must be greater than 1.`
+                            }
+                        };
                 }
             }
 

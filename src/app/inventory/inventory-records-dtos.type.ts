@@ -28,7 +28,7 @@ export type CreateInventoryRecordDTO = {
 };
 
 export type UpdateInventoryRecordDTO = {
-    _id: string,
+    productId: string,
     updateFields: InventoryRecordUpdateFields,
 };
 
@@ -44,4 +44,4 @@ export type UpdateInventoryRecordsDTO = {
     updateFields: InventoryRecordUpdateFields,
 };
 
-export type DeleteInventoryRecordDTO = { _id: string };
+export type DeleteInventoryRecordDTO = { productId: string };

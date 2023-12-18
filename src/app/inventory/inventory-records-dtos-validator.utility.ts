@@ -186,13 +186,13 @@ export const configureInventoryRecordsDtosValidator =
         },
 
         validateUpdateInventoryRecordDto: async (dto: UpdateInventoryRecordDTO): Promise<ValidationOutcome> => {
-            if (!dto._id)
+            if (!dto.productId)
                 return {error: {type: "BadRequest", message: 'ID required.'}};
             if (!(await inventoryRepository.exists(dto)))
                 return {
                     error: {
                         type: "NotFound",
-                        message: `Inventory record "${dto._id}" not found.`
+                        message: `Inventory record "${dto.productId}" not found.`
                     }
                 }
             if (!dto.updateFields)
@@ -220,7 +220,7 @@ export const configureInventoryRecordsDtosValidator =
                         }
                     };
             if (dto.updateFields.countDelta) {
-                const record = await inventoryRepository.getRecord({_id: dto._id})
+                const record = await inventoryRepository.getRecord({_id: dto.productId})
                 if ((record.count + dto.updateFields.countDelta) < 0)
                     return {
                         error: {
@@ -329,13 +329,13 @@ export const configureInventoryRecordsDtosValidator =
         },
 
         validateDeleteInventoryRecordDto: async (dto: DeleteInventoryRecordDTO): Promise<ValidationOutcome> => {
-            if (!dto._id)
+            if (!dto.productId)
                 return {error: {type: "BadRequest", message: 'ID required.'}};
             if (!(await inventoryRepository.exists(dto)))
                 return {
                     error: {
                         type: "NotFound",
-                        message: `Inventory record "${dto._id}" not found.`
+                        message: `Inventory record "${dto.productId}" not found.`
                     }
                 };
             return {};

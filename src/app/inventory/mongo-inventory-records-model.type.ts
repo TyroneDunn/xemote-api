@@ -12,7 +12,8 @@ const InventoryRecordSchema = new Schema(
         productId: {
             type: Schema.Types.ObjectId,
             ref: "ProductSchema",
-            required: true
+            unique: true,
+            required: true,
         },
         count: {
             type: Number,

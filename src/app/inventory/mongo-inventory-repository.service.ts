@@ -38,7 +38,7 @@ export const MongoInventoryRepository: InventoryRepository = {
 
     updateRecord: (dto: UpdateInventoryRecordDTO): Promise<InventoryRecord> =>
         InventoryRecordsModel.findOneAndUpdate(
-            {_id: dto._id},
+            {productId: dto.productId},
             mapUpdateFieldsToUpdateQuery(dto.updateFields),
             {new: true},
         ),
@@ -51,7 +51,7 @@ export const MongoInventoryRepository: InventoryRepository = {
     },
 
     deleteRecord: async (dto: DeleteInventoryRecordDTO): Promise<CommandResult> => {
-        const result: DeleteResult = await InventoryRecordsModel.deleteOne({_id: dto._id});
+        const result: DeleteResult = await InventoryRecordsModel.deleteOne({productId: dto.productId});
         return {success: result.acknowledged, affectedCount: result.deletedCount};
     },
 

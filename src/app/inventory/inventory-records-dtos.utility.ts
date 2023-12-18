@@ -58,7 +58,7 @@ export const mapRequestToCreateInventoryRecordDTO = (request: Request): CreateIn
 });
 
 export const mapRequestToUpdateInventoryRecordDTO = (request: Request): UpdateInventoryRecordDTO => ({
-    _id: request.paramMap['id'],
+    productId: request.paramMap['id'],
     ...mapRequestToInventoryRecordUpdateFields(request.payload)
 });
 
@@ -79,4 +79,4 @@ export const mapRequestToUpdateInventoryRecordsDTO = (request: Request): UpdateI
 });
 
 export const mapRequestToDeleteInventoryRecordDTO = (request: Request): DeleteInventoryRecordDTO =>
-    ({_id: request.paramMap['id']});
+    ({productId: request.paramMap['id']});

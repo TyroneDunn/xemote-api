@@ -1,11 +1,11 @@
-import {Controller, Method, Request, Response} from "@hals/core";
+import {Controller, Method, RequestHandler} from "@hals/core";
 import {InventoryService} from "./inventory-service.type";
 
 export const InventoryQueryParamsKeys: string[] = [
     'countRange',
 ];
 
-const getRecordsMethod = (getRecords: (request: Request) => Promise<Response>): Method => ({
+const getRecordsMethod = (getRecords: RequestHandler): Method => ({
     type: "GET",
     paramKeys: [],
     queryParamKeys: InventoryQueryParamsKeys,
@@ -14,7 +14,7 @@ const getRecordsMethod = (getRecords: (request: Request) => Promise<Response>): 
     requestHandler: getRecords
 });
 
-const getRecordMethod = (getRecord: (request: Request) => Promise<Response>): Method => ({
+const getRecordMethod = (getRecord: RequestHandler): Method => ({
     type: "GET",
     paramKeys: [],
     queryParamKeys: [],
@@ -23,7 +23,7 @@ const getRecordMethod = (getRecord: (request: Request) => Promise<Response>): Me
     requestHandler: getRecord
 });
 
-const createRecordMethod = (createRecord: (request: Request) => Promise<Response>): Method => ({
+const createRecordMethod = (createRecord: RequestHandler): Method => ({
     type: "POST",
     paramKeys: [],
     queryParamKeys: [],
@@ -32,7 +32,7 @@ const createRecordMethod = (createRecord: (request: Request) => Promise<Response
     requestHandler: createRecord
 });
 
-const updateRecordsMethod = (updateRecords: (request: Request) => Promise<Response>): Method => ({
+const updateRecordsMethod = (updateRecords: RequestHandler): Method => ({
     type: "PATCH",
     paramKeys: [],
     queryParamKeys: InventoryQueryParamsKeys,
@@ -41,7 +41,7 @@ const updateRecordsMethod = (updateRecords: (request: Request) => Promise<Respon
     requestHandler: updateRecords
 });
 
-const updateRecordMethod = (updateRecord: (request: Request) => Promise<Response>): Method => ({
+const updateRecordMethod = (updateRecord: RequestHandler): Method => ({
     type: "PATCH",
     paramKeys: [],
     queryParamKeys: [],
@@ -50,7 +50,7 @@ const updateRecordMethod = (updateRecord: (request: Request) => Promise<Response
     requestHandler: updateRecord
 });
 
-const deleteRecordsMethod = (deleteRecords: (request: Request) => Promise<Response>): Method => ({
+const deleteRecordsMethod = (deleteRecords: RequestHandler): Method => ({
     type: "DELETE",
     paramKeys: [],
     queryParamKeys: InventoryQueryParamsKeys,
@@ -59,7 +59,7 @@ const deleteRecordsMethod = (deleteRecords: (request: Request) => Promise<Respon
     requestHandler: deleteRecords
 });
 
-const deleteRecordMethod = (deleteRecord: (request: Request) => Promise<Response>): Method => ({
+const deleteRecordMethod = (deleteRecord: RequestHandler): Method => ({
     type: "DELETE",
     paramKeys: [],
     queryParamKeys: [],

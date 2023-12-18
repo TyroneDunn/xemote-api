@@ -12,7 +12,7 @@ import {InventoryRecord} from "./inventory-record.type";
 import {mapRequestToPage, mapRequestToTimestamps, NumberRange, OrderOption} from "@hals/common";
 
 export const mapRequestToGetInventoryRecordDTO = (request: Request): GetInventoryRecordDTO =>
-    ({_id: request.paramMap['id']});
+    ({productId: request.paramMap['id']});
 
 export const mapInventoryRecordToSuccessResponse = (record: InventoryRecord): Response => ({
     status: HttpStatusCodes.OK,

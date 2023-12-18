@@ -1,6 +1,6 @@
 import {NumberRange, OrderOption, Page, Timestamps} from "@hals/common";
 
-export type GetInventoryRecordDTO = { _id: string };
+export type GetInventoryRecordDTO = { productId: string };
 
 export type InventoryRecordsDTO = {
     filter?: InventoryRecordsFilter,

@@ -9,9 +9,6 @@ import {
 } from "./inventory-records-dtos.type";
 import {CommandResult} from "@hals/common";
 
-
-// todo : functions should return either record or error. Find a way to implement this functional
-//  pattern in a clean manner.
 export type InventoryRepository = {
     getRecord: (dto: GetInventoryRecordDTO) => Promise<InventoryRecord>,
     getRecords: (dto: InventoryRecordsDTO) => Promise<InventoryRecord[]>,

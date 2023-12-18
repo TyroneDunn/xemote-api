@@ -25,13 +25,13 @@ export const configureInventoryRecordsDtosValidator =
         productsRepository: ProductsRepository
     ): InventoryRecordsDtosValidator => ({
         validateGetInventoryRecordDto: async (dto: GetInventoryRecordDTO): Promise<ValidationOutcome> => {
-            if (!dto._id)
-                return {error: {type: "BadRequest", message: 'ID required.'}};
+            if (!dto.productId)
+                return {error: {type: "BadRequest", message: 'Product ID required.'}};
             if (!(await inventoryRepository.exists(dto)))
                 return {
                     error: {
                         type: "NotFound",
-                        message: `Inventory record "${dto._id}" not found.`
+                        message: `Product inventory record "${dto.productId}" not found.`
                     }
                 };
             return {};
@@ -220,7 +220,7 @@ export const configureInventoryRecordsDtosValidator =
                         }
                     };
             if (dto.updateFields.countDelta) {
-                const record = await inventoryRepository.getRecord({_id: dto.productId})
+                const record = await inventoryRepository.getRecord({productId: dto.productId})
                 if ((record.count + dto.updateFields.countDelta) < 0)
                     return {
                         error: {

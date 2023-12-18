@@ -16,7 +16,7 @@ import {CommandResult} from "@hals/common";
 
 export const MongoInventoryRepository: InventoryRepository = {
     getRecord: (dto: GetInventoryRecordDTO): Promise<InventoryRecord> =>
-        InventoryRecordsModel.findById(dto._id),
+        InventoryRecordsModel.findOne({productId: dto.productId}),
 
     getRecords: (dto: InventoryRecordsDTO): Promise<InventoryRecord[]> => {
         const filter = mapDTOToFilter(dto);
@@ -63,7 +63,7 @@ export const MongoInventoryRepository: InventoryRepository = {
 
     exists: async (dto: GetInventoryRecordDTO): Promise<boolean> => {
         try {
-            const record: InventoryRecord = await InventoryRecordsModel.findById(dto._id);
+            const record: InventoryRecord = await InventoryRecordsModel.findOne({productId: dto.productId});
             return !!record;
         } catch (error) {
             return false;

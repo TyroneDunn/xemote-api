@@ -178,6 +178,81 @@ export const configureInventoryRecordsDtosValidator =
         },
 
         validateUpdateInventoryRecordsDto: async (dto: UpdateInventoryRecordsDTO): Promise<ValidationOutcome> => {
+            if (dto.filter.countRange) {
+                if (dto.filter.countRange.start && (dto.filter.countRange.start < 0))
+                    return {
+                        error: {
+                            type: "BadRequest", message: 'Invalid count range. Count range' +
+                                ' start value must be greater than 0.'
+                        }
+                    };
+                if (dto.filter.countRange.end && (dto.filter.countRange.end < 0))
+                    return {
+                        error: {
+                            type: "BadRequest", message: 'Invalid count range. Count range' +
+                                ' end value must be greater than 0.'
+                        }
+                    };
+                if ((dto.filter.countRange.start && dto.filter.countRange.end)
+                    && (dto.filter.countRange.end < dto.filter.countRange.start))
+                    return {
+                        error: {
+                            type: "BadRequest", message: 'Invalid count range. Count range' +
+                                ' end value must be greater than start value.'
+                        }
+                    };
+            }
+
+            if (dto.timestamps) {
+                if (dto.timestamps.createdAt) {
+                    if (dto.timestamps.createdAt.start && isNaN(Date.parse(dto.timestamps.createdAt.start)))
+                        return {
+                            error: {
+                                type: "BadRequest", message: 'Invalid createdAt start' +
+                                    ' date. Provide a valid ISO date string.'
+                            }
+                        };
+                    if (dto.timestamps.createdAt.end && isNaN(Date.parse(dto.timestamps.createdAt.end)))
+                        return {
+                            error: {
+                                type: "BadRequest", message: 'Invalid createdAt end' +
+                                    ' date. Provide a valid ISO date string.'
+                            }
+                        };
+                }
+                if (dto.timestamps.updatedAt) {
+                    if (dto.timestamps.updatedAt.start && isNaN(Date.parse(dto.timestamps.updatedAt.start)))
+                        return {
+                            error: {
+                                type: "BadRequest", message: 'Invalid updatedAt start' +
+                                    ' date. Provide a valid ISO date string.'
+                            }
+                        };
+                    if (dto.timestamps.updatedAt.end && isNaN(Date.parse(dto.timestamps.updatedAt.end)))
+                        return {
+                            error: {
+                                type: "BadRequest", message: 'Invalid updatedAt end' +
+                                    ' date. Provide a valid ISO date string.'
+                            }
+                        };
+                }
+            }
+
+            if (!dto.updateFields)
+                return {error: {type: "BadRequest", message: 'Invalid request. Update field(s)' +
+                            ' required.'}};
+            if (dto.updateFields.newProductId)
+                if (!(await productsRepository.exists({_id: dto.updateFields.newProductId})))
+                    return {error: {type: "NotFound", message: `Invalid product ID. Product ${dto.updateFields.newProductId}` +
+                                ' not found.'}};
+            if (dto.updateFields.newCount)
+                if (dto.updateFields.newCount < 0)
+                    return {error: {type: "BadRequest", message: 'Invalid count. Count must be' +
+                                ' greater than 0.'}};
+            if (dto.updateFields.countDelta)
+                return {error: {type: "BadRequest", message: 'Invalid update. Cannot update' +
+                            ' multiple records with count delta.'}};
+
             return {};
         },
 

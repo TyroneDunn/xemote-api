@@ -287,6 +287,158 @@ export const configureProductsDtoValidator = (repository: ProductsRepository): P
     },
 
     validateUpdateProductsDTO: async (dto: UpdateProductsDTO): Promise<ValidationOutcome> => {
+        if (dto.filter.name && dto.filter.nameRegex)
+            return {
+                error: {
+                    type: "BadRequest", message: 'Invalid name. Provide either "name"' +
+                        ' or "nameRegex".'
+                }
+            };
+        if (dto.filter.type && dto.filter.typeRegex)
+            return {
+                error: {
+                    type: "BadRequest", message: 'Invalid type. Provide either "type"' +
+                        ' or "typeRegex".'
+                }
+            };
+        if (dto.filter.type)
+            if (dto.filter.type !== "Xemote Gateway"
+                && dto.filter.type !== "Xemote Accessory"
+                && dto.filter.type !== "Wireless Temperature Sensor"
+                && dto.filter.type !== "Wireless Humidity Sensor"
+                && dto.filter.type !== "Wireless AC Current Meter"
+                && dto.filter.type !== "Wireless Event-Based Sensor"
+                && dto.filter.type !== "Wireless Infrared Beam Sensor"
+                && dto.filter.type !== "Wireless 4-30mA Sensor")
+                return {
+                    error: {
+                        type: "BadRequest", message: 'Invalid filter type. Type must be "Xemote' +
+                            ' Accessory", "Xemote Gateway", "Wireless Temperature Sensor", "Wireless' +
+                            ' Humidity Sensor", "Wireless Ac Current Meter", "Wireless Event-Based' +
+                            ' Sensor", "Wireless Infrared Beam Sensor", or "Wireless 4-30mA Sensor".'
+                    }
+                };
+        if (dto.filter.costPriceRange) {
+            if (dto.filter.costPriceRange.start && (dto.filter.costPriceRange.start < 0))
+                return {
+                    error: {
+                        type: "BadRequest", message: 'Invalid cost price range. Cost price range' +
+                            ' start value must be greater than 0.'
+                    }
+                };
+            if (dto.filter.costPriceRange.end && (dto.filter.costPriceRange.end < 0))
+                return {
+                    error: {
+                        type: "BadRequest", message: 'Invalid cost price range. Cost price range' +
+                            ' end value must be greater than 0.'
+                    }
+                };
+            if ((dto.filter.costPriceRange.start && dto.filter.costPriceRange.end)
+                && (dto.filter.costPriceRange.end < dto.filter.costPriceRange.start))
+                return {
+                    error: {
+                        type: "BadRequest", message: 'Invalid cost price range. Cost' +
+                            ' price range' +
+                            ' end value must be greater than start value.'
+                    }
+                };
+        }
+        if (dto.filter.markupRange) {
+            if (dto.filter.markupRange.start && (dto.filter.markupRange.start < 0))
+                return {
+                    error: {
+                        type: "BadRequest", message: 'Invalid markup range. Markup range' +
+                            ' start value must be greater than 0.'
+                    }
+                };
+            if (dto.filter.markupRange.end && (dto.filter.markupRange.end < 0))
+                return {
+                    error: {
+                        type: "BadRequest", message: 'Invalid markup range. Markup range' +
+                            ' end value must be greater than 0.'
+                    }
+                };
+            if ((dto.filter.markupRange.start && dto.filter.markupRange.end)
+                && (dto.filter.markupRange.end < dto.filter.markupRange.start))
+                return {
+                    error: {
+                        type: "BadRequest", message: 'Invalid markup range. Markup range' +
+                            ' end value must be greater than start value.'
+                    }
+                };
+        }
+
+        if (dto.timestamps) {
+            if (dto.timestamps.createdAt) {
+                if (dto.timestamps.createdAt.start && isNaN(Date.parse(dto.timestamps.createdAt.start)))
+                    return {
+                        error: {
+                            type: "BadRequest", message: 'Invalid createdAt start' +
+                                ' date. Provide a valid ISO date string.'
+                        }
+                    };
+                if (dto.timestamps.createdAt.end && isNaN(Date.parse(dto.timestamps.createdAt.end)))
+                    return {
+                        error: {
+                            type: "BadRequest", message: 'Invalid createdAt end' +
+                                ' date. Provide a valid ISO date string.'
+                        }
+                    };
+            }
+            if (dto.timestamps.updatedAt) {
+                if (dto.timestamps.updatedAt.start && isNaN(Date.parse(dto.timestamps.updatedAt.start)))
+                    return {
+                        error: {
+                            type: "BadRequest", message: 'Invalid updatedAt start' +
+                                ' date. Provide a valid ISO date string.'
+                        }
+                    };
+                if (dto.timestamps.updatedAt.end && isNaN(Date.parse(dto.timestamps.updatedAt.end)))
+                    return {
+                        error: {
+                            type: "BadRequest", message: 'Invalid updatedAt end' +
+                                ' date. Provide a valid ISO date string.'
+                        }
+                    };
+            }
+        }
+
+        if (!dto.updateFields)
+            return {error: {type: "BadRequest", message: 'Invalid request. Update field' +
+                        ' required.'}};
+        if (dto.updateFields.newName && dto.updateFields.newName === '')
+            return {error: {type: "BadRequest", message: 'Invalid name. Name cannot be empty' +
+                        ' string.'}};
+        if (dto.updateFields.newType)
+            if (dto.updateFields.newType !== "Xemote Gateway"
+                && dto.updateFields.newType !== "Xemote Accessory"
+                && dto.updateFields.newType !== "Wireless Temperature Sensor"
+                && dto.updateFields.newType !== "Wireless Humidity Sensor"
+                && dto.updateFields.newType !== "Wireless AC Current Meter"
+                && dto.updateFields.newType !== "Wireless Event-Based Sensor"
+                && dto.updateFields.newType !== "Wireless Infrared Beam Sensor"
+                && dto.updateFields.newType !== "Wireless 4-30mA Sensor")
+                return {
+                    error: {
+                        type: "BadRequest", message: 'Invalid type. New yype must be "Xemote' +
+                            ' Accessory", "Xemote Gateway", "Wireless Temperature Sensor", "Wireless' +
+                            ' Humidity Sensor", "Wireless Ac Current Meter", "Wireless Event-Based' +
+                            ' Sensor", "Wireless Infrared Beam Sensor", or "Wireless 4-30mA Sensor".'
+                    }
+                };
+        if (dto.updateFields.newCostPrice) {
+            if (dto.updateFields.newCostPrice.price && dto.updateFields.newCostPrice.price < 0)
+                return {error: {type: "BadRequest", message: 'Invalid price. Price must be' +
+                            ' greater than 0.'}};
+            if (dto.updateFields.newCostPrice.currency)
+                if (dto.updateFields.newCostPrice.currency !== "ZAR" &&
+                    dto.updateFields.newCostPrice.currency !== "USD")
+                    return {error: {type: "BadRequest", message: 'Invalid currency. Currency' +
+                                ' must be "ZAR" or "USD".'}};
+        }
+        if (dto.updateFields.newMarkup && dto.updateFields.newMarkup < 0)
+            return {error: {type: "BadRequest", message: 'Invalid markup. Markup' +
+                        ' must be greater than 0.'}};
         return {};
     },
 

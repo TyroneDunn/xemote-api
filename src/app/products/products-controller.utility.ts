@@ -1,4 +1,4 @@
-import {Controller, Method, Request, Response} from "@hals/core";
+import {Controller, Method, RequestHandler} from "@hals/core";
 import {ProductsService} from "./products-service.type";
 
 export const ProductsQueryParamKeys: string[] = [
@@ -16,7 +16,7 @@ export const ProductsQueryParamKeys: string[] = [
     'limit'
 ];
 
-const getProductsMethod = (getProducts: (request: Request) => Promise<Response>): Method => ({
+const getProductsMethod = (getProducts: RequestHandler): Method => ({
     type: "GET",
     paramKeys: [],
     queryParamKeys: ProductsQueryParamKeys,
@@ -25,7 +25,7 @@ const getProductsMethod = (getProducts: (request: Request) => Promise<Response>)
     requestHandler: getProducts
 });
 
-const getProductMethod = (getProduct: (request: Request) => Promise<Response>): Method => ({
+const getProductMethod = (getProduct: RequestHandler): Method => ({
     type: "GET",
     paramKeys: ['id'],
     queryParamKeys: [],
@@ -34,7 +34,7 @@ const getProductMethod = (getProduct: (request: Request) => Promise<Response>): 
     requestHandler: getProduct
 });
 
-const createProductMethod = (createProduct: (request: Request) => Promise<Response>): Method => ({
+const createProductMethod = (createProduct: RequestHandler): Method => ({
     type: "POST",
     paramKeys: [],
     queryParamKeys: [],
@@ -43,7 +43,7 @@ const createProductMethod = (createProduct: (request: Request) => Promise<Respon
     requestHandler: createProduct
 });
 
-const updateProductsMethod = (updateProducts: (request: Request) => Promise<Response>): Method => ({
+const updateProductsMethod = (updateProducts: RequestHandler): Method => ({
     type: "PATCH",
     paramKeys: [],
     queryParamKeys: ProductsQueryParamKeys,
@@ -52,7 +52,7 @@ const updateProductsMethod = (updateProducts: (request: Request) => Promise<Resp
     requestHandler: updateProducts
 });
 
-const updateProductMethod = (updateProduct: (request: Request) => Promise<Response>): Method => ({
+const updateProductMethod = (updateProduct: RequestHandler): Method => ({
     type: "PATCH",
     paramKeys: ['id'],
     queryParamKeys: [],
@@ -61,7 +61,7 @@ const updateProductMethod = (updateProduct: (request: Request) => Promise<Respon
     requestHandler: updateProduct
 });
 
-const deleteProductsMethod = (deleteProducts: (request: Request) => Promise<Response>): Method => ({
+const deleteProductsMethod = (deleteProducts: RequestHandler): Method => ({
     type: "DELETE",
     paramKeys: [],
     queryParamKeys: ProductsQueryParamKeys,
@@ -70,7 +70,7 @@ const deleteProductsMethod = (deleteProducts: (request: Request) => Promise<Resp
     requestHandler: deleteProducts
 });
 
-const deleteProductMethod = (deleteProduct: (request: Request) => Promise<Response>): Method => ({
+const deleteProductMethod = (deleteProduct: RequestHandler): Method => ({
     type: "DELETE",
     paramKeys: ['id'],
     queryParamKeys: [],

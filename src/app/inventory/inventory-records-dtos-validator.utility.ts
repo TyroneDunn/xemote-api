@@ -8,6 +8,7 @@ import {
 } from "./inventory-records-dtos.type";
 import {InventoryRepository} from "./inventory-repository.type";
 import {ValidationOutcome} from "@hals/common";
+import {ProductsRepository} from "../products/products-repository.type";
 
 export type InventoryRecordsDtosValidator = {
     validateGetInventoryRecordDto: (dto: GetInventoryRecordDTO) => Promise<ValidationOutcome>,
@@ -19,11 +20,14 @@ export type InventoryRecordsDtosValidator = {
 };
 
 export const configureInventoryRecordsDtosValidator =
-    (repository: InventoryRepository): InventoryRecordsDtosValidator => ({
+    (
+        inventoryRepository: InventoryRepository,
+        productsRepository: ProductsRepository
+    ): InventoryRecordsDtosValidator => ({
         validateGetInventoryRecordDto: async (dto: GetInventoryRecordDTO): Promise<ValidationOutcome> => {
             if (!dto._id)
                 return {error: {type: "BadRequest", message: 'ID required.'}};
-            if (!(await repository.exists(dto)))
+            if (!(await inventoryRepository.exists(dto)))
                 return {error: {type: "NotFound", message: `Inventory record "${dto._id}" not found.`}};
             return {};
         },
@@ -137,15 +141,39 @@ export const configureInventoryRecordsDtosValidator =
         validateCreateInventoryRecordDto: async (dto: CreateInventoryRecordDTO): Promise<ValidationOutcome> => {
             if (!dto.productId)
                 return {error: {type: "BadRequest", message: 'Product ID required.'}};
+            if (!(await productsRepository.exists({_id: dto.productId})))
+                return {error: {type: "NotFound", message: `Invalid product ID. Product ${dto.productId}` +
+                            ' not found.'}};
             if (!dto.count)
                 return {error: {type: "BadRequest", message: 'Count required.'}};
             if (dto.count < 0)
-                return {error: {type: "BadRequest", message: 'Invalid count.Count must be' +
+                return {error: {type: "BadRequest", message: 'Invalid count. Count must be' +
                             ' greater than 0.'}};
             return {};
         },
 
         validateUpdateInventoryRecordDto: async (dto: UpdateInventoryRecordDTO): Promise<ValidationOutcome> => {
+            if (!dto._id)
+                return {error: {type: "BadRequest", message: 'ID required.'}};
+            if (!(await inventoryRepository.exists(dto)))
+                return {error: {type: "NotFound", message: `Inventory record "${dto._id}" not found.`}}
+            if (!dto.updateFields)
+                return {error: {type: "BadRequest", message: 'Invalid request. Update field(s)' +
+                            ' required.'}};
+            if (dto.updateFields.newProductId)
+                if (!(await productsRepository.exists({_id: dto.updateFields.newProductId})))
+                    return {error: {type: "NotFound", message: `Invalid product ID. Product ${dto.updateFields.newProductId}` +
+                                ' not found.'}};
+            if (dto.updateFields.newCount)
+                if (dto.updateFields.newCount < 0)
+                    return {error: {type: "BadRequest", message: 'Invalid count. Count must be' +
+                                ' greater than 0.'}};
+            if (dto.updateFields.countDelta) {
+                const record = await inventoryRepository.getRecord({_id: dto._id})
+                if ((record.count + dto.updateFields.countDelta) < 0)
+                    return {error: {type: "BadRequest", message: 'Invalid count delta. Not' +
+                                ' enough products.'}};
+            }
             return {};
         },
 

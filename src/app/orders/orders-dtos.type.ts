@@ -30,7 +30,7 @@ export type UpdateOrdersDTO = {
 export type OrdersFilter = {
     clientId: string,
     productId: string,
-    status: string,
+    status: OrderStatus,
     countRange: NumberRange,
 };
 

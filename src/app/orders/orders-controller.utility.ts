@@ -17,7 +17,7 @@ const getOrdersMethod = (getOrders: RequestHandler): Method => ({
 
 const getOrderMethod = (getOrder: RequestHandler): Method => ({
     type: "GET",
-    paramKeys: [],
+    paramKeys: ['id'],
     queryParamKeys: [],
     sideEffects: [],
     middleware: [],
@@ -44,7 +44,7 @@ const updateOrdersMethod = (updateOrders: RequestHandler): Method => ({
 
 const updateOrderMethod = (updateOrder: RequestHandler): Method => ({
     type: "PATCH",
-    paramKeys: [],
+    paramKeys: ['id'],
     queryParamKeys: [],
     sideEffects: [],
     middleware: [],
@@ -62,7 +62,7 @@ const deleteOrdersMethod = (deleteOrders: RequestHandler): Method => ({
 
 const deleteOrderMethod = (deleteOrder: RequestHandler): Method => ({
     type: "DELETE",
-    paramKeys: [],
+    paramKeys: ['id'],
     queryParamKeys: [],
     sideEffects: [],
     middleware: [],

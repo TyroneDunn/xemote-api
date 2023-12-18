@@ -162,7 +162,7 @@ export const configureOrdersDtosValidator =
                 if (!(await productsRepository.exists({_id: product})))
                     return {error: {type: "NotFound", message: `Invalid cart. Product "${product}" does not exist.`}};
                 if (dto.cart[product] < 1)
-                    return {error: {type: "BadRequest", message: `Invalid card. Product ${product} count must be greater than 1.`}};
+                    return {error: {type: "BadRequest", message: `Invalid cart. Product ${product} count must be greater than 1.`}};
             }
             return {};
         },
@@ -181,6 +181,14 @@ export const configureOrdersDtosValidator =
                     && dto.updateFields.newStatus !== "cancelled")
                     return {error: {type: "BadRequest", message: 'Invalid status. Status must be' +
                                 ' "complete", "pending" or "cancelled".'}};
+            if (dto.updateFields.newCart) {
+                for (const product in dto.updateFields.newCart) {
+                    if (!(await productsRepository.exists({_id: product})))
+                        return {error: {type: "NotFound", message: `Invalid cart. Product "${product}" does not exist.`}};
+                    if (dto.updateFields.newCart[product] < 1)
+                        return {error: {type: "BadRequest", message: `Invalid cart. Product ${product} count must be greater than 1.`}};
+                }
+            }
             return {};
         },
 

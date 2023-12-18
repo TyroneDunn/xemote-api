@@ -6,7 +6,6 @@ import {
 } from "./inventory-records-dtos.type";
 import {InventoryRepository} from "./inventory-repository.type";
 import {ValidationOutcome} from "@hals/common";
-import {ProductsRepository} from "../products/products-repository.type";
 
 export type InventoryRecordsDtosValidator = {
     validateGetInventoryRecordDto: (dto: GetInventoryRecordDTO) => Promise<ValidationOutcome>,
@@ -16,10 +15,7 @@ export type InventoryRecordsDtosValidator = {
 };
 
 export const configureInventoryRecordsDtosValidator =
-    (
-        inventoryRepository: InventoryRepository,
-        productsRepository: ProductsRepository
-    ): InventoryRecordsDtosValidator => ({
+    (inventoryRepository: InventoryRepository): InventoryRecordsDtosValidator => ({
         validateGetInventoryRecordDto: async (dto: GetInventoryRecordDTO): Promise<ValidationOutcome> => {
             if (!dto.productId)
                 return {error: {type: "BadRequest", message: 'Product ID required.'}};

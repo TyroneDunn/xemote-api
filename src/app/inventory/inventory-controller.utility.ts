@@ -16,7 +16,7 @@ const getRecordsMethod = (getRecords: RequestHandler): Method => ({
 
 const getRecordMethod = (getRecord: RequestHandler): Method => ({
     type: "GET",
-    paramKeys: [],
+    paramKeys: ['id'],
     queryParamKeys: [],
     sideEffects: [],
     middleware: [],
@@ -43,7 +43,7 @@ const updateRecordsMethod = (updateRecords: RequestHandler): Method => ({
 
 const updateRecordMethod = (updateRecord: RequestHandler): Method => ({
     type: "PATCH",
-    paramKeys: [],
+    paramKeys: ['id'],
     queryParamKeys: [],
     sideEffects: [],
     middleware: [],
@@ -61,7 +61,7 @@ const deleteRecordsMethod = (deleteRecords: RequestHandler): Method => ({
 
 const deleteRecordMethod = (deleteRecord: RequestHandler): Method => ({
     type: "DELETE",
-    paramKeys: [],
+    paramKeys: ['id'],
     queryParamKeys: [],
     sideEffects: [],
     middleware: [],

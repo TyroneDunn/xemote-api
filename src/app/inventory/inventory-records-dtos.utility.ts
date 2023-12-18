@@ -28,8 +28,6 @@ export const mapRequestToInventoryRecordsDTO = (request: Request): InventoryReco
 
 const mapRequestToInventoryRecordsFilter = (request: Request) => ({
     filter: {
-        ...request.queryParamMap['productId']
-        && {productId: request.queryParamMap['productId']},
         ...request.queryParamMap['countRange']
         && {countRange: JSON.parse(request.queryParamMap['countRange']) as NumberRange},
     }

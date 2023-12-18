@@ -23,15 +23,6 @@ const getRecordMethod = (getRecord: RequestHandler): Method => ({
     requestHandler: getRecord
 });
 
-const createRecordMethod = (createRecord: RequestHandler): Method => ({
-    type: "POST",
-    paramKeys: [],
-    queryParamKeys: [],
-    sideEffects: [],
-    middleware: [],
-    requestHandler: createRecord
-});
-
 const updateRecordsMethod = (updateRecords: RequestHandler): Method => ({
     type: "PATCH",
     paramKeys: [],
@@ -50,24 +41,6 @@ const updateRecordMethod = (updateRecord: RequestHandler): Method => ({
     requestHandler: updateRecord
 });
 
-const deleteRecordsMethod = (deleteRecords: RequestHandler): Method => ({
-    type: "DELETE",
-    paramKeys: [],
-    queryParamKeys: InventoryQueryParamsKeys,
-    sideEffects: [],
-    middleware: [],
-    requestHandler: deleteRecords
-});
-
-const deleteRecordMethod = (deleteRecord: RequestHandler): Method => ({
-    type: "DELETE",
-    paramKeys: ['id'],
-    queryParamKeys: [],
-    sideEffects: [],
-    middleware: [],
-    requestHandler: deleteRecord
-});
-
 export type InventoryController = Controller;
 
 export const configureInventoryController = (service: InventoryService): Controller => ({
@@ -76,10 +49,7 @@ export const configureInventoryController = (service: InventoryService): Control
     methods: [
         getRecordsMethod(service.getRecords),
         getRecordMethod(service.getRecord),
-        createRecordMethod(service.createRecord),
         updateRecordsMethod(service.updateRecords),
         updateRecordMethod(service.updateRecord),
-        deleteRecordsMethod(service.deleteRecords),
-        deleteRecordMethod(service.deleteRecord),
     ]
 });

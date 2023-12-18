@@ -63,20 +63,6 @@ export const configureInventoryService = (
         }
     },
 
-    createRecord: async (request: Request): Promise<Response> => {
-        const dto: CreateInventoryRecordDTO = mapRequestToCreateInventoryRecordDTO(request);
-
-        const validationOutcome: ValidationOutcome = await validator.validateCreateInventoryRecordDto(dto);
-        if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-        try {
-            const record: InventoryRecord = await repository.createRecord(dto);
-            return mapInventoryRecordToSuccessResponse(record);
-        } catch (error) {
-            return mapErrorToInternalServerErrorResponse(error);
-        }
-    },
-
     updateRecord: async (request: Request): Promise<Response> => {
         const dto: UpdateInventoryRecordDTO = mapRequestToUpdateInventoryRecordDTO(request);
 
@@ -99,34 +85,6 @@ export const configureInventoryService = (
 
         try {
             const result: CommandResult = await repository.updateRecords(dto);
-            return mapCommandResultToSuccessResponse(result);
-        } catch (error) {
-            return mapErrorToInternalServerErrorResponse(error);
-        }
-    },
-
-    deleteRecord: async (request: Request): Promise<Response> => {
-        const dto: DeleteInventoryRecordDTO = mapRequestToDeleteInventoryRecordDTO(request);
-
-        const validationOutcome: ValidationOutcome = await validator.validateDeleteInventoryRecordDto(dto);
-        if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-        try {
-            const result: CommandResult = await repository.deleteRecord(dto);
-            return mapCommandResultToSuccessResponse(result);
-        } catch (error) {
-            return mapErrorToInternalServerErrorResponse(error);
-        }
-    },
-
-    deleteRecords: async (request: Request): Promise<Response> => {
-        const dto: InventoryRecordsDTO = mapRequestToInventoryRecordsDTO(request);
-
-        const validationOutcome: ValidationOutcome = await validator.validateInventoryRecordsDto(dto);
-        if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-        try {
-            const result: CommandResult = await repository.deleteRecords(dto);
             return mapCommandResultToSuccessResponse(result);
         } catch (error) {
             return mapErrorToInternalServerErrorResponse(error);

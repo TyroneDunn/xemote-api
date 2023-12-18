@@ -168,6 +168,19 @@ export const configureOrdersDtosValidator =
         },
 
         validateUpdateOrderDto: async (dto: UpdateOrderDTO): Promise<ValidationOutcome> => {
+            if (!dto._id)
+                return {error: {type: "BadRequest", message: 'ID required.'}};
+            if (!(await ordersRepository.exists(dto)))
+                return {error: {type: "NotFound", message: `Order "${dto._id}" not found.`}}
+            if (!dto.updateFields)
+                return {error: {type: "BadRequest", message: 'Invalid request. Update field(s)' +
+                            ' required.'}};
+            if (dto.updateFields.newStatus)
+                if (dto.updateFields.newStatus !== "complete"
+                    && dto.updateFields.newStatus !== "pending"
+                    && dto.updateFields.newStatus !== "cancelled")
+                    return {error: {type: "BadRequest", message: 'Invalid status. Status must be' +
+                                ' "complete", "pending" or "cancelled".'}};
             return {};
         },
 

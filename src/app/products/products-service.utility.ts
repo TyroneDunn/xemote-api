@@ -27,10 +27,13 @@ import {
     mapValidationOutcomeToErrorResponse,
     ValidationOutcome
 } from "@hals/common";
+import {InventoryService} from "../inventory/inventory-service.type";
+import {InventoryRepository} from "../inventory/inventory-repository.type";
 
 export const configureProductsService = (
     repository: ProductsRepository,
-    validator: ProductsDtoValidator): ProductsService =>
+    validator: ProductsDtoValidator,
+    inventoryRepository: InventoryRepository): ProductsService =>
     ({
         getProduct: async (request: Request): Promise<Response> => {
             const dto: GetProductDTO = mapToGetProductDTO(request);
@@ -67,6 +70,7 @@ export const configureProductsService = (
 
             try {
                 const product: Product = await repository.createProduct(dto);
+                await inventoryRepository.createRecord({productId: product._id, count: 0});
                 return mapProductToSuccessResponse(product);
             } catch (error) {
                 return mapErrorToInternalServerErrorResponse(error);

@@ -1,6 +1,5 @@
-import {CorsOptions} from "cors";
 import {APP_URL} from "../environments";
-import {OK} from "@hals/common";
+import {CorsOptions, OK} from "@hals/common";
 
 const corsOptions: CorsOptions = {
     origin: [

@@ -72,7 +72,6 @@ export const MongoInventoryRepository: InventoryRepository = {
 };
 
 const mapDTOToFilter = (dto: InventoryRecordsDTO) => ({
-    ...dto.filter.productId && {productId: dto.filter.productId},
     ...dto.filter.countRange && {
         ...(dto.filter.countRange.start && !dto.filter.countRange.end)
         && {count: {$gt: dto.filter.countRange.start}},
@@ -112,13 +111,11 @@ const mapDTOToFilter = (dto: InventoryRecordsDTO) => ({
 });
 
 const mapUpdateFieldsToUpdateQuery = (updateFields: InventoryRecordUpdateFields) => ({
-    ...updateFields.newProductId && {productId: updateFields.newProductId},
     ...updateFields.newCount && {count: updateFields.newCount},
     ...updateFields.countDelta && {$inc: {count: updateFields.countDelta}},
 });
 
 const mapUpdateInventoryRecordsDTOToFilter = (dto: UpdateInventoryRecordsDTO) => ({
-    ...dto.filter.productId && {productId: dto.filter.productId},
     ...dto.filter.countRange && {
         ...(dto.filter.countRange.start && !dto.filter.countRange.end)
         && {count: {$gt: dto.filter.countRange.start}},

@@ -32,7 +32,6 @@ export type UpdateInventoryRecordDTO = {
 };
 
 export type InventoryRecordUpdateFields = {
-    newProductId: string,
     newCount: number,
     countDelta: number
 };

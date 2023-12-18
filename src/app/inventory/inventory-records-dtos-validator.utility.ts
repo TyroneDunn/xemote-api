@@ -176,15 +176,6 @@ export const configureInventoryRecordsDtosValidator =
                             ' required.'
                     }
                 };
-            if (dto.updateFields.newProductId)
-                if (!(await productsRepository.exists({_id: dto.updateFields.newProductId})))
-                    return {
-                        error: {
-                            type: "NotFound",
-                            message: `Invalid product ID. Product ${dto.updateFields.newProductId}` +
-                                ' not found.'
-                        }
-                    };
             if (dto.updateFields.newCount)
                 if (dto.updateFields.newCount < 0)
                     return {
@@ -274,15 +265,6 @@ export const configureInventoryRecordsDtosValidator =
                             ' required.'
                     }
                 };
-            if (dto.updateFields.newProductId)
-                if (!(await productsRepository.exists({_id: dto.updateFields.newProductId})))
-                    return {
-                        error: {
-                            type: "NotFound",
-                            message: `Invalid product ID. Product ${dto.updateFields.newProductId}` +
-                                ' not found.'
-                        }
-                    };
             if (dto.updateFields.newCount)
                 if (dto.updateFields.newCount < 0)
                     return {

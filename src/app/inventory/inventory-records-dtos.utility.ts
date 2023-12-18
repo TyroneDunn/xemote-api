@@ -66,5 +66,5 @@ export const mapRequestToUpdateInventoryRecordsDTO = (request: Request): UpdateI
     ...mapRequestToTimestamps(request),
     ...mapToInventoryRecordsSort(request),
     ...mapRequestToPage(request),
-    ...mapRequestToInventoryRecordUpdateFields(request),
+    ...mapRequestToInventoryRecordUpdateFields(request.payload),
 });

@@ -4,9 +4,12 @@ import {configureOrdersService} from "./orders-service.utility";
 import {OrdersRepository} from "./orders-repository.type";
 import {MongoOrdersRepository} from "./mongo-orders-repository.service";
 import {configureOrdersDtosValidator, OrdersDtosValidator} from "./orders-dtos-validator.utility";
+import {ProductsRepository} from "../products/products-repository.type";
+import {MongoProductsRepository} from "../products/mongo-products-repository.service";
 
 const ordersRepository: OrdersRepository = MongoOrdersRepository;
-const ordersDtosValidator: OrdersDtosValidator = configureOrdersDtosValidator(ordersRepository);
+const productsRepository: ProductsRepository = MongoProductsRepository;
+const ordersDtosValidator: OrdersDtosValidator = configureOrdersDtosValidator(ordersRepository, productsRepository);
 const ordersService: OrdersService = configureOrdersService(ordersRepository, ordersDtosValidator);
 const ordersController: OrdersController = configureOrdersController(ordersService);
 

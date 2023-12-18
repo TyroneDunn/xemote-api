@@ -1,6 +1,4 @@
 import {
-    CreateInventoryRecordDTO,
-    DeleteInventoryRecordDTO,
     GetInventoryRecordDTO,
     InventoryRecordsDTO,
     UpdateInventoryRecordDTO,
@@ -13,10 +11,8 @@ import {ProductsRepository} from "../products/products-repository.type";
 export type InventoryRecordsDtosValidator = {
     validateGetInventoryRecordDto: (dto: GetInventoryRecordDTO) => Promise<ValidationOutcome>,
     validateInventoryRecordsDto: (dto: InventoryRecordsDTO) => Promise<ValidationOutcome>,
-    validateCreateInventoryRecordDto: (dto: CreateInventoryRecordDTO) => Promise<ValidationOutcome>,
     validateUpdateInventoryRecordDto: (dto: UpdateInventoryRecordDTO) => Promise<ValidationOutcome>,
     validateUpdateInventoryRecordsDto: (dto: UpdateInventoryRecordsDTO) => Promise<ValidationOutcome>,
-    validateDeleteInventoryRecordDto: (dto: DeleteInventoryRecordDTO) => Promise<ValidationOutcome>,
 };
 
 export const configureInventoryRecordsDtosValidator =
@@ -163,28 +159,6 @@ export const configureInventoryRecordsDtosValidator =
             return {};
         },
 
-        validateCreateInventoryRecordDto: async (dto: CreateInventoryRecordDTO): Promise<ValidationOutcome> => {
-            if (!dto.productId)
-                return {error: {type: "BadRequest", message: 'Product ID required.'}};
-            if (!(await productsRepository.exists({_id: dto.productId})))
-                return {
-                    error: {
-                        type: "NotFound", message: `Invalid product ID. Product ${dto.productId}` +
-                            ' not found.'
-                    }
-                };
-            if (!dto.count)
-                return {error: {type: "BadRequest", message: 'Count required.'}};
-            if (dto.count < 0)
-                return {
-                    error: {
-                        type: "BadRequest", message: 'Invalid count. Count must be' +
-                            ' greater than 0.'
-                    }
-                };
-            return {};
-        },
-
         validateUpdateInventoryRecordDto: async (dto: UpdateInventoryRecordDTO): Promise<ValidationOutcome> => {
             if (!dto.productId)
                 return {error: {type: "BadRequest", message: 'ID required.'}};
@@ -325,19 +299,6 @@ export const configureInventoryRecordsDtosValidator =
                     }
                 };
 
-            return {};
-        },
-
-        validateDeleteInventoryRecordDto: async (dto: DeleteInventoryRecordDTO): Promise<ValidationOutcome> => {
-            if (!dto.productId)
-                return {error: {type: "BadRequest", message: 'ID required.'}};
-            if (!(await inventoryRepository.exists(dto)))
-                return {
-                    error: {
-                        type: "NotFound",
-                        message: `Inventory record "${dto.productId}" not found.`
-                    }
-                };
             return {};
         },
     });

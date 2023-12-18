@@ -1,7 +1,5 @@
 import {HttpStatusCodes, Request, Response} from "@hals/core";
 import {
-    CreateInventoryRecordDTO,
-    DeleteInventoryRecordDTO,
     GetInventoryRecordDTO,
     InventoryRecordsDTO,
     InventoryRecordsSortOption,
@@ -52,11 +50,6 @@ export const mapInventoryRecordsToSuccessResponse = (records: InventoryRecord[])
     count: records.length
 });
 
-export const mapRequestToCreateInventoryRecordDTO = (request: Request): CreateInventoryRecordDTO => ({
-    productId: request.payload['productId'],
-    count: parseInt(request.payload['count'])
-});
-
 export const mapRequestToUpdateInventoryRecordDTO = (request: Request): UpdateInventoryRecordDTO => ({
     productId: request.paramMap['id'],
     ...mapRequestToInventoryRecordUpdateFields(request.payload)
@@ -77,6 +70,3 @@ export const mapRequestToUpdateInventoryRecordsDTO = (request: Request): UpdateI
     ...mapRequestToPage(request),
     ...mapRequestToInventoryRecordUpdateFields(request),
 });
-
-export const mapRequestToDeleteInventoryRecordDTO = (request: Request): DeleteInventoryRecordDTO =>
-    ({productId: request.paramMap['id']});

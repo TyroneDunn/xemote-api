@@ -1,7 +1,5 @@
 import {InventoryRepository} from "./inventory-repository.type";
 import {
-    CreateInventoryRecordDTO,
-    DeleteInventoryRecordDTO,
     GetInventoryRecordDTO,
     InventoryRecordsDTO,
     UpdateInventoryRecordDTO,
@@ -12,8 +10,6 @@ import {InventoryRecord} from "./inventory-record.type";
 import {
     mapInventoryRecordsToSuccessResponse,
     mapInventoryRecordToSuccessResponse,
-    mapRequestToCreateInventoryRecordDTO,
-    mapRequestToDeleteInventoryRecordDTO,
     mapRequestToGetInventoryRecordDTO,
     mapRequestToInventoryRecordsDTO,
     mapRequestToUpdateInventoryRecordDTO,

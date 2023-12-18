@@ -282,6 +282,10 @@ export const configureOrdersDtosValidator =
         },
 
         validateDeleteOrderDto: async (dto: DeleteOrderDTO): Promise<ValidationOutcome> => {
+            if (!dto._id)
+                return {error: {type: "BadRequest", message: 'ID required.'}};
+            if (!(await ordersRepository.exists(dto)))
+                return {error: {type: "NotFound", message: `Order "${dto._id}" not found.`}};
             return {};
         },
     });

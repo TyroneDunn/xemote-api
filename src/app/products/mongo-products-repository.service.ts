@@ -80,46 +80,46 @@ const mapProductsDtoToProductsFilter = (dto: ProductsDTO) => ({
     ...dto.filter.type && {type: dto.filter.type},
     ...dto.filter.typeRegex && {type: {$regex: dto.filter.typeRegex, $options: 'i'}},
     ...dto.filter.costPriceRange && {
-        ...(dto.filter.costPriceRange.start && !dto.filter.costPriceRange.end) && {'costPrice.price': {$gt: dto.filter.costPriceRange.start}},
-        ...(!dto.filter.costPriceRange.start && dto.filter.costPriceRange.end) && {'costPrice.price': {$lt: dto.filter.costPriceRange.end}},
+        ...(dto.filter.costPriceRange.start && !dto.filter.costPriceRange.end) && {'costPrice.price': {$gte: dto.filter.costPriceRange.start}},
+        ...(!dto.filter.costPriceRange.start && dto.filter.costPriceRange.end) && {'costPrice.price': {$lte: dto.filter.costPriceRange.end}},
         ...(dto.filter.costPriceRange.start && dto.filter.costPriceRange.end) && {
             'costPrice.price': {
-                $gt: dto.filter.costPriceRange.start,
-                $lt: dto.filter.costPriceRange.end
+                $gte: dto.filter.costPriceRange.start,
+                $lte: dto.filter.costPriceRange.end
             }
         },
     },
     ...dto.filter.markupRange && {
-        ...(dto.filter.markupRange.start && !dto.filter.markupRange.end) && {markup: {$gt: dto.filter.markupRange.start}},
-        ...(!dto.filter.markupRange.start && dto.filter.markupRange.end) && {markup: {$lt: dto.filter.markupRange.end}},
+        ...(dto.filter.markupRange.start && !dto.filter.markupRange.end) && {markup: {$gte: dto.filter.markupRange.start}},
+        ...(!dto.filter.markupRange.start && dto.filter.markupRange.end) && {markup: {$lte: dto.filter.markupRange.end}},
         ...(dto.filter.markupRange.start && dto.filter.markupRange.end) && {
             markup: {
-                $gt: dto.filter.markupRange.start,
-                $lt: dto.filter.markupRange.end
+                $gte: dto.filter.markupRange.start,
+                $lte: dto.filter.markupRange.end
             }
         },
     },
     ...dto.timestamps && {
         ...dto.timestamps.createdAt && {
             ...(dto.timestamps.createdAt.start && !dto.timestamps.createdAt.end) && {
-                createdAt: {$gt: dto.timestamps.createdAt.start}
+                createdAt: {$gte: dto.timestamps.createdAt.start}
             },
             ...(!dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
-                createdAt: {$lt: dto.timestamps.createdAt.end}
+                createdAt: {$lte: dto.timestamps.createdAt.end}
             },
             ...(dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
-                createdAt: {$gt: dto.timestamps.createdAt.start, $lt: dto.timestamps.createdAt.end}
+                createdAt: {$gte: dto.timestamps.createdAt.start, $lte: dto.timestamps.createdAt.end}
             }
         },
         ...dto.timestamps.updatedAt && {
             ...(dto.timestamps.updatedAt.start && !dto.timestamps.updatedAt.end) && {
-                updatedAt: {$gt: dto.timestamps.updatedAt.start}
+                updatedAt: {$gte: dto.timestamps.updatedAt.start}
             },
             ...(!dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
-                updatedAt: {$lt: dto.timestamps.updatedAt.end}
+                updatedAt: {$lte: dto.timestamps.updatedAt.end}
             },
             ...(dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
-                updatedAt: {$gt: dto.timestamps.updatedAt.start, $lt: dto.timestamps.updatedAt.end}
+                updatedAt: {$gte: dto.timestamps.updatedAt.start, $lte: dto.timestamps.updatedAt.end}
             }
         }
     },
@@ -131,46 +131,46 @@ const mapUpdateProductsDtoToFilter = (dto: UpdateProductsDTO) => ({
     ...dto.filter.type && {type: dto.filter.type},
     ...dto.filter.typeRegex && {type: {$regex: dto.filter.typeRegex, $options: 'i'}},
     ...dto.filter.costPriceRange && {
-        ...(dto.filter.costPriceRange.start && !dto.filter.costPriceRange.end) && {'costPrice.price': {$gt: dto.filter.costPriceRange.start}},
-        ...(!dto.filter.costPriceRange.start && dto.filter.costPriceRange.end) && {'costPrice.price': {$lt: dto.filter.costPriceRange.end}},
+        ...(dto.filter.costPriceRange.start && !dto.filter.costPriceRange.end) && {'costPrice.price': {$gte: dto.filter.costPriceRange.start}},
+        ...(!dto.filter.costPriceRange.start && dto.filter.costPriceRange.end) && {'costPrice.price': {$lte: dto.filter.costPriceRange.end}},
         ...(dto.filter.costPriceRange.start && dto.filter.costPriceRange.end) && {
             'costPrice.price': {
-                $gt: dto.filter.costPriceRange.start,
-                $lt: dto.filter.costPriceRange.end
+                $gte: dto.filter.costPriceRange.start,
+                $lte: dto.filter.costPriceRange.end
             }
         },
     },
     ...dto.filter.markupRange && {
-        ...(dto.filter.markupRange.start && !dto.filter.markupRange.end) && {markup: {$gt: dto.filter.markupRange.start}},
-        ...(!dto.filter.markupRange.start && dto.filter.markupRange.end) && {markup: {$lt: dto.filter.markupRange.end}},
+        ...(dto.filter.markupRange.start && !dto.filter.markupRange.end) && {markup: {$gte: dto.filter.markupRange.start}},
+        ...(!dto.filter.markupRange.start && dto.filter.markupRange.end) && {markup: {$lte: dto.filter.markupRange.end}},
         ...(dto.filter.markupRange.start && dto.filter.markupRange.end) && {
             markup: {
-                $gt: dto.filter.markupRange.start,
-                $lt: dto.filter.markupRange.end
+                $gte: dto.filter.markupRange.start,
+                $lte: dto.filter.markupRange.end
             }
         },
     },
     ...dto.timestamps && {
         ...dto.timestamps.createdAt && {
             ...(dto.timestamps.createdAt.start && !dto.timestamps.createdAt.end) && {
-                createdAt: {$gt: dto.timestamps.createdAt.start}
+                createdAt: {$gte: dto.timestamps.createdAt.start}
             },
             ...(!dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
-                createdAt: {$lt: dto.timestamps.createdAt.end}
+                createdAt: {$lte: dto.timestamps.createdAt.end}
             },
             ...(dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
-                createdAt: {$gt: dto.timestamps.createdAt.start, $lt: dto.timestamps.createdAt.end}
+                createdAt: {$gte: dto.timestamps.createdAt.start, $lte: dto.timestamps.createdAt.end}
             }
         },
         ...dto.timestamps.updatedAt && {
             ...(dto.timestamps.updatedAt.start && !dto.timestamps.updatedAt.end) && {
-                updatedAt: {$gt: dto.timestamps.updatedAt.start}
+                updatedAt: {$gte: dto.timestamps.updatedAt.start}
             },
             ...(!dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
-                updatedAt: {$lt: dto.timestamps.updatedAt.end}
+                updatedAt: {$lte: dto.timestamps.updatedAt.end}
             },
             ...(dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
-                updatedAt: {$gt: dto.timestamps.updatedAt.start, $lt: dto.timestamps.updatedAt.end}
+                updatedAt: {$gte: dto.timestamps.updatedAt.start, $lte: dto.timestamps.updatedAt.end}
             }
         }
     },

@@ -1,4 +1,4 @@
-import {Controller, Method, Request, Response} from "@hals/core";
+import {Controller, Method, RequestHandler} from "@hals/core";
 import {OrdersService} from "./orders-service.type";
 
 export const OrdersQueryParamsKeys: string[] = [
@@ -6,7 +6,7 @@ export const OrdersQueryParamsKeys: string[] = [
     'status',
 ];
 
-const getOrdersMethod = (getOrders: (request: Request) => Promise<Response>): Method => ({
+const getOrdersMethod = (getOrders: RequestHandler): Method => ({
     type: "GET",
     paramKeys: [],
     queryParamKeys: OrdersQueryParamsKeys,
@@ -15,7 +15,7 @@ const getOrdersMethod = (getOrders: (request: Request) => Promise<Response>): Me
     requestHandler: getOrders
 });
 
-const getOrderMethod = (getOrder: (request: Request) => Promise<Response>): Method => ({
+const getOrderMethod = (getOrder: RequestHandler): Method => ({
     type: "GET",
     paramKeys: [],
     queryParamKeys: [],
@@ -24,7 +24,7 @@ const getOrderMethod = (getOrder: (request: Request) => Promise<Response>): Meth
     requestHandler: getOrder
 });
 
-const createOrderMethod = (createOrder: (request: Request) => Promise<Response>): Method => ({
+const createOrderMethod = (createOrder: RequestHandler): Method => ({
     type: "POST",
     paramKeys: [],
     queryParamKeys: [],
@@ -33,7 +33,7 @@ const createOrderMethod = (createOrder: (request: Request) => Promise<Response>)
     requestHandler: createOrder
 });
 
-const updateOrdersMethod = (updateOrders: (request: Request) => Promise<Response>): Method => ({
+const updateOrdersMethod = (updateOrders: RequestHandler): Method => ({
     type: "PATCH",
     paramKeys: [],
     queryParamKeys: OrdersQueryParamsKeys,
@@ -42,7 +42,7 @@ const updateOrdersMethod = (updateOrders: (request: Request) => Promise<Response
     requestHandler: updateOrders
 });
 
-const updateOrderMethod = (updateOrder: (request: Request) => Promise<Response>): Method => ({
+const updateOrderMethod = (updateOrder: RequestHandler): Method => ({
     type: "PATCH",
     paramKeys: [],
     queryParamKeys: [],
@@ -51,7 +51,7 @@ const updateOrderMethod = (updateOrder: (request: Request) => Promise<Response>)
     requestHandler: updateOrder
 });
 
-const deleteOrdersMethod = (deleteOrders: (request: Request) => Promise<Response>): Method => ({
+const deleteOrdersMethod = (deleteOrders: RequestHandler): Method => ({
     type: "DELETE",
     paramKeys: [],
     queryParamKeys: OrdersQueryParamsKeys,
@@ -60,7 +60,7 @@ const deleteOrdersMethod = (deleteOrders: (request: Request) => Promise<Response
     requestHandler: deleteOrders
 });
 
-const deleteOrderMethod = (deleteOrder: (request: Request) => Promise<Response>): Method => ({
+const deleteOrderMethod = (deleteOrder: RequestHandler): Method => ({
     type: "DELETE",
     paramKeys: [],
     queryParamKeys: [],
@@ -71,7 +71,7 @@ const deleteOrderMethod = (deleteOrder: (request: Request) => Promise<Response>)
 
 export type OrdersController = Controller;
 
-export const configureOrdersController= (service: OrdersService): Controller => ({
+export const configureOrdersController = (service: OrdersService): Controller => ({
     path: 'orders/',
     guard: true,
     methods: [

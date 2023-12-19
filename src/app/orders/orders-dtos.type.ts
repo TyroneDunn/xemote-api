@@ -42,8 +42,8 @@ export type OrderUpdateFields = {
 export type DeleteOrderDTO = { _id: string };
 
 export type OrdersSortOptions =
-    | "clientId"
-    | "status";
+   | "clientId"
+   | "status";
 
 export type OrdersSort = {
     field: OrdersSortOptions,

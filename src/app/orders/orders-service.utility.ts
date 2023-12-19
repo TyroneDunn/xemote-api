@@ -1,14 +1,14 @@
-import {Request, Response} from "@hals/core";
-import {OrdersRepository} from "./orders-repository.type";
+import { Request, Response } from "@hals/core";
+import { OrdersRepository } from "./orders-repository.type";
 import {
     CreateOrderDTO,
     DeleteOrderDTO,
     GetOrderDTO,
     OrdersDTO,
     UpdateOrderDTO,
-    UpdateOrdersDTO
+    UpdateOrdersDTO,
 } from "./orders-dtos.type";
-import {Order} from "./order.type";
+import { Order } from "./order.type";
 import {
     mapOrdersToSuccessResponse,
     mapOrderToSuccessResponse,
@@ -17,20 +17,22 @@ import {
     mapRequestToGetOrderDTO,
     mapRequestToOrdersDTO,
     mapRequestToUpdateOrderDTO,
-    mapRequestToUpdateOrdersDTO
+    mapRequestToUpdateOrdersDTO,
 } from "./orders-dtos.utility";
-import {OrdersDtosValidator,} from "./orders-dtos-validator.utility";
-import {OrdersService} from "./orders-service.type";
+import { OrdersDtosValidator } from "./orders-dtos-validator.utility";
+import { OrdersService } from "./orders-service.type";
 import {
-    addRequestPageDataToResponse, CommandResult, mapCommandResultToSuccessResponse,
+    addRequestPageDataToResponse,
+    CommandResult,
+    mapCommandResultToSuccessResponse,
     mapErrorToInternalServerErrorResponse,
     mapValidationOutcomeToErrorResponse,
-    ValidationOutcome
+    ValidationOutcome,
 } from "@hals/common";
 
 export const configureOrdersService = (
-    repository: OrdersRepository,
-    validator: OrdersDtosValidator
+   repository: OrdersRepository,
+   validator: OrdersDtosValidator,
 ): OrdersService => ({
     getOrder: async (request: Request): Promise<Response> => {
         const dto: GetOrderDTO = mapRequestToGetOrderDTO(request);
@@ -41,7 +43,8 @@ export const configureOrdersService = (
         try {
             const order: Order = await repository.getOrder(dto);
             return mapOrderToSuccessResponse(order);
-        } catch (error) {
+        }
+        catch (error) {
             return mapErrorToInternalServerErrorResponse(error);
         }
     },
@@ -56,9 +59,10 @@ export const configureOrdersService = (
             const orders: Order[] = await repository.getOrders(dto);
 
             const addPageData = (response: Response): Response =>
-                addRequestPageDataToResponse(request, response);
+               addRequestPageDataToResponse(request, response);
             return addPageData(mapOrdersToSuccessResponse(orders));
-        } catch (error) {
+        }
+        catch (error) {
             return mapErrorToInternalServerErrorResponse(error);
         }
     },
@@ -72,7 +76,8 @@ export const configureOrdersService = (
         try {
             const order: Order = await repository.createOrder(dto);
             return mapOrderToSuccessResponse(order);
-        } catch (error) {
+        }
+        catch (error) {
             return mapErrorToInternalServerErrorResponse(error);
         }
     },
@@ -86,7 +91,8 @@ export const configureOrdersService = (
         try {
             const order: Order = await repository.updateOrder(dto);
             return mapOrderToSuccessResponse(order);
-        } catch (error) {
+        }
+        catch (error) {
             return mapErrorToInternalServerErrorResponse(error);
         }
     },
@@ -100,7 +106,8 @@ export const configureOrdersService = (
         try {
             const result: CommandResult = await repository.updateOrders(dto);
             return mapCommandResultToSuccessResponse(result);
-        } catch (error) {
+        }
+        catch (error) {
             return mapErrorToInternalServerErrorResponse(error);
         }
     },
@@ -114,7 +121,8 @@ export const configureOrdersService = (
         try {
             const result: CommandResult = await repository.deleteOrder(dto);
             return mapCommandResultToSuccessResponse(result);
-        } catch (error) {
+        }
+        catch (error) {
             return mapErrorToInternalServerErrorResponse(error);
         }
     },
@@ -128,7 +136,8 @@ export const configureOrdersService = (
         try {
             const result: CommandResult = await repository.deleteOrders(dto);
             return mapCommandResultToSuccessResponse(result);
-        } catch (error) {
+        }
+        catch (error) {
             return mapErrorToInternalServerErrorResponse(error);
         }
     },

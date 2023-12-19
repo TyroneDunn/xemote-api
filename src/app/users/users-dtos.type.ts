@@ -15,9 +15,11 @@ export type UsersFilter = {
 };
 
 export type UsersSort = {
-   field: 'username' | 'createdAt' | 'updatedAt',
+   field: UsersSortOption,
    order: OrderOption,
 };
+
+export type UsersSortOption = 'username' | 'createdAt' | 'updatedAt';
 
 export type UpdateUserDTO = {
    username: string,

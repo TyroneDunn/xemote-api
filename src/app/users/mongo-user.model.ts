@@ -24,5 +24,5 @@ const userSchema = new Schema<UserDocument>(
    { timestamps: true },
 );
 
-const UserModel = database.model<UserDocument>(USERS_DB_NAME, userSchema);
-export default UserModel;
+const UsersModel = database.model<UserDocument>(USERS_DB_NAME, userSchema);
+export default UsersModel;

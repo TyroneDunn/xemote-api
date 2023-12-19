@@ -8,6 +8,7 @@ import {
 import { API_PORT, API_TITLE, API_VERSION, NODE_ENV } from "../environments";
 import corsOptions from "./cors-options-config";
 import authStrategy from "./auth-strategy-config";
+import usersController from "./users/users.module";
 import productsController from "./products/products.module";
 import inventoryController from "./inventory/inventory.module";
 import ordersController from "./orders/orders.module";
@@ -23,6 +24,7 @@ export const schema: Schema = buildSchema(
 );
 
 const app: Application = newApplication(schema, [
+   usersController,
    productsController,
    inventoryController,
    ordersController,

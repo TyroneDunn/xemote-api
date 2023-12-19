@@ -60,7 +60,13 @@ export const MongoUsersRepository: UsersRepository = {
    },
 
    exists(username: string): Promise<boolean> {
-      return Promise.resolve(false);
+      try {
+         const user: User = await UsersModel.findOne({ username: username });
+         return !!user;
+      }
+      catch (error) {
+         return false;
+      }
    },
 };
 

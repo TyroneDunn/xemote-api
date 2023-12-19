@@ -1,0 +1,121 @@
+import { UsersRepository } from "./users-repository.type";
+import { UsersService } from "./users-service.type";
+import { Request, Response } from "@hals/core";
+import {
+   addRequestPageDataToResponse,
+   CommandResult,
+   mapDeleteResultToResponse,
+   mapErrorToInternalServerErrorResponse,
+   mapUpdateResultToResponse,
+   mapValidationOutcomeToErrorResponse,
+   ValidationOutcome,
+} from "@hals/common";
+import {
+   DeleteUserDTO,
+   GetUserDTO,
+   UpdateUserDTO,
+   UpdateUsersDTO,
+   UsersDTO,
+} from "./users-dtos.type";
+import { User } from "./user.type";
+import { UsersDtosValidator } from "./users-dtos-validator";
+import {
+   mapRequestToDeleteUserDto,
+   mapRequestToGetUserDto,
+   mapRequestToUpdateUserDto,
+   mapRequestToUpdateUsersDto,
+   mapRequestToUsersDto,
+   mapUsersToSuccessResponse,
+   mapUserToSuccessResponse,
+} from "./users-dtos.utility";
+
+export const configureUsersService = (
+   repository: UsersRepository,
+   validator: UsersDtosValidator,
+): UsersService => ({
+   getUser: async (request: Request): Promise<Response> => {
+      const dto: GetUserDTO = mapRequestToGetUserDto(request);
+      const validationOutcome: ValidationOutcome = await validator.validateGetUserDto(dto);
+      if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
+
+      try {
+         const user: User = await repository.getUser(dto);
+         return mapUserToSuccessResponse(user);
+      }
+      catch (error) {
+         return mapErrorToInternalServerErrorResponse(error);
+      }
+   },
+
+   getUsers: async (request: Request): Promise<Response> => {
+      const dto: UsersDTO = await mapRequestToUsersDto(request);
+      const validationOutcome: ValidationOutcome = await validator.validateUsersDto(dto);
+      if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
+
+      try {
+         const users: User[] = await repository.getUsers(dto);
+         const addPageData = (response: Response): Response =>
+            addRequestPageDataToResponse(request, response);
+         return addPageData(mapUsersToSuccessResponse(users));
+      }
+      catch (error) {
+         return mapErrorToInternalServerErrorResponse(error);
+      }
+   },
+
+   updateUser: async (request: Request): Promise<Response> => {
+      const dto: UpdateUserDTO = mapRequestToUpdateUserDto(request);
+      const validationOutcome: ValidationOutcome = await validator.validateUpdateUserDto(dto);
+      if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
+
+      try {
+         const user: User = await repository.updateUser(dto);
+         return mapUserToSuccessResponse(user);
+      }
+      catch (error) {
+         return mapErrorToInternalServerErrorResponse(error);
+      }
+   },
+
+   updateUsers: async (request: Request): Promise<Response> => {
+      const dto: UpdateUsersDTO = mapRequestToUpdateUsersDto(request);
+      const validationOutcome: ValidationOutcome = await validator.validateUpdateUsersDto(dto);
+      if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
+
+      try {
+         const result: CommandResult = await repository.updateUsers(dto);
+         return mapUpdateResultToResponse(result);
+      }
+      catch (error) {
+         return mapErrorToInternalServerErrorResponse(error);
+      }
+   },
+
+   deleteUser: async (request: Request): Promise<Response> => {
+      const dto: DeleteUserDTO = mapRequestToDeleteUserDto(request);
+      const validationOutcome: ValidationOutcome = await validator.validateDeleteUserDto(dto);
+      if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
+
+      try {
+         const result: CommandResult = await repository.deleteUser(dto);
+         return mapDeleteResultToResponse(result);
+      }
+      catch (error) {
+         return mapErrorToInternalServerErrorResponse(error);
+      }
+   },
+
+   deleteUsers: async (request: Request): Promise<Response> => {
+      const dto: UsersDTO = mapRequestToUsersDto(request);
+      const validationOutcome: ValidationOutcome = await validator.validateUsersDto(dto);
+      if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
+
+      try {
+         const result: CommandResult = await repository.deleteUsers(dto);
+         return mapDeleteResultToResponse(result);
+      }
+      catch (error) {
+         return mapErrorToInternalServerErrorResponse(error);
+      }
+   },
+});

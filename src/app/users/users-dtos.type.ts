@@ -2,7 +2,7 @@ import { OrderOption, Page, Timestamps } from "@hals/common";
 
 export type GetUserDTO = { username: string };
 
-export type GetUsersDTO = {
+export type UsersDTO = {
    filter?: UsersFilter,
    timestamps?: Timestamps,
    sort?: UsersSort,
@@ -33,9 +33,3 @@ export type UpdateUsersDTO = {
 };
 
 export type DeleteUserDTO = { username: string };
-
-export type DeleteUsersDTO = {
-   filter?: UsersFilter,
-   timestamps?: Timestamps,
-   sort?: UsersSort,
-};

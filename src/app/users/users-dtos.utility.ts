@@ -1,5 +1,5 @@
 import { Request, Response } from "@hals/core";
-import { GetUserDTO, UsersDTO, UsersSortOption } from "./users-dtos.type";
+import { GetUserDTO, UpdateUserDTO, UsersDTO, UsersSortOption } from "./users-dtos.type";
 import { User } from "./user.type";
 import { mapRequestToPage, mapRequestToTimestamps, OK, OrderOption } from "@hals/common";
 
@@ -43,4 +43,16 @@ export const mapUsersToSuccessResponse = (users: User[]): Response => ({
    status: OK,
    collection: [ users ],
    count: users.length,
+});
+
+export const mapRequestToUpdateUserDto = (request: Request): UpdateUserDTO => ({
+   username: request.paramMap['username'],
+   ...mapRequestToUpdateFields(request),
+});
+
+const mapRequestToUpdateFields = (request: Request) => ({
+   updateFields: {
+      ...request.payload['newUsername'] && { newUsername: request.payload['newUsername'] },
+      ...request.payload['newPassword'] && { newPassword: request.payload['newPassword'] },
+   },
 });

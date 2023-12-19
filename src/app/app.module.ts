@@ -14,10 +14,10 @@ import inventoryController from "./inventory/inventory.module";
 import ordersController from "./orders/orders.module";
 
 export const schema: Schema = buildSchema(
-   `${NODE_ENV as NodeEnvironmentOption}`,
+   NODE_ENV as NodeEnvironmentOption,
    "Express",
-   `${API_TITLE}`,
-   `${API_VERSION}`,
+   API_TITLE,
+   API_VERSION,
    API_PORT,
    corsOptions,
    authStrategy,

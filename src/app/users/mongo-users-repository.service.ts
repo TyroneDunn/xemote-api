@@ -9,11 +9,11 @@ import {
 import { User } from "./user.type";
 import { Promise } from "mongoose";
 import { CommandResult } from "@hals/common";
+import UserModel from "./mongo-user.model";
 
 export const MongoUsersRepository: UsersRepository = {
-   getUser(dto: GetUserDTO): Promise<User> {
-      return Promise.resolve(undefined);
-   },
+   getUser: (dto: GetUserDTO): Promise<User> =>
+      UserModel.findOne({ username: dto.username }),
 
    getUsers(dto: UsersDTO): Promise<User[]> {
       return Promise.resolve([]);

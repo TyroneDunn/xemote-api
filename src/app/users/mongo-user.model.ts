@@ -9,17 +9,20 @@ interface UserDocument extends Document, User {
    hash: string,
 }
 
-const userSchema = new Schema<UserDocument>({
-   username: {
-      type: String,
-      unique: true,
-      required: true,
+const userSchema = new Schema<UserDocument>(
+   {
+      username: {
+         type: String,
+         unique: true,
+         required: true,
+      },
+      hash: {
+         type: String,
+         required: true,
+      },
    },
-   hash: {
-      type: String,
-      required: true,
-   },
-});
+   { timestamps: true },
+);
 
 const UserModel = database.model<UserDocument>(USERS_DB_NAME, userSchema);
 export default UserModel;

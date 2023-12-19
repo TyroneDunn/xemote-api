@@ -54,7 +54,9 @@ export const MongoUsersRepository: UsersRepository = {
    },
 
    deleteUsers(dto: UsersDTO): Promise<CommandResult> {
-      return Promise.resolve("");
+      const filter = mapUsersDtoToUsersFilter(dto);
+      const result: DeleteResult = await UsersModel.deleteMany(filter);
+      return { success: result.acknowledged, affectedCount: result.deletedCount };
    },
 
    exists(username: string): Promise<boolean> {

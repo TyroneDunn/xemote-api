@@ -1,1 +1,0 @@
-export type UserPermissions = 'admin' | 'client';

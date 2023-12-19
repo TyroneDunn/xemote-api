@@ -1,41 +1,41 @@
-import {UserSortOptions} from "./users-sort-options.type";
-import {UserPermissions} from "./user-permissions.type";
-import {Page} from "../../shared/page/page.type";
-import {UsersFilter} from "./users-filter.type";
-import {Timestamps} from "../../shared/timestamps/timestamps.type";
+import { OrderOption, Page, Timestamps } from "@hals/common";
 
 export type GetUserDTO = { username: string };
 
 export type GetUsersDTO = {
-    filter?: UsersFilter,
-    timestamps?: Timestamps,
-    sort?: UserSortOptions,
-    page?: Page,
+   filter?: UsersFilter,
+   timestamps?: Timestamps,
+   sort?: UsersSort,
+   page?: Page,
 };
 
-export type RegisterUserDTO = {
-    username: string,
-    password: string,
+export type UsersFilter = {
+   username?: string,
+   usernameRegex?: string,
+};
+
+export type UsersSort = {
+   field: 'username' | 'createdAt' | 'updatedAt',
+   order: OrderOption,
 };
 
 export type UpdateUserDTO = {
-    username: string,
-    newUsername?: string,
-    newPassword?: string,
-    newPermissions?: string[]
+   username: string,
+   newUsername?: string,
+   newPassword?: string,
+   newPermissions?: string[]
 };
 
 export type UpdateUsersDTO = {
-    filter: UsersFilter,
-    timestamps?: Timestamps,
-    newPermissions: UserPermissions[],
-    sort?: UserSortOptions,
+   filter: UsersFilter,
+   timestamps?: Timestamps,
+   sort?: UsersSort,
 };
 
 export type DeleteUserDTO = { username: string };
 
 export type DeleteUsersDTO = {
-    filter?: UsersFilter,
-    timestamps?: Timestamps,
-    sort?: UserSortOptions,
+   filter?: UsersFilter,
+   timestamps?: Timestamps,
+   sort?: UsersSort,
 };

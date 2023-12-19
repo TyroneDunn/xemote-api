@@ -1,4 +1,4 @@
-import { HashingAlgorithm, LocalStrategy } from "@hals/core";
+import { DatabaseOption, HashingAlgorithm, LocalStrategy } from "@hals/core";
 import {
    HASHING_ALGORITHM,
    HASHING_ITERATIONS,
@@ -6,12 +6,14 @@ import {
    PASSWORD_LENGTH,
    PASSWORD_SALT,
    SESSION_SECRET,
+   USERS_DB_NAME,
+   USERS_DB_OPTION,
 } from "../environments";
 
 const authStrategy: LocalStrategy = {
-   usersDbName: 'users',
+   usersDbName: USERS_DB_NAME,
    usersDbUrl: MONGODB_URL,
-   usersDbOption: "MongoDB",
+   usersDbOption: USERS_DB_OPTION as DatabaseOption,
    sessionSecret: SESSION_SECRET,
    hashingAlgorithm: HASHING_ALGORITHM as HashingAlgorithm,
    hashingIterations: HASHING_ITERATIONS,

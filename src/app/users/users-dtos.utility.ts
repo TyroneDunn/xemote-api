@@ -1,5 +1,11 @@
 import { Request, Response } from "@hals/core";
-import { GetUserDTO, UpdateUserDTO, UsersDTO, UsersSortOption } from "./users-dtos.type";
+import {
+   GetUserDTO,
+   UpdateUserDTO,
+   UpdateUsersDTO,
+   UsersDTO,
+   UsersSortOption,
+} from "./users-dtos.type";
 import { User } from "./user.type";
 import { mapRequestToPage, mapRequestToTimestamps, OK, OrderOption } from "@hals/common";
 
@@ -55,4 +61,10 @@ const mapRequestToUpdateFields = (request: Request) => ({
       ...request.payload['newUsername'] && { newUsername: request.payload['newUsername'] },
       ...request.payload['newPassword'] && { newPassword: request.payload['newPassword'] },
    },
+});
+
+export const mapRequestToUpdateUsersDto = (request: Request): UpdateUsersDTO => ({
+   ...mapRequestToUsersFilter(request),
+   ...mapRequestToTimestamps(request),
+   ...mapRequestToUpdateFields(request),
 });

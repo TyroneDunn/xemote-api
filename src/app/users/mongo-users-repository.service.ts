@@ -18,13 +18,6 @@ import {
 } from "../../environments";
 import { DeleteResult } from "mongodb";
 
-const hashUtility = configureHashUtility(
-   PASSWORD_SALT,
-   HASHING_ITERATIONS,
-   PASSWORD_LENGTH,
-   HASHING_ALGORITHM,
-);
-
 export const MongoUsersRepository: UsersRepository = {
    getUser: (dto: GetUserDTO): Promise<User> =>
       UsersModel.findOne({ username: dto.username }),
@@ -100,6 +93,13 @@ const mapUsersDtoToUsersFilter = (dto: UsersDTO) => ({
       },
    },
 });
+
+const hashUtility = configureHashUtility(
+   PASSWORD_SALT,
+   HASHING_ITERATIONS,
+   PASSWORD_LENGTH,
+   HASHING_ALGORITHM,
+);
 
 const mapUserUpdateFieldsToUpdateQuery = (updateFields: UserUpdateFields) => ({
    ...updateFields.newUsername && { username: updateFields.newUsername },

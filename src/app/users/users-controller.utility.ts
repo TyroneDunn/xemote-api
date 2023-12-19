@@ -1,10 +1,15 @@
 import { Controller, Method, RequestHandler } from "@hals/core";
 import { UsersService } from "./users-service.type";
 
+const UserQueryParamKeys: string[] = [
+   'username',
+   'usernameRegex',
+];
+
 const getUsersMethod = (getUsers: RequestHandler): Method => ({
    type: "GET",
    paramKeys: [],
-   queryParamKeys: [],
+   queryParamKeys: UserQueryParamKeys,
    sideEffects: [],
    middleware: [],
    requestHandler: getUsers,
@@ -31,7 +36,7 @@ const updateUserMethod = (updateUser: RequestHandler): Method => ({
 const deleteUsersMethod = (deleteUsers: RequestHandler): Method => ({
    type: "DELETE",
    paramKeys: [],
-   queryParamKeys: [],
+   queryParamKeys: UserQueryParamKeys,
    sideEffects: [],
    middleware: [],
    requestHandler: deleteUsers,

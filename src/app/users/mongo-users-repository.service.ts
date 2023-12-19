@@ -5,11 +5,25 @@ import {
    UpdateUserDTO,
    UpdateUsersDTO,
    UsersDTO,
+   UserUpdateFields,
 } from "./users-dtos.type";
 import { User } from "./user.type";
 import { Promise } from "mongoose";
-import { CommandResult } from "@hals/common";
+import { CommandResult, configureHashUtility } from "@hals/common";
 import UsersModel from "./mongo-user.model";
+import {
+   HASHING_ALGORITHM,
+   HASHING_ITERATIONS,
+   PASSWORD_LENGTH,
+   PASSWORD_SALT,
+} from "../../environments";
+
+const hashUtility = configureHashUtility(
+   PASSWORD_SALT,
+   HASHING_ITERATIONS,
+   PASSWORD_LENGTH,
+   HASHING_ALGORITHM,
+);
 
 export const MongoUsersRepository: UsersRepository = {
    getUser: (dto: GetUserDTO): Promise<User> =>
@@ -27,9 +41,12 @@ export const MongoUsersRepository: UsersRepository = {
       return query.exec();
    },
 
-   updateUser(dto: UpdateUserDTO): Promise<User> {
-      return Promise.resolve(undefined);
-   },
+   updateUser: (dto: UpdateUserDTO): Promise<User> =>
+      UsersModel.findOneAndUpdate(
+         { username: dto.username },
+         mapUserUpdateFieldsToUpdateQuery(dto.updateFields),
+         { new: true },
+      ),
 
    updateUsers(dto: UpdateUsersDTO): Promise<CommandResult> {
       return Promise.resolve([]);
@@ -77,4 +94,9 @@ const mapUsersDtoToUsersFilter = (dto: UsersDTO) => ({
          },
       },
    },
+});
+
+const mapUserUpdateFieldsToUpdateQuery = (updateFields: UserUpdateFields) => ({
+   ...updateFields.newUsername && { username: updateFields.newUsername },
+   ...updateFields.newPassword && { hash: hashUtility.generateHash(updateFields.newPassword) },
 });

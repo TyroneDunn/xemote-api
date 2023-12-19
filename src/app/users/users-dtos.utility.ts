@@ -3,7 +3,6 @@ import {
    DeleteUserDTO,
    GetUserDTO,
    UpdateUserDTO,
-   UpdateUsersDTO,
    UsersDTO,
    UsersSortOption,
 } from "./users-dtos.type";
@@ -62,12 +61,6 @@ const mapRequestToUpdateFields = (request: Request) => ({
       ...request.payload['newUsername'] && { newUsername: request.payload['newUsername'] },
       ...request.payload['newPassword'] && { newPassword: request.payload['newPassword'] },
    },
-});
-
-export const mapRequestToUpdateUsersDto = (request: Request): UpdateUsersDTO => ({
-   ...mapRequestToUsersFilter(request),
-   ...mapRequestToTimestamps(request),
-   ...mapRequestToUpdateFields(request),
 });
 
 export const mapRequestToDeleteUserDto = (request: Request): DeleteUserDTO =>

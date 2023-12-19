@@ -6,24 +6,16 @@ import {
    CommandResult,
    mapDeleteResultToResponse,
    mapErrorToInternalServerErrorResponse,
-   mapUpdateResultToResponse,
    mapValidationOutcomeToErrorResponse,
    ValidationOutcome,
 } from "@hals/common";
-import {
-   DeleteUserDTO,
-   GetUserDTO,
-   UpdateUserDTO,
-   UpdateUsersDTO,
-   UsersDTO,
-} from "./users-dtos.type";
+import { DeleteUserDTO, GetUserDTO, UpdateUserDTO, UsersDTO } from "./users-dtos.type";
 import { User } from "./user.type";
 import { UsersDtosValidator } from "./users-dtos-validator.utility";
 import {
    mapRequestToDeleteUserDto,
    mapRequestToGetUserDto,
    mapRequestToUpdateUserDto,
-   mapRequestToUpdateUsersDto,
    mapRequestToUsersDto,
    mapUsersToSuccessResponse,
    mapUserToSuccessResponse,
@@ -71,20 +63,6 @@ export const configureUsersService = (
       try {
          const user: User = await repository.updateUser(dto);
          return mapUserToSuccessResponse(user);
-      }
-      catch (error) {
-         return mapErrorToInternalServerErrorResponse(error);
-      }
-   },
-
-   updateUsers: async (request: Request): Promise<Response> => {
-      const dto: UpdateUsersDTO = mapRequestToUpdateUsersDto(request);
-      const validationOutcome: ValidationOutcome = await validator.validateUpdateUsersDto(dto);
-      if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-      try {
-         const result: CommandResult = await repository.updateUsers(dto);
-         return mapUpdateResultToResponse(result);
       }
       catch (error) {
          return mapErrorToInternalServerErrorResponse(error);

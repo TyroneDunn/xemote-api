@@ -1,18 +1,11 @@
 import { ValidationOutcome } from "@hals/common";
-import {
-   DeleteUserDTO,
-   GetUserDTO,
-   UpdateUserDTO,
-   UpdateUsersDTO,
-   UsersDTO,
-} from "./users-dtos.type";
+import { DeleteUserDTO, GetUserDTO, UpdateUserDTO, UsersDTO } from "./users-dtos.type";
 import { UsersRepository } from "./users-repository.type";
 
 export type UsersDtosValidator = {
    validateGetUserDto: (dto: GetUserDTO) => Promise<ValidationOutcome>,
    validateUsersDto: (dto: UsersDTO) => Promise<ValidationOutcome>,
    validateUpdateUserDto: (dto: UpdateUserDTO) => Promise<ValidationOutcome>,
-   validateUpdateUsersDto: (dto: UpdateUsersDTO) => Promise<ValidationOutcome>,
    validateDeleteUserDto: (dto: DeleteUserDTO) => Promise<ValidationOutcome>,
 };
 
@@ -122,61 +115,6 @@ export const configureUsersDtosValidator = (repository: UsersRepository): UsersD
 
       if (!(await repository.exists(dto.username)))
          return { error: { type: "NotFound", message: `User "${dto.username}" not found.` } };
-
-      if (!dto.updateFields)
-         return {
-            error: {
-               type: "BadRequest", message: 'Invalid request. Update field(s)' +
-                  ' required.',
-            },
-         };
-
-      return {};
-   },
-
-   validateUpdateUsersDto: async (dto: UpdateUsersDTO): Promise<ValidationOutcome> => {
-      if (dto.filter.username && dto.filter.usernameRegex)
-         return {
-            error: {
-               type: "BadRequest", message: 'Invalid query. Provide either username or' +
-                  ' username regex.',
-            },
-         };
-
-      if (dto.timestamps) {
-         if (dto.timestamps.createdAt) {
-            if (dto.timestamps.createdAt.start && isNaN(Date.parse(dto.timestamps.createdAt.start)))
-               return {
-                  error: {
-                     type: "BadRequest", message: 'Invalid createdAt start' +
-                        ' date. Provide a valid ISO date string.',
-                  },
-               };
-            if (dto.timestamps.createdAt.end && isNaN(Date.parse(dto.timestamps.createdAt.end)))
-               return {
-                  error: {
-                     type: "BadRequest", message: 'Invalid createdAt end' +
-                        ' date. Provide a valid ISO date string.',
-                  },
-               };
-         }
-         if (dto.timestamps.updatedAt) {
-            if (dto.timestamps.updatedAt.start && isNaN(Date.parse(dto.timestamps.updatedAt.start)))
-               return {
-                  error: {
-                     type: "BadRequest", message: 'Invalid updatedAt start' +
-                        ' date. Provide a valid ISO date string.',
-                  },
-               };
-            if (dto.timestamps.updatedAt.end && isNaN(Date.parse(dto.timestamps.updatedAt.end)))
-               return {
-                  error: {
-                     type: "BadRequest", message: 'Invalid updatedAt end' +
-                        ' date. Provide a valid ISO date string.',
-                  },
-               };
-         }
-      }
 
       if (!dto.updateFields)
          return {

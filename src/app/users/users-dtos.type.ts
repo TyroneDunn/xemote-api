@@ -31,10 +31,4 @@ export type UserUpdateFields = {
    newPassword?: string,
 };
 
-export type UpdateUsersDTO = {
-   filter: UsersFilter,
-   timestamps?: Timestamps,
-   updateFields: UserUpdateFields
-};
-
 export type DeleteUserDTO = { username: string };

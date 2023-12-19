@@ -3,7 +3,6 @@ import {
    DeleteUserDTO,
    GetUserDTO,
    UpdateUserDTO,
-   UpdateUsersDTO,
    UsersDTO,
    UserUpdateFields,
 } from "./users-dtos.type";
@@ -47,10 +46,6 @@ export const MongoUsersRepository: UsersRepository = {
          mapUserUpdateFieldsToUpdateQuery(dto.updateFields),
          { new: true },
       ),
-
-   updateUsers(dto: UpdateUsersDTO): Promise<CommandResult> {
-      return Promise.resolve([]);
-   },
 
    deleteUser(dto: DeleteUserDTO): Promise<CommandResult> {
       return Promise.resolve(undefined);

@@ -23,6 +23,10 @@ export type UsersSortOption = 'username' | 'createdAt' | 'updatedAt';
 
 export type UpdateUserDTO = {
    username: string,
+   updateFields: UserUpdateFields
+};
+
+export type UserUpdateFields = {
    newUsername?: string,
    newPassword?: string,
 };
@@ -30,7 +34,7 @@ export type UpdateUserDTO = {
 export type UpdateUsersDTO = {
    filter: UsersFilter,
    timestamps?: Timestamps,
-   sort?: UsersSort,
+   updateFields: UserUpdateFields
 };
 
 export type DeleteUserDTO = { username: string };

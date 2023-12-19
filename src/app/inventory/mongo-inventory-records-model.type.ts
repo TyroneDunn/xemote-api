@@ -3,23 +3,23 @@ import { Document, Schema } from "mongoose";
 import database from "../../database/mongodb.config";
 
 export interface InventoryRecordDocument extends Document, InventoryRecord {
-    productId: string,
-    count: number,
+   productId: string,
+   count: number,
 }
 
 const InventoryRecordSchema = new Schema(
-    {
-        productId: {
-            type: Schema.Types.ObjectId,
-            ref: "ProductSchema",
-            unique: true,
-            required: true,
-        },
-        count: {
-            type: Number,
-            required: true
-        }
-    },
+   {
+      productId: {
+         type: Schema.Types.ObjectId,
+         ref: "ProductSchema",
+         unique: true,
+         required: true,
+      },
+      count: {
+         type: Number,
+         required: true,
+      },
+   },
    { timestamps: true },
 );
 

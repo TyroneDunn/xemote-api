@@ -1,4 +1,4 @@
-import {User} from "./user.type";
+import { User } from "./user.type";
 import {
     DeleteUserDTO,
     DeleteUsersDTO,
@@ -6,9 +6,9 @@ import {
     GetUsersDTO,
     RegisterUserDTO,
     UpdateUserDTO,
-    UpdateUsersDTO
+    UpdateUsersDTO,
 } from "./users-dtos.type";
-import {UserPermissions} from "./user-permissions.type";
+import { UserPermissions } from "./user-permissions.type";
 
 export type UsersRepository = {
     getUser: (dto: GetUserDTO) => Promise<User>,

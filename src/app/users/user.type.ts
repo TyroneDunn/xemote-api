@@ -1,4 +1,4 @@
-import {UserPermissions} from "./user-permissions.type";
+import { UserPermissions } from "./user-permissions.type";
 
 export type User = {
     _id: string,

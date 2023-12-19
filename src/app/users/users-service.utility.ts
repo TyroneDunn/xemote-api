@@ -18,7 +18,7 @@ import {
    UsersDTO,
 } from "./users-dtos.type";
 import { User } from "./user.type";
-import { UsersDtosValidator } from "./users-dtos-validator";
+import { UsersDtosValidator } from "./users-dtos-validator.utility";
 import {
    mapRequestToDeleteUserDto,
    mapRequestToGetUserDto,

@@ -1,4 +1,4 @@
-import {OrdersRepository} from "./orders-repository.type";
+import { OrdersRepository } from "./orders-repository.type";
 import {
     CreateOrderDTO,
     DeleteOrderDTO,
@@ -6,13 +6,13 @@ import {
     OrdersDTO,
     OrderUpdateFields,
     UpdateOrderDTO,
-    UpdateOrdersDTO
+    UpdateOrdersDTO,
 } from "./orders-dtos.type";
-import {Order} from "./order.type";
+import { Order } from "./order.type";
 import OrdersModel from "./mongo-orders-model.type";
-import {DeleteResult} from "mongodb";
-import {UpdateWriteOpResult} from "mongoose";
-import {CommandResult} from "@hals/common";
+import { DeleteResult } from "mongodb";
+import { UpdateWriteOpResult } from "mongoose";
+import { CommandResult } from "@hals/common";
 
 export const MongoOrdersRepository: OrdersRepository = {
     getOrder: (dto: GetOrderDTO): Promise<Order> => OrdersModel.findById(dto._id),
@@ -116,7 +116,6 @@ const mapOrdersDtoToFilter = (dto: OrdersDTO) => ({
 });
 
 const mapUpdateFieldsToUpdateQuery = (updateFields: OrderUpdateFields) => ({
-    ...updateFields.newClientId && {clientId: updateFields.newClientId},
     ...updateFields.newStatus && {status: updateFields.newStatus},
     ...updateFields.newCart && {cart: updateFields.newCart},
 });

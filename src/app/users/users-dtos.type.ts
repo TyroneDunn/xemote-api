@@ -25,7 +25,6 @@ export type UpdateUserDTO = {
    username: string,
    newUsername?: string,
    newPassword?: string,
-   newPermissions?: string[]
 };
 
 export type UpdateUsersDTO = {

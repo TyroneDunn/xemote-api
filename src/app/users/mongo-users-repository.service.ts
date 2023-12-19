@@ -16,6 +16,7 @@ import {
    PASSWORD_LENGTH,
    PASSWORD_SALT,
 } from "../../environments";
+import { DeleteResult } from "mongodb";
 
 const hashUtility = configureHashUtility(
    PASSWORD_SALT,
@@ -48,7 +49,8 @@ export const MongoUsersRepository: UsersRepository = {
       ),
 
    deleteUser(dto: DeleteUserDTO): Promise<CommandResult> {
-      return Promise.resolve(undefined);
+      const result: DeleteResult = await UsersModel.deleteOne({ username: dto.username });
+      return { success: result.acknowledged, affectedCount: result.deletedCount };
    },
 
    deleteUsers(dto: UsersDTO): Promise<CommandResult> {

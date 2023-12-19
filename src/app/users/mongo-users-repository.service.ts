@@ -7,7 +7,6 @@ import {
    UserUpdateFields,
 } from "./users-dtos.type";
 import { User } from "./user.type";
-import { Promise } from "mongoose";
 import { CommandResult, configureHashUtility } from "@hals/common";
 import UsersModel from "./mongo-user.model";
 import {
@@ -41,18 +40,18 @@ export const MongoUsersRepository: UsersRepository = {
          { new: true },
       ),
 
-   deleteUser: (dto: DeleteUserDTO): Promise<CommandResult> => {
+   deleteUser: async (dto: DeleteUserDTO): Promise<CommandResult> => {
       const result: DeleteResult = await UsersModel.deleteOne({ username: dto.username });
       return { success: result.acknowledged, affectedCount: result.deletedCount };
    },
 
-   deleteUsers: (dto: UsersDTO): Promise<CommandResult> => {
+   deleteUsers: async (dto: UsersDTO): Promise<CommandResult> => {
       const filter = mapUsersDtoToUsersFilter(dto);
       const result: DeleteResult = await UsersModel.deleteMany(filter);
       return { success: result.acknowledged, affectedCount: result.deletedCount };
    },
 
-   exists: (username: string): Promise<boolean> => {
+   exists: async (username: string): Promise<boolean> => {
       try {
          const user: User = await UsersModel.findOne({ username: username });
          return !!user;

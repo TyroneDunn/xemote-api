@@ -9,14 +9,22 @@ import {
 import { User } from "./user.type";
 import { Promise } from "mongoose";
 import { CommandResult } from "@hals/common";
-import UserModel from "./mongo-user.model";
+import UsersModel from "./mongo-user.model";
 
 export const MongoUsersRepository: UsersRepository = {
    getUser: (dto: GetUserDTO): Promise<User> =>
-      UserModel.findOne({ username: dto.username }),
+      UsersModel.findOne({ username: dto.username }),
 
    getUsers(dto: UsersDTO): Promise<User[]> {
-      return Promise.resolve([]);
+      const filter = mapUsersDtoToUsersFilter(dto);
+      const query = UsersModel.find(filter);
+      if (dto.sort)
+         query.sort({ [dto.sort.field]: dto.sort.order === 'asc' ? 1 : -1 });
+      if (dto.page) {
+         query.skip(dto.page.index * dto.page.limit);
+         query.limit(dto.page.limit);
+      }
+      return query.exec();
    },
 
    updateUser(dto: UpdateUserDTO): Promise<User> {
@@ -39,3 +47,34 @@ export const MongoUsersRepository: UsersRepository = {
       return Promise.resolve(false);
    },
 };
+
+const mapUsersDtoToUsersFilter = (dto: UsersDTO) => ({
+   ...dto.filter.username && { username: dto.filter.username },
+   ...dto.filter.usernameRegex && { username: { $regex: dto.filter.usernameRegex, $options: 'i' } },
+   ...dto.timestamps && {
+      ...dto.timestamps.createdAt && {
+         ...(dto.timestamps.createdAt.start && !dto.timestamps.createdAt.end) &&
+         { createdAt: { $gte: dto.timestamps.createdAt.start } },
+         ...(!dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) &&
+         { createdAt: { $lte: dto.timestamps.createdAt.end } },
+         ...(dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
+            createdAt: {
+               $gte: dto.timestamps.createdAt.start,
+               $lte: dto.timestamps.createdAt.end,
+            },
+         },
+      },
+      ...dto.timestamps.updatedAt && {
+         ...(dto.timestamps.updatedAt.start && !dto.timestamps.updatedAt.end) &&
+         { updatedAt: { $gte: dto.timestamps.updatedAt.start } },
+         ...(!dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) &&
+         { updatedAt: { $lte: dto.timestamps.updatedAt.end } },
+         ...(dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
+            updatedAt: {
+               $gte: dto.timestamps.updatedAt.start,
+               $lte: dto.timestamps.updatedAt.end,
+            },
+         },
+      },
+   },
+});

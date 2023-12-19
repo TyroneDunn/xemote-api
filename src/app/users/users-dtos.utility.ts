@@ -38,3 +38,9 @@ const mapRequestToUsersSort = (request: Request) => {
       },
    };
 };
+
+export const mapUsersToSuccessResponse = (users: User[]): Response => ({
+   status: OK,
+   collection: [ users ],
+   count: users.length,
+});

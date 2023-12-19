@@ -1,5 +1,5 @@
-import {OrderStatus, ProductCount} from "./order.type";
-import {NumberRange, OrderOption, Page, Timestamps} from "@hals/common";
+import { OrderStatus, ProductCount } from "./order.type";
+import { NumberRange, OrderOption, Page, Timestamps } from "@hals/common";
 
 export type GetOrderDTO = { _id: string };
 
@@ -35,7 +35,6 @@ export type OrdersFilter = {
 };
 
 export type OrderUpdateFields = {
-    newClientId: string,
     newCart: ProductCount,
     newStatus: OrderStatus,
 };

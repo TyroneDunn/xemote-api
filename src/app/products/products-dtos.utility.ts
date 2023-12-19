@@ -39,8 +39,6 @@ export const mapToUpdateProductDTO = (request: Request): UpdateProductDTO => ({
 export const mapToUpdateProductsDTO = (request: Request): UpdateProductsDTO => ({
    ...mapToProductsFilter(request),
    ...mapRequestToTimestamps(request),
-   ...mapToProductsSort(request),
-   ...mapRequestToPage(request),
    ...mapToUpdateFields(request),
 });
 

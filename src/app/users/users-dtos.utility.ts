@@ -1,5 +1,6 @@
 import { Request, Response } from "@hals/core";
 import {
+   DeleteUserDTO,
    GetUserDTO,
    UpdateUserDTO,
    UpdateUsersDTO,
@@ -68,3 +69,6 @@ export const mapRequestToUpdateUsersDto = (request: Request): UpdateUsersDTO => 
    ...mapRequestToTimestamps(request),
    ...mapRequestToUpdateFields(request),
 });
+
+export const mapRequestToDeleteUserDto = (request: Request): DeleteUserDTO =>
+   ({ username: request.paramMap['username'] });

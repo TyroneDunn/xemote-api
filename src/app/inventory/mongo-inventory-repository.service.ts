@@ -92,10 +92,15 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   deleteRecords: async (dto: InventoryRecordsDTO): Promise<CommandResult> => {
-      const filter = mapDTOToFilter(dto);
-      const result: DeleteResult = await InventoryRecordsModel.deleteMany(filter);
-      return { success: result.acknowledged, affectedCount: result.deletedCount };
+   deleteRecords: async (dto: InventoryRecordsDTO): Promise<CommandResult | Error> => {
+      try {
+         const filter = mapDTOToFilter(dto);
+         const result: DeleteResult = await InventoryRecordsModel.deleteMany(filter);
+         return { success: result.acknowledged, affectedCount: result.deletedCount };
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
    },
 
    exists: async (dto: GetInventoryRecordDTO): Promise<boolean> => {

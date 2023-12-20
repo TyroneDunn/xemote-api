@@ -1,4 +1,4 @@
-import { RequestHandler } from "@hals/core";
+import { RequestHandler } from "@hals/common";
 
 export type InventoryService = {
    getRecord: RequestHandler,

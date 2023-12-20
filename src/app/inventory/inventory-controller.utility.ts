@@ -1,4 +1,4 @@
-import { Controller, Method, RequestHandler } from "@hals/core";
+import { Controller, Method, RequestHandler } from "@hals/common";
 import { InventoryService } from "./inventory-service.type";
 
 export const InventoryQueryParamsKeys: string[] = [

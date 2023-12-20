@@ -55,12 +55,20 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   updateRecord: (dto: UpdateInventoryRecordDTO): Promise<InventoryRecord> =>
-      InventoryRecordsModel.findOneAndUpdate(
-         { productId: dto.productId },
-         mapUpdateFieldsToUpdateQuery(dto.updateFields),
-         { new: true },
-      ),
+   updateRecord: async (dto: UpdateInventoryRecordDTO): Promise<InventoryRecord | Error> => {
+      try {
+         const record: InventoryRecord | null = await InventoryRecordsModel.findOneAndUpdate(
+            { productId: dto.productId },
+            mapUpdateFieldsToUpdateQuery(dto.updateFields),
+            { new: true },
+         );
+         if (!record) return { type: "NotFound", message: 'Inventory record not found.' };
+         return record;
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
+   },
 
    updateRecords: async (dto: UpdateInventoryRecordsDTO): Promise<CommandResult> => {
       const filter = mapUpdateInventoryRecordsDTOToFilter(dto);

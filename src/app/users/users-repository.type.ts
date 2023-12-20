@@ -1,12 +1,12 @@
 import { User } from "./user.type";
 import { DeleteUserDTO, GetUserDTO, UpdateUserDTO, UsersDTO } from "./users-dtos.type";
-import { CommandResult } from "@hals/common";
+import { CommandResult, Error } from "@hals/common";
 
 export type UsersRepository = {
-   getUser: (dto: GetUserDTO) => Promise<User | null>,
-   getUsers: (dto: UsersDTO) => Promise<User[]>,
-   updateUser: (dto: UpdateUserDTO) => Promise<User | null>,
-   deleteUser: (dto: DeleteUserDTO) => Promise<CommandResult>,
-   deleteUsers: (dto: UsersDTO) => Promise<CommandResult>,
+   getUser: (dto: GetUserDTO) => Promise<User | Error>,
+   getUsers: (dto: UsersDTO) => Promise<User[] | Error>,
+   updateUser: (dto: UpdateUserDTO) => Promise<User | Error>,
+   deleteUser: (dto: DeleteUserDTO) => Promise<CommandResult | Error>,
+   deleteUsers: (dto: UsersDTO) => Promise<CommandResult | Error>,
    exists: (username: string) => Promise<boolean>,
 };

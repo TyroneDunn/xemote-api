@@ -71,11 +71,16 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   updateOrders: async (dto: UpdateOrdersDTO): Promise<CommandResult> => {
-      const filter = mapUpdateOrdersDtoToFilter(dto);
-      const updateQuery = mapUpdateFieldsToUpdateQuery(dto.updateFields);
-      const updateResult: UpdateWriteOpResult = await OrdersModel.updateMany(filter, updateQuery);
-      return { success: updateResult.acknowledged, affectedCount: updateResult.modifiedCount };
+   updateOrders: async (dto: UpdateOrdersDTO): Promise<CommandResult | Error> => {
+      try {
+         const filter = mapUpdateOrdersDtoToFilter(dto);
+         const updateQuery = mapUpdateFieldsToUpdateQuery(dto.updateFields);
+         const updateResult: UpdateWriteOpResult = await OrdersModel.updateMany(filter, updateQuery);
+         return { success: updateResult.acknowledged, affectedCount: updateResult.modifiedCount };
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
    },
 
    deleteOrder: async (dto: DeleteOrderDTO): Promise<CommandResult> => {

@@ -7,7 +7,7 @@ import {
    UserUpdateFields,
 } from "./users-dtos.type";
 import { User } from "./user.type";
-import { CommandResult, configureHashUtility } from "@hals/common";
+import { CommandResult, configureHashUtility, Error } from "@hals/common";
 import UsersModel from "./mongo-user.model";
 import {
    HASHING_ALGORITHM,
@@ -51,13 +51,13 @@ export const MongoUsersRepository: UsersRepository = {
       return { success: result.acknowledged, affectedCount: result.deletedCount };
    },
 
-   exists: async (username: string): Promise<boolean> => {
+   exists: async (username: string): Promise<boolean | Error> => {
       try {
          const user: User | null = await UsersModel.findOne({ username: username });
          return !!user;
       }
       catch (error) {
-         return false;
+         return { type: "Internal", message: (error as Error).message };
       }
    },
 };

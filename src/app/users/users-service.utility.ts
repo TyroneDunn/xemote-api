@@ -4,6 +4,8 @@ import { Request, Response } from "@hals/core";
 import {
    addRequestPageDataToResponse,
    CommandResult,
+   Error,
+   isError,
    mapDeleteResultToResponse,
    mapErrorToInternalServerErrorResponse,
    mapValidationOutcomeToErrorResponse,
@@ -87,13 +89,8 @@ export const configureUsersService = (
       const dto: UsersDTO = mapRequestToUsersDto(request);
       const validationOutcome: ValidationOutcome = await validator.validateUsersDto(dto);
       if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-      try {
-         const result: CommandResult = await repository.deleteUsers(dto);
-         return mapDeleteResultToResponse(result);
-      }
-      catch (error) {
-         return mapErrorToInternalServerErrorResponse(error);
-      }
+      const result: CommandResult | Error = await repository.deleteUsers(dto);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      return mapDeleteResultToResponse(result);
    },
 });

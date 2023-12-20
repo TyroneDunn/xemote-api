@@ -70,11 +70,16 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   updateRecords: async (dto: UpdateInventoryRecordsDTO): Promise<CommandResult> => {
-      const filter = mapUpdateInventoryRecordsDTOToFilter(dto);
-      const query = mapUpdateFieldsToUpdateQuery(dto.updateFields);
-      const result: UpdateWriteOpResult = await InventoryRecordsModel.updateMany(filter, query);
-      return { success: result.acknowledged, affectedCount: result.modifiedCount };
+   updateRecords: async (dto: UpdateInventoryRecordsDTO): Promise<CommandResult | Error> => {
+      try {
+         const filter = mapUpdateInventoryRecordsDTOToFilter(dto);
+         const query = mapUpdateFieldsToUpdateQuery(dto.updateFields);
+         const result: UpdateWriteOpResult = await InventoryRecordsModel.updateMany(filter, query);
+         return { success: result.acknowledged, affectedCount: result.modifiedCount };
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
    },
 
    deleteRecord: async (dto: DeleteInventoryRecordDTO): Promise<CommandResult> => {

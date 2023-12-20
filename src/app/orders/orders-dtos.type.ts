@@ -28,10 +28,10 @@ export type UpdateOrdersDTO = {
 };
 
 export type OrdersFilter = {
-    clientId: string,
-    productId: string,
-    status: OrderStatus,
-    countRange: NumberRange,
+    clientId?: string,
+    productId?: string,
+    status?: OrderStatus,
+    countRange?: NumberRange,
 };
 
 export type OrderUpdateFields = {

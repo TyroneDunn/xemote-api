@@ -94,9 +94,9 @@ export const mapProductToSuccessResponse = (product: Product): Response =>
       count: 1,
    });
 
-export const mapProductsToResponse = (products: Product[], status: number): Response =>
+export const mapProductsToSuccessResponse = (products: Product[]): Response =>
    ({
-      status: status,
+      status: OK,
       collection: [ products ],
       count: products.length,
    });

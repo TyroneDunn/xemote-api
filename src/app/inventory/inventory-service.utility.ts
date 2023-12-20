@@ -64,16 +64,10 @@ export const configureInventoryService = (
 
    updateRecords: async (request: Request): Promise<Response> => {
       const dto: UpdateInventoryRecordsDTO = mapRequestToUpdateInventoryRecordsDTO(request);
-
       const validationOutcome: ValidationOutcome = await validator.validateUpdateInventoryRecordsDto(dto);
       if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-      try {
-         const result: CommandResult = await repository.updateRecords(dto);
-         return mapCommandResultToSuccessResponse(result);
-      }
-      catch (error) {
-         return mapErrorToInternalServerErrorResponse(error);
-      }
+      const result: CommandResult | Error = await repository.updateRecords(dto);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      return mapCommandResultToSuccessResponse(result);
    },
 });

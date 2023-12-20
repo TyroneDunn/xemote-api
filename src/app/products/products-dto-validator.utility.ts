@@ -28,85 +28,87 @@ export const configureProductsDtoValidator = (repository: ProductsRepository): P
    },
 
    validateProductsDTO: async (dto: ProductsDTO): Promise<ValidationOutcome> => {
-      if (dto.filter.name && dto.filter.nameRegex)
-         return {
-            error: {
-               type: "BadRequest", message: 'Invalid name. Provide either "name"' +
-                  ' or "nameRegex".',
-            },
-         };
-      if (dto.filter.type && dto.filter.typeRegex)
-         return {
-            error: {
-               type: "BadRequest", message: 'Invalid type. Provide either "type"' +
-                  ' or "typeRegex".',
-            },
-         };
-      if (dto.filter.type)
-         if (dto.filter.type !== "Xemote Gateway"
-            && dto.filter.type !== "Xemote Accessory"
-            && dto.filter.type !== "Wireless Temperature Sensor"
-            && dto.filter.type !== "Wireless Humidity Sensor"
-            && dto.filter.type !== "Wireless AC Current Meter"
-            && dto.filter.type !== "Wireless Event-Based Sensor"
-            && dto.filter.type !== "Wireless Infrared Beam Sensor"
-            && dto.filter.type !== "Wireless 4-30mA Sensor")
+      if (dto.filter) {
+         if (dto.filter.name && dto.filter.nameRegex)
             return {
                error: {
-                  type: "BadRequest", message: 'Invalid filter type. Type must be "Xemote' +
-                     ' Accessory", "Xemote Gateway", "Wireless Temperature Sensor", "Wireless' +
-                     ' Humidity Sensor", "Wireless Ac Current Meter", "Wireless Event-Based' +
-                     ' Sensor", "Wireless Infrared Beam Sensor", or "Wireless 4-30mA Sensor".',
+                  type: "BadRequest", message: 'Invalid name. Provide either "name"' +
+                     ' or "nameRegex".',
                },
             };
-      if (dto.filter.costPriceRange) {
-         if (dto.filter.costPriceRange.start && (dto.filter.costPriceRange.start < 0))
+         if (dto.filter.type && dto.filter.typeRegex)
             return {
                error: {
-                  type: "BadRequest", message: 'Invalid cost price range. Cost price range' +
-                     ' start value must be greater than 0.',
+                  type: "BadRequest", message: 'Invalid type. Provide either "type"' +
+                     ' or "typeRegex".',
                },
             };
-         if (dto.filter.costPriceRange.end && (dto.filter.costPriceRange.end < 0))
-            return {
-               error: {
-                  type: "BadRequest", message: 'Invalid cost price range. Cost price range' +
-                     ' end value must be greater than 0.',
-               },
-            };
-         if ((dto.filter.costPriceRange.start && dto.filter.costPriceRange.end)
-            && (dto.filter.costPriceRange.end < dto.filter.costPriceRange.start))
-            return {
-               error: {
-                  type: "BadRequest", message: 'Invalid cost price range. Cost' +
-                     ' price range' +
-                     ' end value must be greater than start value.',
-               },
-            };
-      }
-      if (dto.filter.markupRange) {
-         if (dto.filter.markupRange.start && (dto.filter.markupRange.start < 0))
-            return {
-               error: {
-                  type: "BadRequest", message: 'Invalid markup range. Markup range' +
-                     ' start value must be greater than 0.',
-               },
-            };
-         if (dto.filter.markupRange.end && (dto.filter.markupRange.end < 0))
-            return {
-               error: {
-                  type: "BadRequest", message: 'Invalid markup range. Markup range' +
-                     ' end value must be greater than 0.',
-               },
-            };
-         if ((dto.filter.markupRange.start && dto.filter.markupRange.end)
-            && (dto.filter.markupRange.end < dto.filter.markupRange.start))
-            return {
-               error: {
-                  type: "BadRequest", message: 'Invalid markup range. Markup range' +
-                     ' end value must be greater than start value.',
-               },
-            };
+         if (dto.filter.type)
+            if (dto.filter.type !== "Xemote Gateway"
+               && dto.filter.type !== "Xemote Accessory"
+               && dto.filter.type !== "Wireless Temperature Sensor"
+               && dto.filter.type !== "Wireless Humidity Sensor"
+               && dto.filter.type !== "Wireless AC Current Meter"
+               && dto.filter.type !== "Wireless Event-Based Sensor"
+               && dto.filter.type !== "Wireless Infrared Beam Sensor"
+               && dto.filter.type !== "Wireless 4-30mA Sensor")
+               return {
+                  error: {
+                     type: "BadRequest", message: 'Invalid filter type. Type must be "Xemote' +
+                        ' Accessory", "Xemote Gateway", "Wireless Temperature Sensor", "Wireless' +
+                        ' Humidity Sensor", "Wireless Ac Current Meter", "Wireless Event-Based' +
+                        ' Sensor", "Wireless Infrared Beam Sensor", or "Wireless 4-30mA Sensor".',
+                  },
+               };
+         if (dto.filter.costPriceRange) {
+            if (dto.filter.costPriceRange.start && (dto.filter.costPriceRange.start < 0))
+               return {
+                  error: {
+                     type: "BadRequest", message: 'Invalid cost price range. Cost price range' +
+                        ' start value must be greater than 0.',
+                  },
+               };
+            if (dto.filter.costPriceRange.end && (dto.filter.costPriceRange.end < 0))
+               return {
+                  error: {
+                     type: "BadRequest", message: 'Invalid cost price range. Cost price range' +
+                        ' end value must be greater than 0.',
+                  },
+               };
+            if ((dto.filter.costPriceRange.start && dto.filter.costPriceRange.end)
+               && (dto.filter.costPriceRange.end < dto.filter.costPriceRange.start))
+               return {
+                  error: {
+                     type: "BadRequest", message: 'Invalid cost price range. Cost' +
+                        ' price range' +
+                        ' end value must be greater than start value.',
+                  },
+               };
+         }
+         if (dto.filter.markupRange) {
+            if (dto.filter.markupRange.start && (dto.filter.markupRange.start < 0))
+               return {
+                  error: {
+                     type: "BadRequest", message: 'Invalid markup range. Markup range' +
+                        ' start value must be greater than 0.',
+                  },
+               };
+            if (dto.filter.markupRange.end && (dto.filter.markupRange.end < 0))
+               return {
+                  error: {
+                     type: "BadRequest", message: 'Invalid markup range. Markup range' +
+                        ' end value must be greater than 0.',
+                  },
+               };
+            if ((dto.filter.markupRange.start && dto.filter.markupRange.end)
+               && (dto.filter.markupRange.end < dto.filter.markupRange.start))
+               return {
+                  error: {
+                     type: "BadRequest", message: 'Invalid markup range. Markup range' +
+                        ' end value must be greater than start value.',
+                  },
+               };
+         }
       }
 
       if (dto.timestamps) {

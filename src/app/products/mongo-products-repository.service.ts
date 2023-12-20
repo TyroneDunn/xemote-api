@@ -85,9 +85,14 @@ export const MongoProductsRepository: ProductsRepository = {
       }
    },
 
-   deleteProduct: async (dto: DeleteProductDTO): Promise<CommandResult> => {
-      const result: DeleteResult = await ProductModel.deleteOne({ _id: dto._id });
-      return { success: result.acknowledged, affectedCount: result.deletedCount };
+   deleteProduct: async (dto: DeleteProductDTO): Promise<CommandResult | Error> => {
+      try {
+         const result: DeleteResult = await ProductModel.deleteOne({ _id: dto._id });
+         return { success: result.acknowledged, affectedCount: result.deletedCount };
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
    },
 
    deleteProducts: async (dto: ProductsDTO): Promise<CommandResult> => {

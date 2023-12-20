@@ -1,5 +1,13 @@
 import { Product, ProductType } from "./product.type";
-import { HttpStatusCodes, Request, Response } from "@hals/core";
+import {
+   mapRequestToPage,
+   mapRequestToTimestamps,
+   NumberRange,
+   OK,
+   OrderOption,
+   Request,
+   Response,
+} from "@hals/common";
 import {
    CreateProductDTO,
    DeleteProductDTO,
@@ -10,7 +18,6 @@ import {
    UpdateProductsDTO,
 } from "./products-dtos.type";
 import { Price } from "./price.type";
-import { mapRequestToPage, mapRequestToTimestamps, NumberRange, OrderOption } from "@hals/common";
 
 export const mapToGetProductDTO = (request: Request): GetProductDTO => ({
    _id: request.paramMap['id'],
@@ -82,7 +89,7 @@ const mapToUpdateFields = (request: Request) => ({
 
 export const mapProductToSuccessResponse = (product: Product): Response =>
    ({
-      status: HttpStatusCodes.OK,
+      status: OK,
       collection: [ product ],
       count: 1,
    });

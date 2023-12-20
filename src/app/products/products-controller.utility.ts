@@ -1,4 +1,4 @@
-import { Controller, Method, RequestHandler } from "@hals/core";
+import { Controller, Method, RequestHandler } from "@hals/common";
 import { ProductsService } from "./products-service.type";
 
 export const ProductsQueryParamKeys: string[] = [

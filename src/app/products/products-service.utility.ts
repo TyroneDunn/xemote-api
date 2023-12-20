@@ -7,7 +7,6 @@ import {
    mapErrorToInternalServerErrorResponse,
    mapUpdateResultToResponse,
    mapValidationOutcomeToErrorResponse,
-   OK,
    Request,
    Response,
    ValidationOutcome,
@@ -16,7 +15,7 @@ import { ProductsRepository } from "./products-repository.type";
 import { ProductsDtoValidator } from "./products-dto-validator.utility";
 import { Product } from "./product.type";
 import {
-   mapProductsToResponse,
+   mapProductsToSuccessResponse,
    mapProductToSuccessResponse,
    mapRequestToProductsDTO,
    mapToCreateProductDTO,
@@ -54,16 +53,11 @@ export const configureProductsService = (
          const dto: ProductsDTO = mapRequestToProductsDTO(request);
          const validationOutcome: ValidationOutcome = await validator.validateProductsDTO(dto);
          if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-         try {
-            const products: Product[] = await repository.getProducts(dto);
-            const addPageData = (response: Response): Response =>
-               addRequestPageDataToResponse(request, response);
-            return addPageData(mapProductsToResponse(products, OK));
-         }
-         catch (error) {
-            return mapErrorToInternalServerErrorResponse(error);
-         }
+         const result: Product[] | Error = await repository.getProducts(dto);
+         if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+         const addPageData = (response: Response): Response =>
+            addRequestPageDataToResponse(request, response);
+         return addPageData(mapProductsToSuccessResponse(result));
       },
 
       createProduct: async (request: Request): Promise<Response> => {

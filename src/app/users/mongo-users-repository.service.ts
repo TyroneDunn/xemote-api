@@ -33,12 +33,20 @@ export const MongoUsersRepository: UsersRepository = {
       return query.exec();
    },
 
-   updateUser: async (dto: UpdateUserDTO): Promise<User | null> =>
-      UsersModel.findOneAndUpdate(
-         { username: dto.username },
-         mapUserUpdateFieldsToUpdateQuery(dto.updateFields),
-         { new: true },
-      ),
+   updateUser: async (dto: UpdateUserDTO): Promise<User | Error> => {
+      try {
+         const user: User | null = await UsersModel.findOneAndUpdate(
+            { username: dto.username },
+            mapUserUpdateFieldsToUpdateQuery(dto.updateFields),
+            { new: true },
+         );
+         if (!user) return { type: "NotFound", message: 'User not found.' };
+         return user as User;
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
+   },
 
    deleteUser: async (dto: DeleteUserDTO): Promise<CommandResult | Error> => {
       try {

@@ -18,7 +18,7 @@ import {
 import { DeleteResult } from "mongodb";
 
 export const MongoUsersRepository: UsersRepository = {
-   getUser: (dto: GetUserDTO): Promise<User> =>
+   getUser: (dto: GetUserDTO): Promise<User | null> =>
       UsersModel.findOne({ username: dto.username }),
 
    getUsers(dto: UsersDTO): Promise<User[]> {
@@ -33,7 +33,7 @@ export const MongoUsersRepository: UsersRepository = {
       return query.exec();
    },
 
-   updateUser: (dto: UpdateUserDTO): Promise<User> =>
+   updateUser: async (dto: UpdateUserDTO): Promise<User | null> =>
       UsersModel.findOneAndUpdate(
          { username: dto.username },
          mapUserUpdateFieldsToUpdateQuery(dto.updateFields),
@@ -53,7 +53,7 @@ export const MongoUsersRepository: UsersRepository = {
 
    exists: async (username: string): Promise<boolean> => {
       try {
-         const user: User = await UsersModel.findOne({ username: username });
+         const user: User | null = await UsersModel.findOne({ username: username });
          return !!user;
       }
       catch (error) {
@@ -63,8 +63,15 @@ export const MongoUsersRepository: UsersRepository = {
 };
 
 const mapUsersDtoToUsersFilter = (dto: UsersDTO) => ({
-   ...dto.filter.username && { username: dto.filter.username },
-   ...dto.filter.usernameRegex && { username: { $regex: dto.filter.usernameRegex, $options: 'i' } },
+   ...dto.filter && {
+      ...dto.filter.username && { username: dto.filter.username },
+      ...dto.filter.usernameRegex && {
+         username: {
+            $regex: dto.filter.usernameRegex,
+            $options: 'i',
+         },
+      },
+   },
    ...dto.timestamps && {
       ...dto.timestamps.createdAt && {
          ...(dto.timestamps.createdAt.start && !dto.timestamps.createdAt.end) &&

@@ -2,8 +2,8 @@ import { configureInventoryController, InventoryController } from "./inventory-c
 import { configureInventoryService } from "./inventory-service.utility";
 import { MongoInventoryRepository } from "./mongo-inventory-repository.service";
 import {
-    configureInventoryRecordsDtosValidator,
-    InventoryRecordsDtosValidator,
+   configureInventoryRecordsDtosValidator,
+   InventoryRecordsDtosValidator,
 } from "./inventory-records-dtos-validator.utility";
 import { InventoryRepository } from "./inventory-repository.type";
 import { InventoryService } from "./inventory-service.type";

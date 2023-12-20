@@ -1,8 +1,8 @@
 export type Order = {
-    _id: string
-    clientId: string,
-    cart: ProductCount,
-    status: OrderStatus,
+   _id: string
+   clientId: string,
+   cart: ProductCount,
+   status: OrderStatus,
 };
 
 export type ProductCount = Record<string, number>;

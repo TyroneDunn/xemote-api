@@ -19,13 +19,14 @@ export const configureUsersDtosValidator = (repository: UsersRepository): UsersD
    },
 
    validateUsersDto: async (dto: UsersDTO): Promise<ValidationOutcome> => {
-      if (dto.filter.username && dto.filter.usernameRegex)
-         return {
-            error: {
-               type: "BadRequest", message: 'Invalid query. Provide either username or' +
-                  ' username regex.',
-            },
-         };
+      if (dto.filter)
+         if (dto.filter.username && dto.filter.usernameRegex)
+            return {
+               error: {
+                  type: "BadRequest", message: 'Invalid query. Provide either username or' +
+                     ' username regex.',
+               },
+            };
 
       if (dto.timestamps) {
          if (dto.timestamps.createdAt) {

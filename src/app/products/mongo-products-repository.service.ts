@@ -44,7 +44,7 @@ export const MongoProductsRepository: ProductsRepository = {
       }
    },
 
-   createProduct: (dto: CreateProductDTO): Promise<Product | Error> => {
+   createProduct: async (dto: CreateProductDTO): Promise<Product | Error> => {
       try {
          return new ProductModel({
             name: dto.name,
@@ -58,12 +58,20 @@ export const MongoProductsRepository: ProductsRepository = {
       }
    },
 
-   updateProduct: (dto: UpdateProductDTO): Promise<Product> =>
-      ProductModel.findOneAndUpdate(
-         { _id: dto._id },
-         mapUpdateFieldsToUpdateQuery(dto.updateFields),
-         { new: true },
-      ),
+   updateProduct: async (dto: UpdateProductDTO): Promise<Product | Error> => {
+      try {
+         const product: Product | null = await ProductModel.findOneAndUpdate(
+            { _id: dto._id },
+            mapUpdateFieldsToUpdateQuery(dto.updateFields),
+            { new: true },
+         );
+         if (!product) return { type: "NotFound", message: 'Product not found.' };
+         return product;
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
+   },
 
    updateProducts: async (dto: UpdateProductsDTO): Promise<CommandResult> => {
       const filter = mapUpdateProductsDtoToFilter(dto);

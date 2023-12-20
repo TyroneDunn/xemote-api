@@ -115,15 +115,17 @@ export const MongoInventoryRepository: InventoryRepository = {
 };
 
 const mapDTOToFilter = (dto: InventoryRecordsDTO) => ({
-   ...dto.filter.countRange && {
-      ...(dto.filter.countRange.start && !dto.filter.countRange.end) &&
-      { count: { $gte: dto.filter.countRange.start } },
-      ...(!dto.filter.countRange.start && dto.filter.countRange.end) &&
-      { count: { $lte: dto.filter.countRange.end } },
-      ...(dto.filter.countRange.start && dto.filter.countRange.end) && {
-         count: {
-            $gte: dto.filter.countRange.start,
-            $lte: dto.filter.countRange.end,
+   ...dto.filter && {
+      ...dto.filter.countRange && {
+         ...(dto.filter.countRange.start && !dto.filter.countRange.end) &&
+         { count: { $gte: dto.filter.countRange.start } },
+         ...(!dto.filter.countRange.start && dto.filter.countRange.end) &&
+         { count: { $lte: dto.filter.countRange.end } },
+         ...(dto.filter.countRange.start && dto.filter.countRange.end) && {
+            count: {
+               $gte: dto.filter.countRange.start,
+               $lte: dto.filter.countRange.end,
+            },
          },
       },
    },

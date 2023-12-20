@@ -26,16 +26,21 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   getRecords: (dto: InventoryRecordsDTO): Promise<InventoryRecord[]> => {
-      const filter = mapDTOToFilter(dto);
-      const query = InventoryRecordsModel.find(filter);
-      if (dto.sort !== undefined)
-         query.sort({ [dto.sort.field]: dto.sort.order === 'asc' ? 1 : -1 });
-      if (dto.page !== undefined) {
-         query.skip(dto.page.index * dto.page.limit);
-         query.limit(dto.page.limit);
+   getRecords: async (dto: InventoryRecordsDTO): Promise<InventoryRecord[] | Error> => {
+      try {
+         const filter = mapDTOToFilter(dto);
+         const query = InventoryRecordsModel.find(filter);
+         if (dto.sort !== undefined)
+            query.sort({ [dto.sort.field]: dto.sort.order === 'asc' ? 1 : -1 });
+         if (dto.page !== undefined) {
+            query.skip(dto.page.index * dto.page.limit);
+            query.limit(dto.page.limit);
+         }
+         return query.exec();
       }
-      return query.exec();
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
    },
 
    createRecord: (dto: CreateInventoryRecordDTO): Promise<InventoryRecord> =>

@@ -104,13 +104,13 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   exists: async (dto: GetOrderDTO): Promise<boolean> => {
+   exists: async (dto: GetOrderDTO): Promise<boolean | Error> => {
       try {
-         const order: Order = await OrdersModel.findById(dto._id);
+         const order: Order | null = await OrdersModel.findById(dto._id);
          return !!order;
       }
       catch (error) {
-         return false;
+         return { type: "Internal", message: (error as Error).message };
       }
    },
 };

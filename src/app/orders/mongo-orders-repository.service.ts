@@ -93,10 +93,15 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   deleteOrders: async (dto: OrdersDTO): Promise<CommandResult> => {
-      const filter = mapOrdersDtoToFilter(dto);
-      const result: DeleteResult = await OrdersModel.deleteMany(filter);
-      return { success: result.acknowledged, affectedCount: result.deletedCount };
+   deleteOrders: async (dto: OrdersDTO): Promise<CommandResult | Error> => {
+      try {
+         const filter = mapOrdersDtoToFilter(dto);
+         const result: DeleteResult = await OrdersModel.deleteMany(filter);
+         return { success: result.acknowledged, affectedCount: result.deletedCount };
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
    },
 
    exists: async (dto: GetOrderDTO): Promise<boolean> => {

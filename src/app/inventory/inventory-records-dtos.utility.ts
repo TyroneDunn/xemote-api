@@ -1,4 +1,12 @@
-import { HttpStatusCodes, Request, Response } from "@hals/core";
+import {
+   mapRequestToPage,
+   mapRequestToTimestamps,
+   NumberRange,
+   OK,
+   OrderOption,
+   Request,
+   Response,
+} from "@hals/common";
 import {
    GetInventoryRecordDTO,
    InventoryRecordsDTO,
@@ -7,13 +15,12 @@ import {
    UpdateInventoryRecordsDTO,
 } from "./inventory-records-dtos.type";
 import { InventoryRecord } from "./inventory-record.type";
-import { mapRequestToPage, mapRequestToTimestamps, NumberRange, OrderOption } from "@hals/common";
 
 export const mapRequestToGetInventoryRecordDTO = (request: Request): GetInventoryRecordDTO =>
    ({ productId: request.paramMap['id'] });
 
 export const mapInventoryRecordToSuccessResponse = (record: InventoryRecord): Response => ({
-   status: HttpStatusCodes.OK,
+   status: OK,
    collection: [ record ],
    count: 1,
 });
@@ -43,7 +50,7 @@ const mapToInventoryRecordsSort = (request: Request) => ({
 });
 
 export const mapInventoryRecordsToSuccessResponse = (records: InventoryRecord[]): Response => ({
-   status: HttpStatusCodes.OK,
+   status: OK,
    collection: records,
    count: records.length,
 });
@@ -53,7 +60,7 @@ export const mapRequestToUpdateInventoryRecordDTO = (request: Request): UpdateIn
    ...mapRequestToInventoryRecordUpdateFields(request.payload),
 });
 
-const mapRequestToInventoryRecordUpdateFields = (payload: Object) => ({
+const mapRequestToInventoryRecordUpdateFields = (payload: any) => ({
    updateFields: {
       ...payload['newProductId'] && { newProductId: payload['newProductId'] },
       ...payload['newCount'] && { newCount: payload['newCount'] },

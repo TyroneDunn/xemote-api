@@ -75,14 +75,9 @@ export const configureUsersService = (
       const dto: DeleteUserDTO = mapRequestToDeleteUserDto(request);
       const validationOutcome: ValidationOutcome = await validator.validateDeleteUserDto(dto);
       if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-      try {
-         const result: CommandResult = await repository.deleteUser(dto);
-         return mapDeleteResultToResponse(result);
-      }
-      catch (error) {
-         return mapErrorToInternalServerErrorResponse(error);
-      }
+      const result: CommandResult | Error = await repository.deleteUser(dto);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      return mapDeleteResultToResponse(result);
    },
 
    deleteUsers: async (request: Request): Promise<Response> => {

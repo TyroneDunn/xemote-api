@@ -86,17 +86,11 @@ export const configureOrdersService = (
 
    deleteOrder: async (request: Request): Promise<Response> => {
       const dto: DeleteOrderDTO = mapRequestToDeleteOrderDTO(request);
-
       const validationOutcome: ValidationOutcome = await validator.validateDeleteOrderDto(dto);
       if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-      try {
-         const result: CommandResult = await repository.deleteOrder(dto);
-         return mapCommandResultToSuccessResponse(result);
-      }
-      catch (error) {
-         return mapErrorToInternalServerErrorResponse(error);
-      }
+      const result: CommandResult | Error = await repository.deleteOrder(dto);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      return mapCommandResultToSuccessResponse(result);
    },
 
    deleteOrders: async (request: Request): Promise<Response> => {

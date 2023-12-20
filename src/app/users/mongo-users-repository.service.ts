@@ -45,10 +45,15 @@ export const MongoUsersRepository: UsersRepository = {
       return { success: result.acknowledged, affectedCount: result.deletedCount };
    },
 
-   deleteUsers: async (dto: UsersDTO): Promise<CommandResult> => {
-      const filter = mapUsersDtoToUsersFilter(dto);
-      const result: DeleteResult = await UsersModel.deleteMany(filter);
-      return { success: result.acknowledged, affectedCount: result.deletedCount };
+   deleteUsers: async (dto: UsersDTO): Promise<CommandResult | Error> => {
+      try {
+         const filter = mapUsersDtoToUsersFilter(dto);
+         const result: DeleteResult = await UsersModel.deleteMany(filter);
+         return { success: result.acknowledged, affectedCount: result.deletedCount };
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
    },
 
    exists: async (username: string): Promise<boolean | Error> => {

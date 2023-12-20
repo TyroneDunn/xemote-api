@@ -1,4 +1,17 @@
-import { HttpStatusCodes, Request, Response } from "@hals/core";
+import {
+   addRequestPageDataToResponse,
+   CommandResult,
+   Error,
+   isError,
+   mapDeleteResultToResponse,
+   mapErrorToInternalServerErrorResponse,
+   mapUpdateResultToResponse,
+   mapValidationOutcomeToErrorResponse,
+   OK,
+   Request,
+   Response,
+   ValidationOutcome,
+} from "@hals/common";
 import { ProductsRepository } from "./products-repository.type";
 import { ProductsDtoValidator } from "./products-dto-validator.utility";
 import { Product } from "./product.type";
@@ -21,15 +34,6 @@ import {
    UpdateProductsDTO,
 } from "./products-dtos.type";
 import { ProductsService } from "./products-service.type";
-import {
-   addRequestPageDataToResponse,
-   CommandResult,
-   mapDeleteResultToResponse,
-   mapErrorToInternalServerErrorResponse,
-   mapUpdateResultToResponse,
-   mapValidationOutcomeToErrorResponse,
-   ValidationOutcome,
-} from "@hals/common";
 import { InventoryRepository } from "../inventory/inventory-repository.type";
 
 export const configureProductsService = (
@@ -41,14 +45,9 @@ export const configureProductsService = (
          const dto: GetProductDTO = mapToGetProductDTO(request);
          const validationOutcome: ValidationOutcome = await validator.validateGetProductDTO(dto);
          if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-         try {
-            const product: Product = await repository.getProduct(dto);
-            return mapProductToSuccessResponse(product);
-         }
-         catch (error) {
-            return mapErrorToInternalServerErrorResponse(error);
-         }
+         const result: Product | Error = await repository.getProduct(dto);
+         if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+         return mapProductToSuccessResponse(result);
       },
 
       getProducts: async (request: Request): Promise<Response> => {
@@ -60,7 +59,7 @@ export const configureProductsService = (
             const products: Product[] = await repository.getProducts(dto);
             const addPageData = (response: Response): Response =>
                addRequestPageDataToResponse(request, response);
-            return addPageData(mapProductsToResponse(products, HttpStatusCodes.OK));
+            return addPageData(mapProductsToResponse(products, OK));
          }
          catch (error) {
             return mapErrorToInternalServerErrorResponse(error);

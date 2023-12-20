@@ -1,7 +1,7 @@
 import { Document, Schema } from 'mongoose';
-import { User } from "./user.type";
 import database from "../../database/mongodb.config";
 import { USERS_DB_NAME } from "../../environments";
+import { User } from "@hals/common";
 
 interface UserDocument extends Document, User {
    _id: string,

@@ -1,6 +1,5 @@
-import { User } from "./user.type";
 import { DeleteUserDTO, GetUserDTO, UpdateUserDTO, UsersDTO } from "./users-dtos.type";
-import { CommandResult, Error } from "@hals/common";
+import { CommandResult, Error, User } from "@hals/common";
 
 export type UsersRepository = {
    getUser: (dto: GetUserDTO) => Promise<User | Error>,

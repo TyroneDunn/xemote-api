@@ -10,10 +10,10 @@ import {
    mapValidationOutcomeToErrorResponse,
    Request,
    Response,
+   User,
    ValidationOutcome,
 } from "@hals/common";
 import { DeleteUserDTO, GetUserDTO, UpdateUserDTO, UsersDTO } from "./users-dtos.type";
-import { User } from "./user.type";
 import { UsersDtosValidator } from "./users-dtos-validator.utility";
 import {
    mapRequestToDeleteUserDto,

@@ -55,17 +55,11 @@ export const configureInventoryService = (
 
    updateRecord: async (request: Request): Promise<Response> => {
       const dto: UpdateInventoryRecordDTO = mapRequestToUpdateInventoryRecordDTO(request);
-
       const validationOutcome: ValidationOutcome = await validator.validateUpdateInventoryRecordDto(dto);
       if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-      try {
-         const record: InventoryRecord = await repository.updateRecord(dto);
-         return mapInventoryRecordToSuccessResponse(record);
-      }
-      catch (error) {
-         return mapErrorToInternalServerErrorResponse(error);
-      }
+      const result: InventoryRecord | Error = await repository.updateRecord(dto);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      return mapInventoryRecordToSuccessResponse(result);
    },
 
    updateRecords: async (request: Request): Promise<Response> => {

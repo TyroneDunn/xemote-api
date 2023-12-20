@@ -27,16 +27,21 @@ export const MongoProductsRepository: ProductsRepository = {
       }
    },
 
-   getProducts: (dto: ProductsDTO): Promise<Product[]> => {
-      const filter = mapProductsDtoToProductsFilter(dto);
-      const query = ProductModel.find(filter);
-      if (dto.sort !== undefined)
-         query.sort({ [dto.sort.field]: dto.sort.order === 'asc' ? 1 : -1 });
-      if (dto.page !== undefined) {
-         query.skip(dto.page.index * dto.page.limit);
-         query.limit(dto.page.limit);
+   getProducts: async (dto: ProductsDTO): Promise<Product[] | Error> => {
+      try {
+         const filter = mapProductsDtoToProductsFilter(dto);
+         const query = ProductModel.find(filter);
+         if (dto.sort !== undefined)
+            query.sort({ [dto.sort.field]: dto.sort.order === 'asc' ? 1 : -1 });
+         if (dto.page !== undefined) {
+            query.skip(dto.page.index * dto.page.limit);
+            query.limit(dto.page.limit);
+         }
+         return query.exec();
       }
-      return query.exec();
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
    },
 
    createProduct: (dto: CreateProductDTO): Promise<Product> =>

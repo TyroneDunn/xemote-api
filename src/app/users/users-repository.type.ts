@@ -8,5 +8,5 @@ export type UsersRepository = {
    updateUser: (dto: UpdateUserDTO) => Promise<User | Error>,
    deleteUser: (dto: DeleteUserDTO) => Promise<CommandResult | Error>,
    deleteUsers: (dto: UsersDTO) => Promise<CommandResult | Error>,
-   exists: (username: string) => Promise<boolean>,
+   exists: (username: string) => Promise<boolean | Error>,
 };

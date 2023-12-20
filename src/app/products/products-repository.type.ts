@@ -7,15 +7,15 @@ import {
    UpdateProductDTO,
    UpdateProductsDTO,
 } from "./products-dtos.type";
-import { CommandResult } from "@hals/common";
+import { CommandResult, Error } from "@hals/common";
 
 export type ProductsRepository = {
-   getProduct: (dto: GetProductDTO) => Promise<Product>,
-   getProducts: (dto: ProductsDTO) => Promise<Product[]>,
-   createProduct: (dto: CreateProductDTO) => Promise<Product>,
-   updateProduct: (dto: UpdateProductDTO) => Promise<Product>,
-   updateProducts: (dto: UpdateProductsDTO) => Promise<CommandResult>,
-   deleteProduct: (dto: DeleteProductDTO) => Promise<CommandResult>,
-   deleteProducts: (dto: ProductsDTO) => Promise<CommandResult>,
-   exists: (dto: GetProductDTO) => Promise<boolean>,
+   getProduct: (dto: GetProductDTO) => Promise<Product | Error>,
+   getProducts: (dto: ProductsDTO) => Promise<Product[] | Error>,
+   createProduct: (dto: CreateProductDTO) => Promise<Product | Error>,
+   updateProduct: (dto: UpdateProductDTO) => Promise<Product | Error>,
+   updateProducts: (dto: UpdateProductsDTO) => Promise<CommandResult | Error>,
+   deleteProduct: (dto: DeleteProductDTO) => Promise<CommandResult | Error>,
+   deleteProducts: (dto: ProductsDTO) => Promise<CommandResult | Error>,
+   exists: (dto: GetProductDTO) => Promise<boolean | Error>,
 };

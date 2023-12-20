@@ -44,20 +44,13 @@ export const configureInventoryService = (
 
    getRecords: async (request: Request): Promise<Response> => {
       const dto: InventoryRecordsDTO = mapRequestToInventoryRecordsDTO(request);
-
       const validationOutcome: ValidationOutcome = await validator.validateInventoryRecordsDto(dto);
       if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-      try {
-         const records: InventoryRecord[] = await repository.getRecords(dto);
-
-         const addPageData = (response: Response): Response =>
-            addRequestPageDataToResponse(request, response);
-         return addPageData(mapInventoryRecordsToSuccessResponse(records));
-      }
-      catch (error) {
-         return mapErrorToInternalServerErrorResponse(error);
-      }
+      const result: InventoryRecord[] | Error = await repository.getRecords(dto);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      const addPageData = (response: Response): Response =>
+         addRequestPageDataToResponse(request, response);
+      return addPageData(mapInventoryRecordsToSuccessResponse(result));
    },
 
    updateRecord: async (request: Request): Promise<Response> => {

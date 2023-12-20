@@ -43,12 +43,18 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   createOrder: (dto: CreateOrderDTO): Promise<Order> =>
-      new OrdersModel({
-         clientId: dto.clientId,
-         cart: dto.cart,
-         status: dto.status,
-      }).save(),
+   createOrder: (dto: CreateOrderDTO): Promise<Order> => {
+      try {
+         return new OrdersModel({
+            clientId: dto.clientId,
+            cart: dto.cart,
+            status: dto.status,
+         }).save();
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
+   },
 
    updateOrder: (dto: UpdateOrderDTO): Promise<Order> =>
       OrdersModel.findOneAndUpdate(

@@ -106,13 +106,13 @@ export const MongoProductsRepository: ProductsRepository = {
       }
    },
 
-   exists: async (dto: GetProductDTO): Promise<boolean> => {
+   exists: async (dto: GetProductDTO): Promise<boolean | Error> => {
       try {
-         const product: Product = await ProductModel.findById(dto._id);
+         const product: Product | null = await ProductModel.findById(dto._id);
          return !!product;
       }
       catch (error) {
-         return false;
+         return { type: "Internal", message: (error as Error).message };
       }
    },
 };

@@ -59,17 +59,11 @@ export const configureOrdersService = (
 
    createOrder: async (request: Request): Promise<Response> => {
       const dto: CreateOrderDTO = mapRequestToCreateOrderDTO(request);
-
       const validationOutcome: ValidationOutcome = await validator.validateCreateOrderDto(dto);
       if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-      try {
-         const order: Order = await repository.createOrder(dto);
-         return mapOrderToSuccessResponse(order);
-      }
-      catch (error) {
-         return mapErrorToInternalServerErrorResponse(error);
-      }
+      const result: Order | Error = await repository.createOrder(dto);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      return mapOrderToSuccessResponse(result);
    },
 
    updateOrder: async (request: Request): Promise<Response> => {

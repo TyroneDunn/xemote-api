@@ -43,11 +43,17 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   createRecord: (dto: CreateInventoryRecordDTO): Promise<InventoryRecord> =>
-      new InventoryRecordsModel({
-         productId: dto.productId,
-         count: dto.count,
-      }).save(),
+   createRecord: async (dto: CreateInventoryRecordDTO): Promise<InventoryRecord | Error> => {
+      try {
+         return new InventoryRecordsModel({
+            productId: dto.productId,
+            count: dto.count,
+         }).save();
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
+   },
 
    updateRecord: (dto: UpdateInventoryRecordDTO): Promise<InventoryRecord> =>
       InventoryRecordsModel.findOneAndUpdate(

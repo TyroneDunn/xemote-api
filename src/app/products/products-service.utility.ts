@@ -104,17 +104,14 @@ export const configureProductsService = (
          const dto: ProductsDTO = mapRequestToProductsDTO(request);
          const validationOutcome: ValidationOutcome = await validator.validateProductsDTO(dto);
          if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-         try {
-            const products: Product[] = await repository.getProducts(dto);
-            products.forEach(async (product) => {
-               await inventoryRepository.deleteRecord({ productId: product._id });
-            });
-            const result: CommandResult = await repository.deleteProducts(dto);
-            return mapDeleteResultToResponse(result);
-         }
-         catch (error) {
-            return mapErrorToInternalServerErrorResponse(error);
-         }
+         const products: Product[] | Error = await repository.getProducts(dto);
+         if (isError(products)) return mapErrorToInternalServerErrorResponse(products);
+         products.forEach(async (product) => {
+            // todo improve inventory repository error handling
+            await inventoryRepository.deleteRecord({ productId: product._id });
+         });
+         const result: CommandResult | Error = await repository.deleteProducts(dto);
+         if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+         return mapDeleteResultToResponse(result);
       },
    });

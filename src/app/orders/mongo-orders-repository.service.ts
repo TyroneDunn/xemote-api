@@ -83,9 +83,14 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   deleteOrder: async (dto: DeleteOrderDTO): Promise<CommandResult> => {
-      const result: DeleteResult = await OrdersModel.deleteOne({ _id: dto._id });
-      return { success: result.acknowledged, affectedCount: result.deletedCount };
+   deleteOrder: async (dto: DeleteOrderDTO): Promise<CommandResult | Error> => {
+      try {
+         const result: DeleteResult = await OrdersModel.deleteOne({ _id: dto._id });
+         return { success: result.acknowledged, affectedCount: result.deletedCount };
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
    },
 
    deleteOrders: async (dto: OrdersDTO): Promise<CommandResult> => {

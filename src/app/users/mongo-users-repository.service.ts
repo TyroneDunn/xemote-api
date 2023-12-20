@@ -40,9 +40,14 @@ export const MongoUsersRepository: UsersRepository = {
          { new: true },
       ),
 
-   deleteUser: async (dto: DeleteUserDTO): Promise<CommandResult> => {
-      const result: DeleteResult = await UsersModel.deleteOne({ username: dto.username });
-      return { success: result.acknowledged, affectedCount: result.deletedCount };
+   deleteUser: async (dto: DeleteUserDTO): Promise<CommandResult | Error> => {
+      try {
+         const result: DeleteResult = await UsersModel.deleteOne({ username: dto.username });
+         return { success: result.acknowledged, affectedCount: result.deletedCount };
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
    },
 
    deleteUsers: async (dto: UsersDTO): Promise<CommandResult | Error> => {

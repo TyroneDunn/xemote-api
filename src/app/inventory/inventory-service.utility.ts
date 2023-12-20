@@ -5,7 +5,18 @@ import {
    UpdateInventoryRecordDTO,
    UpdateInventoryRecordsDTO,
 } from "./inventory-records-dtos.type";
-import { Request, Response } from "@hals/core";
+import {
+   addRequestPageDataToResponse,
+   CommandResult,
+   Error,
+   isError,
+   mapCommandResultToSuccessResponse,
+   mapErrorToInternalServerErrorResponse,
+   mapValidationOutcomeToErrorResponse,
+   Request,
+   Response,
+   ValidationOutcome,
+} from "@hals/common";
 import { InventoryRecord } from "./inventory-record.type";
 import {
    mapInventoryRecordsToSuccessResponse,
@@ -17,14 +28,6 @@ import {
 } from "./inventory-records-dtos.utility";
 import { InventoryRecordsDtosValidator } from "./inventory-records-dtos-validator.utility";
 import { InventoryService } from "./inventory-service.type";
-import {
-   addRequestPageDataToResponse,
-   CommandResult,
-   mapCommandResultToSuccessResponse,
-   mapErrorToInternalServerErrorResponse,
-   mapValidationOutcomeToErrorResponse,
-   ValidationOutcome,
-} from "@hals/common";
 
 export const configureInventoryService = (
    repository: InventoryRepository,
@@ -32,17 +35,11 @@ export const configureInventoryService = (
 ): InventoryService => ({
    getRecord: async (request: Request): Promise<Response> => {
       const dto: GetInventoryRecordDTO = mapRequestToGetInventoryRecordDTO(request);
-
       const validationOutcome: ValidationOutcome = await validator.validateGetInventoryRecordDto(dto);
       if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-      try {
-         const record: InventoryRecord = await repository.getRecord(dto);
-         return mapInventoryRecordToSuccessResponse(record);
-      }
-      catch (error) {
-         return mapErrorToInternalServerErrorResponse(error);
-      }
+      const result: InventoryRecord | Error = await repository.getRecord(dto);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      return mapInventoryRecordToSuccessResponse(result);
    },
 
    getRecords: async (request: Request): Promise<Response> => {

@@ -118,31 +118,33 @@ export const MongoProductsRepository: ProductsRepository = {
 };
 
 const mapProductsDtoToProductsFilter = (dto: ProductsDTO) => ({
-   ...dto.filter.name && { name: dto.filter.name },
-   ...dto.filter.nameRegex && { name: { $regex: dto.filter.nameRegex, $options: 'i' } },
-   ...dto.filter.type && { type: dto.filter.type },
-   ...dto.filter.typeRegex && { type: { $regex: dto.filter.typeRegex, $options: 'i' } },
-   ...dto.filter.costPriceRange && {
-      ...(dto.filter.costPriceRange.start && !dto.filter.costPriceRange.end) &&
-      { 'costPrice.price': { $gte: dto.filter.costPriceRange.start } },
-      ...(!dto.filter.costPriceRange.start && dto.filter.costPriceRange.end) &&
-      { 'costPrice.price': { $lte: dto.filter.costPriceRange.end } },
-      ...(dto.filter.costPriceRange.start && dto.filter.costPriceRange.end) && {
-         'costPrice.price': {
-            $gte: dto.filter.costPriceRange.start,
-            $lte: dto.filter.costPriceRange.end,
+   ...dto.filter && {
+      ...dto.filter.name && { name: dto.filter.name },
+      ...dto.filter.nameRegex && { name: { $regex: dto.filter.nameRegex, $options: 'i' } },
+      ...dto.filter.type && { type: dto.filter.type },
+      ...dto.filter.typeRegex && { type: { $regex: dto.filter.typeRegex, $options: 'i' } },
+      ...dto.filter.costPriceRange && {
+         ...(dto.filter.costPriceRange.start && !dto.filter.costPriceRange.end) &&
+         { 'costPrice.price': { $gte: dto.filter.costPriceRange.start } },
+         ...(!dto.filter.costPriceRange.start && dto.filter.costPriceRange.end) &&
+         { 'costPrice.price': { $lte: dto.filter.costPriceRange.end } },
+         ...(dto.filter.costPriceRange.start && dto.filter.costPriceRange.end) && {
+            'costPrice.price': {
+               $gte: dto.filter.costPriceRange.start,
+               $lte: dto.filter.costPriceRange.end,
+            },
          },
       },
-   },
-   ...dto.filter.markupRange && {
-      ...(dto.filter.markupRange.start && !dto.filter.markupRange.end) &&
-      { markup: { $gte: dto.filter.markupRange.start } },
-      ...(!dto.filter.markupRange.start && dto.filter.markupRange.end) &&
-      { markup: { $lte: dto.filter.markupRange.end } },
-      ...(dto.filter.markupRange.start && dto.filter.markupRange.end) && {
-         markup: {
-            $gte: dto.filter.markupRange.start,
-            $lte: dto.filter.markupRange.end,
+      ...dto.filter.markupRange && {
+         ...(dto.filter.markupRange.start && !dto.filter.markupRange.end) &&
+         { markup: { $gte: dto.filter.markupRange.start } },
+         ...(!dto.filter.markupRange.start && dto.filter.markupRange.end) &&
+         { markup: { $lte: dto.filter.markupRange.end } },
+         ...(dto.filter.markupRange.start && dto.filter.markupRange.end) && {
+            markup: {
+               $gte: dto.filter.markupRange.start,
+               $lte: dto.filter.markupRange.end,
+            },
          },
       },
    },

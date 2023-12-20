@@ -33,39 +33,41 @@ export const configureOrdersDtosValidator =
        },
 
        validateOrdersDto: async (dto: OrdersDTO): Promise<ValidationOutcome> => {
-           if (dto.filter.status)
-               if (dto.filter.status !== "complete"
-                  && dto.filter.status !== "pending"
-                  && dto.filter.status !== "cancelled")
-                   return {
-                       error: {
-                           type: "BadRequest", message: 'Invalid status. Status must be' +
-                              ' "complete", "pending" or "cancelled".',
-                       },
-                   };
-           if (dto.filter.countRange) {
-               if (dto.filter.countRange.start && (dto.filter.countRange.start < 0))
-                   return {
-                       error: {
-                           type: "BadRequest", message: 'Invalid count range. Count range' +
-                              ' start value must be greater than 0.',
-                       },
-                   };
-               if (dto.filter.countRange.end && (dto.filter.countRange.end < 0))
-                   return {
-                       error: {
-                           type: "BadRequest", message: 'Invalid count range. Count range' +
-                              ' end value must be greater than 0.',
-                       },
-                   };
-               if ((dto.filter.countRange.start && dto.filter.countRange.end)
-                  && (dto.filter.countRange.end < dto.filter.countRange.start))
-                   return {
-                       error: {
-                           type: "BadRequest", message: 'Invalid count range. Count range' +
-                              ' end value must be greater than start value.',
-                       },
-                   };
+           if (dto.filter) {
+               if (dto.filter.status)
+                   if (dto.filter.status !== "complete"
+                      && dto.filter.status !== "pending"
+                      && dto.filter.status !== "cancelled")
+                       return {
+                           error: {
+                               type: "BadRequest", message: 'Invalid status. Status must be' +
+                                  ' "complete", "pending" or "cancelled".',
+                           },
+                       };
+               if (dto.filter.countRange) {
+                   if (dto.filter.countRange.start && (dto.filter.countRange.start < 0))
+                       return {
+                           error: {
+                               type: "BadRequest", message: 'Invalid count range. Count range' +
+                                  ' start value must be greater than 0.',
+                           },
+                       };
+                   if (dto.filter.countRange.end && (dto.filter.countRange.end < 0))
+                       return {
+                           error: {
+                               type: "BadRequest", message: 'Invalid count range. Count range' +
+                                  ' end value must be greater than 0.',
+                           },
+                       };
+                   if ((dto.filter.countRange.start && dto.filter.countRange.end)
+                      && (dto.filter.countRange.end < dto.filter.countRange.start))
+                       return {
+                           error: {
+                               type: "BadRequest", message: 'Invalid count range. Count range' +
+                                  ' end value must be greater than start value.',
+                           },
+                       };
+               }
            }
 
            if (dto.timestamps) {

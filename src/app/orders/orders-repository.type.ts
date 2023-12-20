@@ -7,7 +7,7 @@ import {
    UpdateOrderDTO,
    UpdateOrdersDTO,
 } from "./orders-dtos.type";
-import { CommandResult } from "@hals/common";
+import { CommandResult, Error } from "@hals/common";
 
 export type OrdersRepository = {
    getOrder: (dto: GetOrderDTO) => Promise<Order | Error>,

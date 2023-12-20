@@ -1,4 +1,12 @@
-import { HttpStatusCodes, Request, Response } from "@hals/core";
+import {
+   mapRequestToPage,
+   mapRequestToTimestamps,
+   NumberRange,
+   OK,
+   OrderOption,
+   Request,
+   Response,
+} from "@hals/common";
 import {
    CreateOrderDTO,
    DeleteOrderDTO,
@@ -9,13 +17,12 @@ import {
    UpdateOrdersDTO,
 } from "./orders-dtos.type";
 import { Order, OrderStatus, ProductCount } from "./order.type";
-import { mapRequestToPage, mapRequestToTimestamps, NumberRange, OrderOption } from "@hals/common";
 
 export const mapRequestToGetOrderDTO = (request: Request): GetOrderDTO =>
    ({ _id: request.paramMap['id'] });
 
 export const mapOrderToSuccessResponse = (order: Order): Response => ({
-   status: HttpStatusCodes.OK,
+   status: OK,
    collection: [ order ],
    count: 1,
 });
@@ -48,7 +55,7 @@ const mapRequestToOrdersSort = (request: Request) => ({
 });
 
 export const mapOrdersToSuccessResponse = (orders: Order[]): Response => ({
-   status: HttpStatusCodes.OK,
+   status: OK,
    collection: [ orders ],
    count: orders.length,
 });

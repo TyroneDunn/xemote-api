@@ -13,11 +13,19 @@ import {
 import { DeleteResult } from "mongodb";
 import { Price } from "./price.type";
 import { UpdateWriteOpResult } from "mongoose";
-import { CommandResult } from "@hals/common";
+import { CommandResult, Error } from "@hals/common";
 
 export const MongoProductsRepository: ProductsRepository = {
-   getProduct: (dto: GetProductDTO): Promise<Product> =>
-      ProductModel.findById(dto._id),
+   getProduct: async (dto: GetProductDTO): Promise<Product | Error> => {
+      try {
+         const product: Product | null = await ProductModel.findById(dto._id);
+         if (!product) return { type: "NotFound", message: 'Product not found.' };
+         return product;
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
+   },
 
    getProducts: (dto: ProductsDTO): Promise<Product[]> => {
       const filter = mapProductsDtoToProductsFilter(dto);

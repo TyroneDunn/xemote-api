@@ -31,14 +31,9 @@ export const configureUsersService = (
       const dto: GetUserDTO = mapRequestToGetUserDto(request);
       const validationOutcome: ValidationOutcome = await validator.validateGetUserDto(dto);
       if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-      try {
-         const user: User = await repository.getUser(dto);
-         return mapUserToSuccessResponse(user);
-      }
-      catch (error) {
-         return mapErrorToInternalServerErrorResponse(error);
-      }
+      const result: User | Error = await repository.getUser(dto);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      return mapUserToSuccessResponse(result);
    },
 
    getUsers: async (request: Request): Promise<Response> => {

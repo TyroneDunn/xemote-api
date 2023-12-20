@@ -5,7 +5,8 @@ import {
    UpdateInventoryRecordsDTO,
 } from "./inventory-records-dtos.type";
 import { InventoryRepository } from "./inventory-repository.type";
-import { ValidationOutcome } from "@hals/common";
+import { Error, isError, ValidationOutcome } from "@hals/common";
+import { InventoryRecord } from "./inventory-record.type";
 
 export type InventoryRecordsDtosValidator = {
    validateGetInventoryRecordDto: (dto: GetInventoryRecordDTO) => Promise<ValidationOutcome>,
@@ -30,29 +31,31 @@ export const configureInventoryRecordsDtosValidator =
       },
 
       validateInventoryRecordsDto: async (dto: InventoryRecordsDTO): Promise<ValidationOutcome> => {
-         if (dto.filter.countRange) {
-            if (dto.filter.countRange.start && (dto.filter.countRange.start < 0))
-               return {
-                  error: {
-                     type: "BadRequest", message: 'Invalid count range. Count range' +
-                        ' start value must be greater than 0.',
-                  },
-               };
-            if (dto.filter.countRange.end && (dto.filter.countRange.end < 0))
-               return {
-                  error: {
-                     type: "BadRequest", message: 'Invalid count range. Count range' +
-                        ' end value must be greater than 0.',
-                  },
-               };
-            if ((dto.filter.countRange.start && dto.filter.countRange.end)
-               && (dto.filter.countRange.end < dto.filter.countRange.start))
-               return {
-                  error: {
-                     type: "BadRequest", message: 'Invalid count range. Count range' +
-                        ' end value must be greater than start value.',
-                  },
-               };
+         if (dto.filter) {
+            if (dto.filter.countRange) {
+               if (dto.filter.countRange.start && (dto.filter.countRange.start < 0))
+                  return {
+                     error: {
+                        type: "BadRequest", message: 'Invalid count range. Count range' +
+                           ' start value must be greater than 0.',
+                     },
+                  };
+               if (dto.filter.countRange.end && (dto.filter.countRange.end < 0))
+                  return {
+                     error: {
+                        type: "BadRequest", message: 'Invalid count range. Count range' +
+                           ' end value must be greater than 0.',
+                     },
+                  };
+               if ((dto.filter.countRange.start && dto.filter.countRange.end)
+                  && (dto.filter.countRange.end < dto.filter.countRange.start))
+                  return {
+                     error: {
+                        type: "BadRequest", message: 'Invalid count range. Count range' +
+                           ' end value must be greater than start value.',
+                     },
+                  };
+            }
          }
 
          if (dto.timestamps) {
@@ -181,8 +184,11 @@ export const configureInventoryRecordsDtosValidator =
                   },
                };
          if (dto.updateFields.countDelta) {
-            const record = await inventoryRepository.getRecord({ productId: dto.productId });
-            if ((record.count + dto.updateFields.countDelta) < 0)
+            const result: InventoryRecord | Error = await inventoryRepository.getRecord({ productId: dto.productId });
+            if (isError(result)) return {
+               error: { type: "Internal", message: 'Repository read error.' },
+            };
+            if ((result.count + dto.updateFields.countDelta) < 0)
                return {
                   error: {
                      type: "BadRequest", message: 'Invalid count delta. Not' +

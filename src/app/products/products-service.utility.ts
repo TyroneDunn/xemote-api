@@ -64,15 +64,11 @@ export const configureProductsService = (
          const dto: CreateProductDTO = mapToCreateProductDTO(request);
          const validationOutcome: ValidationOutcome = await validator.validateCreateProductDTO(dto);
          if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-         try {
-            const product: Product = await repository.createProduct(dto);
-            await inventoryRepository.createRecord({ productId: product._id, count: 0 });
-            return mapProductToSuccessResponse(product);
-         }
-         catch (error) {
-            return mapErrorToInternalServerErrorResponse(error);
-         }
+         const result: Product | Error = await repository.createProduct(dto);
+         if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+         // todo improve inventory repository error handling
+         await inventoryRepository.createRecord({ productId: result._id, count: 0 });
+         return mapProductToSuccessResponse(result);
       },
 
       updateProduct: async (request: Request): Promise<Response> => {

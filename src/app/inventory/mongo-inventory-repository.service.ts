@@ -12,11 +12,19 @@ import { InventoryRecord } from "./inventory-record.type";
 import InventoryRecordsModel from "./mongo-inventory-records-model.type";
 import { DeleteResult } from "mongodb";
 import { UpdateWriteOpResult } from "mongoose";
-import { CommandResult } from "@hals/common";
+import { CommandResult, Error } from "@hals/common";
 
 export const MongoInventoryRepository: InventoryRepository = {
-   getRecord: (dto: GetInventoryRecordDTO): Promise<InventoryRecord> =>
-      InventoryRecordsModel.findOne({ productId: dto.productId }),
+   getRecord: async (dto: GetInventoryRecordDTO): Promise<InventoryRecord | Error> => {
+      try {
+         const record: InventoryRecord | null = await InventoryRecordsModel.findOne({ productId: dto.productId });
+         if (!record) return { type: "NotFound", message: 'Inventory record not found.' };
+         return record;
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
+   },
 
    getRecords: (dto: InventoryRecordsDTO): Promise<InventoryRecord[]> => {
       const filter = mapDTOToFilter(dto);

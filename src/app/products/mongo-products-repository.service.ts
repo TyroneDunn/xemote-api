@@ -95,10 +95,15 @@ export const MongoProductsRepository: ProductsRepository = {
       }
    },
 
-   deleteProducts: async (dto: ProductsDTO): Promise<CommandResult> => {
-      const filter = mapProductsDtoToProductsFilter(dto);
-      const result: DeleteResult = await ProductModel.deleteMany(filter);
-      return { success: result.acknowledged, affectedCount: result.deletedCount };
+   deleteProducts: async (dto: ProductsDTO): Promise<CommandResult | Error> => {
+      try {
+         const filter = mapProductsDtoToProductsFilter(dto);
+         const result: DeleteResult = await ProductModel.deleteMany(filter);
+         return { success: result.acknowledged, affectedCount: result.deletedCount };
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
    },
 
    exists: async (dto: GetProductDTO): Promise<boolean> => {

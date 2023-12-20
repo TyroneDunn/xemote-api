@@ -1,4 +1,11 @@
-import { Request, Response } from "@hals/core";
+import {
+   mapRequestToPage,
+   mapRequestToTimestamps,
+   OK,
+   OrderOption,
+   Request,
+   Response,
+} from "@hals/common";
 import {
    DeleteUserDTO,
    GetUserDTO,
@@ -7,7 +14,6 @@ import {
    UsersSortOption,
 } from "./users-dtos.type";
 import { User } from "./user.type";
-import { mapRequestToPage, mapRequestToTimestamps, OK, OrderOption } from "@hals/common";
 
 export const mapRequestToGetUserDto = (request: Request): GetUserDTO =>
    ({ username: request.paramMap['username'] });

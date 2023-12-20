@@ -116,18 +116,20 @@ export const MongoOrdersRepository: OrdersRepository = {
 };
 
 const mapOrdersDtoToFilter = (dto: OrdersDTO) => ({
-   ...dto.filter.clientId && { clientId: dto.filter.clientId },
-   ...dto.filter.productId && { productId: dto.filter.productId },
-   ...dto.filter.status && { status: dto.filter.status },
-   ...dto.filter.countRange && {
-      ...(dto.filter.countRange.start && !dto.filter.countRange.end) &&
-      { count: { $gte: dto.filter.countRange.start } },
-      ...(!dto.filter.countRange.start && dto.filter.countRange.end) &&
-      { count: { $lte: dto.filter.countRange.end } },
-      ...(dto.filter.countRange.start && dto.filter.countRange.end) && {
-         count: {
-            $gte: dto.filter.countRange.start,
-            $lte: dto.filter.countRange.end,
+   ...dto.filter && {
+      ...dto.filter.clientId && { clientId: dto.filter.clientId },
+      ...dto.filter.productId && { productId: dto.filter.productId },
+      ...dto.filter.status && { status: dto.filter.status },
+      ...dto.filter.countRange && {
+         ...(dto.filter.countRange.start && !dto.filter.countRange.end) &&
+         { count: { $gte: dto.filter.countRange.start } },
+         ...(!dto.filter.countRange.start && dto.filter.countRange.end) &&
+         { count: { $lte: dto.filter.countRange.end } },
+         ...(dto.filter.countRange.start && dto.filter.countRange.end) && {
+            count: {
+               $gte: dto.filter.countRange.start,
+               $lte: dto.filter.countRange.end,
+            },
          },
       },
    },

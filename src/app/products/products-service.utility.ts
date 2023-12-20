@@ -75,14 +75,9 @@ export const configureProductsService = (
          const dto: UpdateProductDTO = mapToUpdateProductDTO(request);
          const validationOutcome: ValidationOutcome = await validator.validateUpdateProductDTO(dto);
          if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-         try {
-            const product: Product = await repository.updateProduct(dto);
-            return mapProductToSuccessResponse(product);
-         }
-         catch (error) {
-            return mapErrorToInternalServerErrorResponse(error);
-         }
+         const result: Product | Error = await repository.updateProduct(dto);
+         if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+         return mapProductToSuccessResponse(result);
       },
 
       updateProducts: async (request: Request): Promise<Response> => {

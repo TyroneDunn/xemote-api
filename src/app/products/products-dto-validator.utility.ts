@@ -20,8 +20,7 @@ export type ProductsDtoValidator = {
 
 export const configureProductsDtoValidator = (repository: ProductsRepository): ProductsDtoValidator => ({
    validateGetProductDTO: async (dto: GetProductDTO): Promise<ValidationOutcome> => {
-      if (!dto._id)
-         return { error: { type: "BadRequest", message: 'ID required.' } };
+      if (!dto._id) return { error: { type: "BadRequest", message: 'ID required.' } };
       if (!(await repository.exists(dto)))
          return { error: { type: "NotFound", message: `Product "${dto._id}" not found.` } };
       return {};

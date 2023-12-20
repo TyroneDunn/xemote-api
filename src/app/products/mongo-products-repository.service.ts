@@ -44,13 +44,19 @@ export const MongoProductsRepository: ProductsRepository = {
       }
    },
 
-   createProduct: (dto: CreateProductDTO): Promise<Product> =>
-      new ProductModel({
-         name: dto.name,
-         type: dto.type,
-         costPrice: dto.costPrice,
-         markup: dto.markup,
-      }).save(),
+   createProduct: (dto: CreateProductDTO): Promise<Product | Error> => {
+      try {
+         return new ProductModel({
+            name: dto.name,
+            type: dto.type,
+            costPrice: dto.costPrice,
+            markup: dto.markup,
+         }).save();
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
+   },
 
    updateProduct: (dto: UpdateProductDTO): Promise<Product> =>
       ProductModel.findOneAndUpdate(

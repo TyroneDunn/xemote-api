@@ -61,14 +61,9 @@ export const configureUsersService = (
       const dto: UpdateUserDTO = mapRequestToUpdateUserDto(request);
       const validationOutcome: ValidationOutcome = await validator.validateUpdateUserDto(dto);
       if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-      try {
-         const user: User = await repository.updateUser(dto);
-         return mapUserToSuccessResponse(user);
-      }
-      catch (error) {
-         return mapErrorToInternalServerErrorResponse(error);
-      }
+      const result: User | Error = await repository.updateUser(dto);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      return mapUserToSuccessResponse(result);
    },
 
    deleteUser: async (request: Request): Promise<Response> => {

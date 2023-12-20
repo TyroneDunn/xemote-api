@@ -93,15 +93,11 @@ export const configureProductsService = (
          const dto: DeleteProductDTO = mapToDeleteProductDTO(request);
          const validationOutcome: ValidationOutcome = await validator.validateDeleteProductDTO(dto);
          if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-         try {
-            const result: CommandResult = await repository.deleteProduct(dto);
-            await inventoryRepository.deleteRecord({ productId: dto._id });
-            return mapDeleteResultToResponse(result);
-         }
-         catch (error) {
-            return mapErrorToInternalServerErrorResponse(error);
-         }
+         const result: CommandResult | Error = await repository.deleteProduct(dto);
+         if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+         // todo improve inventory repository error handling
+         await inventoryRepository.deleteRecord({ productId: dto._id });
+         return mapDeleteResultToResponse(result);
       },
 
       deleteProducts: async (request: Request): Promise<Response> => {

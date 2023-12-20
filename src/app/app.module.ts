@@ -1,4 +1,4 @@
-import { newApplication } from "@hals/core";
+import { hals } from "@hals/core";
 import { API_PORT, API_TITLE, API_VERSION, NODE_ENV } from "../environments";
 import corsOptions from "./cors-options-config";
 import authStrategy from "./auth-strategy-config";
@@ -19,7 +19,7 @@ export const appSchema: ApplicationSchema = {
    authStrategy: authStrategy,
 };
 
-const app: Application = newApplication(appSchema, [
+const app: Application = hals(appSchema, [
    usersController,
    productsController,
    inventoryController,

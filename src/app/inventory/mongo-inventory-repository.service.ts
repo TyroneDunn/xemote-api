@@ -82,9 +82,14 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   deleteRecord: async (dto: DeleteInventoryRecordDTO): Promise<CommandResult> => {
-      const result: DeleteResult = await InventoryRecordsModel.deleteOne({ productId: dto.productId });
-      return { success: result.acknowledged, affectedCount: result.deletedCount };
+   deleteRecord: async (dto: DeleteInventoryRecordDTO): Promise<CommandResult | Error> => {
+      try {
+         const result: DeleteResult = await InventoryRecordsModel.deleteOne({ productId: dto.productId });
+         return { success: result.acknowledged, affectedCount: result.deletedCount };
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
    },
 
    deleteRecords: async (dto: InventoryRecordsDTO): Promise<CommandResult> => {

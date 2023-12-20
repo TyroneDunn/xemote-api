@@ -21,16 +21,21 @@ export const MongoUsersRepository: UsersRepository = {
    getUser: (dto: GetUserDTO): Promise<User | null> =>
       UsersModel.findOne({ username: dto.username }),
 
-   getUsers(dto: UsersDTO): Promise<User[]> {
-      const filter = mapUsersDtoToUsersFilter(dto);
-      const query = UsersModel.find(filter);
-      if (dto.sort)
-         query.sort({ [dto.sort.field]: dto.sort.order === 'asc' ? 1 : -1 });
-      if (dto.page) {
-         query.skip(dto.page.index * dto.page.limit);
-         query.limit(dto.page.limit);
+   getUsers: async (dto: UsersDTO): Promise<User[] | Error> => {
+      try {
+         const filter = mapUsersDtoToUsersFilter(dto);
+         const query = UsersModel.find(filter);
+         if (dto.sort)
+            query.sort({ [dto.sort.field]: dto.sort.order === 'asc' ? 1 : -1 });
+         if (dto.page) {
+            query.skip(dto.page.index * dto.page.limit);
+            query.limit(dto.page.limit);
+         }
+         return query.exec();
       }
-      return query.exec();
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
    },
 
    updateUser: async (dto: UpdateUserDTO): Promise<User | Error> => {

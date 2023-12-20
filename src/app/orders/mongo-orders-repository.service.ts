@@ -26,16 +26,21 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   getOrders: (dto: OrdersDTO): Promise<Order[]> => {
-      const filter = mapOrdersDtoToFilter(dto);
-      const query = OrdersModel.find(filter);
-      if (dto.sort !== undefined)
-         query.sort({ [dto.sort.field]: dto.sort.order === 'asc' ? 1 : -1 });
-      if (dto.page !== undefined) {
-         query.skip(dto.page.index * dto.page.limit);
-         query.limit(dto.page.limit);
+   getOrders: async (dto: OrdersDTO): Promise<Order[] | Error> => {
+      try {
+         const filter = mapOrdersDtoToFilter(dto);
+         const query = OrdersModel.find(filter);
+         if (dto.sort !== undefined)
+            query.sort({ [dto.sort.field]: dto.sort.order === 'asc' ? 1 : -1 });
+         if (dto.page !== undefined) {
+            query.skip(dto.page.index * dto.page.limit);
+            query.limit(dto.page.limit);
+         }
+         return query.exec();
       }
-      return query.exec();
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
    },
 
    createOrder: (dto: CreateOrderDTO): Promise<Order> =>

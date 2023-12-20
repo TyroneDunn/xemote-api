@@ -1,4 +1,4 @@
-import { Controller, Method, RequestHandler } from "@hals/core";
+import { Controller, Method, RequestHandler } from "@hals/common";
 import { UsersService } from "./users-service.type";
 
 const UserQueryParamKeys: string[] = [

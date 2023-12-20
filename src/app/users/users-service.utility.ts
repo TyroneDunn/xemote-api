@@ -1,6 +1,5 @@
 import { UsersRepository } from "./users-repository.type";
 import { UsersService } from "./users-service.type";
-import { Request, Response } from "@hals/core";
 import {
    addRequestPageDataToResponse,
    CommandResult,
@@ -9,6 +8,8 @@ import {
    mapDeleteResultToResponse,
    mapErrorToInternalServerErrorResponse,
    mapValidationOutcomeToErrorResponse,
+   Request,
+   Response,
    ValidationOutcome,
 } from "@hals/common";
 import { DeleteUserDTO, GetUserDTO, UpdateUserDTO, UsersDTO } from "./users-dtos.type";

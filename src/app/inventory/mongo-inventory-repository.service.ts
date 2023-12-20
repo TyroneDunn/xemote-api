@@ -103,13 +103,13 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   exists: async (dto: GetInventoryRecordDTO): Promise<boolean> => {
+   exists: async (dto: GetInventoryRecordDTO): Promise<boolean | Error> => {
       try {
-         const record: InventoryRecord = await InventoryRecordsModel.findOne({ productId: dto.productId });
+         const record: InventoryRecord | null = await InventoryRecordsModel.findOne({ productId: dto.productId });
          return !!record;
       }
       catch (error) {
-         return false;
+         return { type: "Internal", message: (error as Error).message };
       }
    },
 };

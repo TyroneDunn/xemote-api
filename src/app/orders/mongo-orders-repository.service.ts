@@ -12,10 +12,19 @@ import { Order } from "./order.type";
 import OrdersModel from "./mongo-orders-model.type";
 import { DeleteResult } from "mongodb";
 import { UpdateWriteOpResult } from "mongoose";
-import { CommandResult } from "@hals/common";
+import { CommandResult, Error } from "@hals/common";
 
 export const MongoOrdersRepository: OrdersRepository = {
-   getOrder: (dto: GetOrderDTO): Promise<Order> => OrdersModel.findById(dto._id),
+   getOrder: async (dto: GetOrderDTO): Promise<Order | Error> => {
+      try {
+         const order: Order | null = await OrdersModel.findById(dto._id);
+         if (!order) return { type: "NotFound", message: 'Order not found.' };
+         return order;
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
+   },
 
    getOrders: (dto: OrdersDTO): Promise<Order[]> => {
       const filter = mapOrdersDtoToFilter(dto);

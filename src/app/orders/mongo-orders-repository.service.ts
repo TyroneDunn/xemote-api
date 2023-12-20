@@ -43,7 +43,7 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   createOrder: (dto: CreateOrderDTO): Promise<Order> => {
+   createOrder: async (dto: CreateOrderDTO): Promise<Order | Error> => {
       try {
          return new OrdersModel({
             clientId: dto.clientId,
@@ -56,12 +56,20 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   updateOrder: (dto: UpdateOrderDTO): Promise<Order> =>
-      OrdersModel.findOneAndUpdate(
-         { _id: dto._id },
-         mapUpdateFieldsToUpdateQuery(dto.updateFields),
-         { new: true },
-      ),
+   updateOrder: async (dto: UpdateOrderDTO): Promise<Order | Error> => {
+      try {
+         const order: Order | null = await OrdersModel.findOneAndUpdate(
+            { _id: dto._id },
+            mapUpdateFieldsToUpdateQuery(dto.updateFields),
+            { new: true },
+         );
+         if (!order) return { type: "NotFound", message: 'Order not found.' };
+         return order;
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
+   },
 
    updateOrders: async (dto: UpdateOrdersDTO): Promise<CommandResult> => {
       const filter = mapUpdateOrdersDtoToFilter(dto);

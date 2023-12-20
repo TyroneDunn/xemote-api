@@ -47,95 +47,95 @@ export const configureOrdersService = (
    },
 
    getOrders: async (request: Request): Promise<Response> => {
-        const dto: OrdersDTO = mapRequestToOrdersDTO(request);
+      const dto: OrdersDTO = mapRequestToOrdersDTO(request);
 
-        const validationOutcome: ValidationOutcome = await validator.validateOrdersDto(dto);
-        if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
+      const validationOutcome: ValidationOutcome = await validator.validateOrdersDto(dto);
+      if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
 
-        try {
-            const orders: Order[] = await repository.getOrders(dto);
+      try {
+         const orders: Order[] = await repository.getOrders(dto);
 
-            const addPageData = (response: Response): Response =>
-               addRequestPageDataToResponse(request, response);
-            return addPageData(mapOrdersToSuccessResponse(orders));
-        }
-        catch (error) {
-            return mapErrorToInternalServerErrorResponse(error);
-        }
-    },
+         const addPageData = (response: Response): Response =>
+            addRequestPageDataToResponse(request, response);
+         return addPageData(mapOrdersToSuccessResponse(orders));
+      }
+      catch (error) {
+         return mapErrorToInternalServerErrorResponse(error);
+      }
+   },
 
-    createOrder: async (request: Request): Promise<Response> => {
-        const dto: CreateOrderDTO = mapRequestToCreateOrderDTO(request);
+   createOrder: async (request: Request): Promise<Response> => {
+      const dto: CreateOrderDTO = mapRequestToCreateOrderDTO(request);
 
-        const validationOutcome: ValidationOutcome = await validator.validateCreateOrderDto(dto);
-        if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
+      const validationOutcome: ValidationOutcome = await validator.validateCreateOrderDto(dto);
+      if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
 
-        try {
-            const order: Order = await repository.createOrder(dto);
-            return mapOrderToSuccessResponse(order);
-        }
-        catch (error) {
-            return mapErrorToInternalServerErrorResponse(error);
-        }
-    },
+      try {
+         const order: Order = await repository.createOrder(dto);
+         return mapOrderToSuccessResponse(order);
+      }
+      catch (error) {
+         return mapErrorToInternalServerErrorResponse(error);
+      }
+   },
 
-    updateOrder: async (request: Request): Promise<Response> => {
-        const dto: UpdateOrderDTO = mapRequestToUpdateOrderDTO(request);
+   updateOrder: async (request: Request): Promise<Response> => {
+      const dto: UpdateOrderDTO = mapRequestToUpdateOrderDTO(request);
 
-        const validationOutcome: ValidationOutcome = await validator.validateUpdateOrderDto(dto);
-        if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
+      const validationOutcome: ValidationOutcome = await validator.validateUpdateOrderDto(dto);
+      if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
 
-        try {
-            const order: Order = await repository.updateOrder(dto);
-            return mapOrderToSuccessResponse(order);
-        }
-        catch (error) {
-            return mapErrorToInternalServerErrorResponse(error);
-        }
-    },
+      try {
+         const order: Order = await repository.updateOrder(dto);
+         return mapOrderToSuccessResponse(order);
+      }
+      catch (error) {
+         return mapErrorToInternalServerErrorResponse(error);
+      }
+   },
 
-    updateOrders: async (request: Request): Promise<Response> => {
-        const dto: UpdateOrdersDTO = mapRequestToUpdateOrdersDTO(request);
+   updateOrders: async (request: Request): Promise<Response> => {
+      const dto: UpdateOrdersDTO = mapRequestToUpdateOrdersDTO(request);
 
-        const validationOutcome: ValidationOutcome = await validator.validateUpdateOrdersDto(dto);
-        if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
+      const validationOutcome: ValidationOutcome = await validator.validateUpdateOrdersDto(dto);
+      if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
 
-        try {
-            const result: CommandResult = await repository.updateOrders(dto);
-            return mapCommandResultToSuccessResponse(result);
-        }
-        catch (error) {
-            return mapErrorToInternalServerErrorResponse(error);
-        }
-    },
+      try {
+         const result: CommandResult = await repository.updateOrders(dto);
+         return mapCommandResultToSuccessResponse(result);
+      }
+      catch (error) {
+         return mapErrorToInternalServerErrorResponse(error);
+      }
+   },
 
-    deleteOrder: async (request: Request): Promise<Response> => {
-        const dto: DeleteOrderDTO = mapRequestToDeleteOrderDTO(request);
+   deleteOrder: async (request: Request): Promise<Response> => {
+      const dto: DeleteOrderDTO = mapRequestToDeleteOrderDTO(request);
 
-        const validationOutcome: ValidationOutcome = await validator.validateDeleteOrderDto(dto);
-        if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
+      const validationOutcome: ValidationOutcome = await validator.validateDeleteOrderDto(dto);
+      if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
 
-        try {
-            const result: CommandResult = await repository.deleteOrder(dto);
-            return mapCommandResultToSuccessResponse(result);
-        }
-        catch (error) {
-            return mapErrorToInternalServerErrorResponse(error);
-        }
-    },
+      try {
+         const result: CommandResult = await repository.deleteOrder(dto);
+         return mapCommandResultToSuccessResponse(result);
+      }
+      catch (error) {
+         return mapErrorToInternalServerErrorResponse(error);
+      }
+   },
 
-    deleteOrders: async (request: Request): Promise<Response> => {
-        const dto: OrdersDTO = mapRequestToOrdersDTO(request);
+   deleteOrders: async (request: Request): Promise<Response> => {
+      const dto: OrdersDTO = mapRequestToOrdersDTO(request);
 
-        const validationOutcome: ValidationOutcome = await validator.validateOrdersDto(dto);
-        if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
+      const validationOutcome: ValidationOutcome = await validator.validateOrdersDto(dto);
+      if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
 
-        try {
-            const result: CommandResult = await repository.deleteOrders(dto);
-            return mapCommandResultToSuccessResponse(result);
-        }
-        catch (error) {
-            return mapErrorToInternalServerErrorResponse(error);
-        }
-    },
+      try {
+         const result: CommandResult = await repository.deleteOrders(dto);
+         return mapCommandResultToSuccessResponse(result);
+      }
+      catch (error) {
+         return mapErrorToInternalServerErrorResponse(error);
+      }
+   },
 });

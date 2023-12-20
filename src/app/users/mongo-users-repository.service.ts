@@ -18,8 +18,16 @@ import {
 import { DeleteResult } from "mongodb";
 
 export const MongoUsersRepository: UsersRepository = {
-   getUser: (dto: GetUserDTO): Promise<User | null> =>
-      UsersModel.findOne({ username: dto.username }),
+   getUser: async (dto: GetUserDTO): Promise<User | Error> => {
+      try {
+         const user: User | null = await UsersModel.findOne({ username: dto.username });
+         if (!user) return { type: "NotFound", message: 'User not found.' };
+         return user as User;
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
+   },
 
    getUsers: async (dto: UsersDTO): Promise<User[] | Error> => {
       try {

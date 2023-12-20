@@ -45,16 +45,11 @@ export const configureUsersService = (
       const dto: UsersDTO = await mapRequestToUsersDto(request);
       const validationOutcome: ValidationOutcome = await validator.validateUsersDto(dto);
       if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-      try {
-         const users: User[] = await repository.getUsers(dto);
-         const addPageData = (response: Response): Response =>
-            addRequestPageDataToResponse(request, response);
-         return addPageData(mapUsersToSuccessResponse(users));
-      }
-      catch (error) {
-         return mapErrorToInternalServerErrorResponse(error);
-      }
+      const result: User[] | Error = await repository.getUsers(dto);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      const addPageData = (response: Response): Response =>
+         addRequestPageDataToResponse(request, response);
+      return addPageData(mapUsersToSuccessResponse(result));
    },
 
    updateUser: async (request: Request): Promise<Response> => {

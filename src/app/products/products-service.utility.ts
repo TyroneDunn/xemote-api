@@ -84,14 +84,9 @@ export const configureProductsService = (
          const dto: UpdateProductsDTO = mapToUpdateProductsDTO(request);
          const validationOutcome: ValidationOutcome = await validator.validateUpdateProductsDTO(dto);
          if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
-
-         try {
-            const result: CommandResult = await repository.updateProducts(dto);
-            return mapUpdateResultToResponse(result);
-         }
-         catch (error) {
-            return mapErrorToInternalServerErrorResponse(error);
-         }
+         const result: CommandResult | Error = await repository.updateProducts(dto);
+         if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+         return mapUpdateResultToResponse(result);
       },
 
       deleteProduct: async (request: Request): Promise<Response> => {

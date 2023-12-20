@@ -73,11 +73,16 @@ export const MongoProductsRepository: ProductsRepository = {
       }
    },
 
-   updateProducts: async (dto: UpdateProductsDTO): Promise<CommandResult> => {
-      const filter = mapUpdateProductsDtoToFilter(dto);
-      const updateQuery = mapUpdateFieldsToUpdateQuery(dto.updateFields);
-      const updateResult: UpdateWriteOpResult = await ProductModel.updateMany(filter, updateQuery);
-      return { success: updateResult.acknowledged, affectedCount: updateResult.modifiedCount };
+   updateProducts: async (dto: UpdateProductsDTO): Promise<CommandResult | Error> => {
+      try {
+         const filter = mapUpdateProductsDtoToFilter(dto);
+         const updateQuery = mapUpdateFieldsToUpdateQuery(dto.updateFields);
+         const updateResult: UpdateWriteOpResult = await ProductModel.updateMany(filter, updateQuery);
+         return { success: updateResult.acknowledged, affectedCount: updateResult.modifiedCount };
+      }
+      catch (error) {
+         return { type: "Internal", message: (error as Error).message };
+      }
    },
 
    deleteProduct: async (dto: DeleteProductDTO): Promise<CommandResult> => {

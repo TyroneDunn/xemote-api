@@ -169,30 +169,28 @@ export const mapUpdateProductsResultToResponse = (updateProducts : UpdateProduct
 export const mapDeleteProductResultToResponse = (
    deleteProduct : DeleteProduct,
    deleteRecord : DeleteRecord,
-) =>
-   async (deleteProductRequest : DeleteProductRequest) : Promise<Response> => {
-      const result : CommandResult | Error = await deleteProduct(deleteProductRequest);
-      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
-      // todo improve inventory repository error handling
-      await deleteRecord({ productId: deleteProductRequest._id });
-      return mapDeleteResultToResponse(result);
-   };
+) => async (deleteProductRequest : DeleteProductRequest) : Promise<Response> => {
+   const result : CommandResult | Error = await deleteProduct(deleteProductRequest);
+   if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+   // todo improve inventory repository error handling
+   await deleteRecord({ productId: deleteProductRequest._id });
+   return mapDeleteResultToResponse(result);
+};
 
 export const mapDeleteProductsResultToResponse = (
    getProducts : GetProducts,
    deleteProducts : DeleteProducts,
    deleteRecord : DeleteRecord,
-) =>
-   async (productsRequest : ProductsRequest) : Promise<Response> => {
-      const products : Product[] | Error = await getProducts(productsRequest);
-      if (isError(products)) return mapErrorToInternalServerErrorResponse(products);
-      products.forEach(async (product) => {
-         // todo improve inventory repository error handling
-         await deleteRecord({ productId: product._id });
-      });
-      const deleteProductsResult : CommandResult | Error =
-         await deleteProducts(productsRequest);
-      if (isError(deleteProductsResult))
-         return mapErrorToInternalServerErrorResponse(deleteProductsResult);
-      return mapDeleteResultToResponse(deleteProductsResult);
-   };
+) => async (productsRequest : ProductsRequest) : Promise<Response> => {
+   const products : Product[] | Error = await getProducts(productsRequest);
+   if (isError(products)) return mapErrorToInternalServerErrorResponse(products);
+   products.forEach(async (product) => {
+      // todo improve inventory repository error handling
+      await deleteRecord({ productId: product._id });
+   });
+   const deleteProductsResult : CommandResult | Error =
+      await deleteProducts(productsRequest);
+   if (isError(deleteProductsResult))
+      return mapErrorToInternalServerErrorResponse(deleteProductsResult);
+   return mapDeleteResultToResponse(deleteProductsResult);
+};

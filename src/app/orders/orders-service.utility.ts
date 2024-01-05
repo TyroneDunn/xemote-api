@@ -3,12 +3,13 @@ import {
    CommandResult,
    Error,
    isError,
+   isValidationError,
    mapCommandResultToSuccessResponse,
    mapErrorToInternalServerErrorResponse,
-   mapValidationOutcomeToErrorResponse,
+   mapValidationErrorToErrorResponse,
    Request,
    Response,
-   ValidationOutcome,
+   ValidationError,
 } from "@hals/common";
 import { OrdersRepository } from "./orders-repository.type";
 import {
@@ -39,8 +40,8 @@ export const configureOrdersService = (
 ): OrdersService => ({
    getOrder: async (request: Request): Promise<Response> => {
       const dto: GetOrderDTO = mapRequestToGetOrderDTO(request);
-      const validationOutcome: ValidationOutcome = await validator.validateGetOrderDto(dto);
-      if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
+      const validationOutcome: ValidationError | null = await validator.validateGetOrderDto(dto);
+      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: Order | Error = await repository.getOrder(dto);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
       return mapOrderToSuccessResponse(result);
@@ -48,8 +49,8 @@ export const configureOrdersService = (
 
    getOrders: async (request: Request): Promise<Response> => {
       const dto: OrdersDTO = mapRequestToOrdersDTO(request);
-      const validationOutcome: ValidationOutcome = await validator.validateOrdersDto(dto);
-      if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
+      const validationOutcome: ValidationError | null = await validator.validateOrdersDto(dto);
+      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: Order[] | Error = await repository.getOrders(dto);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
       const addPageData = (response: Response): Response =>
@@ -59,8 +60,8 @@ export const configureOrdersService = (
 
    createOrder: async (request: Request): Promise<Response> => {
       const dto: CreateOrderDTO = mapRequestToCreateOrderDTO(request);
-      const validationOutcome: ValidationOutcome = await validator.validateCreateOrderDto(dto);
-      if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
+      const validationOutcome: ValidationError | null = await validator.validateCreateOrderDto(dto);
+      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: Order | Error = await repository.createOrder(dto);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
       return mapOrderToSuccessResponse(result);
@@ -68,8 +69,8 @@ export const configureOrdersService = (
 
    updateOrder: async (request: Request): Promise<Response> => {
       const dto: UpdateOrderDTO = mapRequestToUpdateOrderDTO(request);
-      const validationOutcome: ValidationOutcome = await validator.validateUpdateOrderDto(dto);
-      if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
+      const validationOutcome: ValidationError | null = await validator.validateUpdateOrderDto(dto);
+      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: Order | Error = await repository.updateOrder(dto);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
       return mapOrderToSuccessResponse(result);
@@ -77,8 +78,8 @@ export const configureOrdersService = (
 
    updateOrders: async (request: Request): Promise<Response> => {
       const dto: UpdateOrdersDTO = mapRequestToUpdateOrdersDTO(request);
-      const validationOutcome: ValidationOutcome = await validator.validateUpdateOrdersDto(dto);
-      if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
+      const validationOutcome: ValidationError | null = await validator.validateUpdateOrdersDto(dto);
+      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: CommandResult | Error = await repository.updateOrders(dto);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
       return mapCommandResultToSuccessResponse(result);
@@ -86,8 +87,8 @@ export const configureOrdersService = (
 
    deleteOrder: async (request: Request): Promise<Response> => {
       const dto: DeleteOrderDTO = mapRequestToDeleteOrderDTO(request);
-      const validationOutcome: ValidationOutcome = await validator.validateDeleteOrderDto(dto);
-      if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
+      const validationOutcome: ValidationError | null = await validator.validateDeleteOrderDto(dto);
+      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: CommandResult | Error = await repository.deleteOrder(dto);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
       return mapCommandResultToSuccessResponse(result);
@@ -95,8 +96,8 @@ export const configureOrdersService = (
 
    deleteOrders: async (request: Request): Promise<Response> => {
       const dto: OrdersDTO = mapRequestToOrdersDTO(request);
-      const validationOutcome: ValidationOutcome = await validator.validateOrdersDto(dto);
-      if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
+      const validationOutcome: ValidationError | null = await validator.validateOrdersDto(dto);
+      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: CommandResult | Error = await repository.deleteOrders(dto);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
       return mapCommandResultToSuccessResponse(result);

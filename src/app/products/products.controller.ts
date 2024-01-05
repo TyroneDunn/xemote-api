@@ -5,8 +5,8 @@ import { ProductsService } from "./products.service";
 export const ProductsQueryParamKeys: string[] = [
    'name',
    'nameRegex',
-   'type',
-   'typeRegex',
+   'category',
+   'categoryRegex',
    'costPriceRange',
    'markupRange',
    'createdAt',

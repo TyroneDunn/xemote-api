@@ -55,7 +55,7 @@ export type ProductUpdateFields = {
    newCostPrice? : Price,
    newMarkup? : number,
    newCategory? : ProductCategory,
-}
+};
 
 export type DeleteProductRequest = { _id : string };
 

@@ -1,6 +1,13 @@
 import {
+   addPageDataToResponse,
+   CommandResult,
+   Error,
+   isError,
+   mapDeleteResultToResponse,
+   mapErrorToInternalServerErrorResponse,
    mapRequestToPage,
    mapRequestToTimestamps,
+   mapUpdateResultToResponse,
    NumberRange,
    OK,
    OrderOption,
@@ -19,6 +26,16 @@ import {
    UpdateProductsRequest,
 } from "./products.type";
 import { Price } from "./price.type";
+import {
+   CreateProduct,
+   DeleteProduct,
+   DeleteProducts,
+   GetProduct,
+   GetProducts,
+   UpdateProduct,
+   UpdateProducts,
+} from "./products-repository.type";
+import { CreateRecord, DeleteRecord } from "../inventory/inventory-repository.type";
 
 export const mapToGetProductRequest = (request : Request) : GetProductRequest => ({
    _id: request.paramMap['id'],
@@ -101,3 +118,81 @@ export const mapProductsToSuccessResponse = (products : Product[]) : Response =>
       collection : [ products ],
       count      : products.length,
    });
+
+export const mapGetProductResultToResponse = (getProduct : GetProduct) =>
+   async (getProductRequest : GetProductRequest) : Promise<Response> => {
+      const result : Product | Error = await getProduct(getProductRequest);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      else return mapProductToSuccessResponse(result);
+   };
+
+export const mapGetProductsResultToResponse = (getProducts : GetProducts) =>
+   async (productsRequest : ProductsRequest) : Promise<Response> => {
+      const getProductsResult : Product[] | Error = await getProducts(productsRequest);
+      if (isError(getProductsResult))
+         return mapErrorToInternalServerErrorResponse(getProductsResult);
+      else {
+         const response : Response = mapProductsToSuccessResponse(getProductsResult);
+         if (productsRequest.page === undefined) return response;
+         else return addPageDataToResponse(productsRequest.page, response);
+      }
+   };
+
+export const mapCreateProductResultToResponse = (
+   createProduct : CreateProduct,
+   createRecord : CreateRecord,
+) => async (createProductRequest : CreateProductRequest) : Promise<Response> => {
+   const createProductResult : Product | Error =
+      await createProduct(createProductRequest);
+   if (isError(createProductResult))
+      return mapErrorToInternalServerErrorResponse(createProductResult);
+   // todo improve inventory repository error handling
+   await createRecord({ productId: createProductResult._id, count: 0 });
+   return mapProductToSuccessResponse(createProductResult);
+};
+
+export const mapUpdateProductResultToResponse = (updateProduct : UpdateProduct) =>
+   async (updateProductRequest : UpdateProductRequest) : Promise<Response> => {
+      const result : Product | Error = await updateProduct(updateProductRequest);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      else return mapProductToSuccessResponse(result);
+   };
+
+export const mapUpdateProductsResultToResponse = (updateProducts : UpdateProducts) =>
+   async (updateProductsRequest : UpdateProductsRequest) : Promise<Response> => {
+      const result : CommandResult | Error =
+         await updateProducts(updateProductsRequest);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      else return mapUpdateResultToResponse(result);
+   };
+
+export const mapDeleteProductResultToResponse = (
+   deleteProduct : DeleteProduct,
+   deleteRecord : DeleteRecord,
+) =>
+   async (deleteProductRequest : DeleteProductRequest) : Promise<Response> => {
+      const result : CommandResult | Error = await deleteProduct(deleteProductRequest);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      // todo improve inventory repository error handling
+      await deleteRecord({ productId: deleteProductRequest._id });
+      return mapDeleteResultToResponse(result);
+   };
+
+export const mapDeleteProductsResultToResponse = (
+   getProducts : GetProducts,
+   deleteProducts : DeleteProducts,
+   deleteRecord : DeleteRecord,
+) =>
+   async (productsRequest : ProductsRequest) : Promise<Response> => {
+      const products : Product[] | Error = await getProducts(productsRequest);
+      if (isError(products)) return mapErrorToInternalServerErrorResponse(products);
+      products.forEach(async (product) => {
+         // todo improve inventory repository error handling
+         await deleteRecord({ productId: product._id });
+      });
+      const deleteProductsResult : CommandResult | Error =
+         await deleteProducts(productsRequest);
+      if (isError(deleteProductsResult))
+         return mapErrorToInternalServerErrorResponse(deleteProductsResult);
+      return mapDeleteResultToResponse(deleteProductsResult);
+   };

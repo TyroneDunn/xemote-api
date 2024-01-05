@@ -8,6 +8,7 @@ import {
    mapUpdateResultToResponse,
    mapValidationOutcomeToErrorResponse,
    Request,
+   RequestHandler,
    Response,
    ValidationOutcome,
 } from "@hals/common";
@@ -32,10 +33,19 @@ import {
    UpdateProductDTO,
    UpdateProductsDTO,
 } from "./products-dtos.type";
-import { ProductsService } from "./products-service.type";
 import { InventoryRepository } from "../inventory/inventory-repository.type";
 
-export const configureProductsService = (
+export type ProductsService = {
+   getProduct : RequestHandler,
+   getProducts : RequestHandler,
+   createProduct : RequestHandler,
+   updateProduct : RequestHandler,
+   updateProducts : RequestHandler,
+   deleteProduct : RequestHandler,
+   deleteProducts : RequestHandler,
+};
+
+export const ProductsService = (
    repository: ProductsRepository,
    validator: ProductsDtoValidator,
    inventoryRepository: InventoryRepository): ProductsService =>

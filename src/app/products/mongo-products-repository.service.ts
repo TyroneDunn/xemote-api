@@ -16,9 +16,9 @@ import { UpdateWriteOpResult } from "mongoose";
 import { CommandResult, Error } from "@hals/common";
 
 export const MongoProductsRepository : ProductsRepository = {
-   getProduct: async (dto : GetProductRequest) : Promise<Product | Error> => {
+   getProduct: async (request : GetProductRequest) : Promise<Product | Error> => {
       try {
-         const product : Product | null = await ProductModel.findById(dto._id);
+         const product : Product | null = await ProductModel.findById(request._id);
          if (!product) return { type: "NotFound", message: 'Product not found.' };
          return product;
       }
@@ -27,15 +27,15 @@ export const MongoProductsRepository : ProductsRepository = {
       }
    },
 
-   getProducts: async (dto : ProductsRequest) : Promise<Product[] | Error> => {
+   getProducts: async (request : ProductsRequest) : Promise<Product[] | Error> => {
       try {
-         const filter = mapProductsDtoToProductsFilter(dto);
+         const filter = mapProductsRequestToProductsFilter(request);
          const query = ProductModel.find(filter);
-         if (dto.sort !== undefined)
-            query.sort({ [dto.sort.field]: dto.sort.order === 'asc' ? 1 : -1 });
-         if (dto.page !== undefined) {
-            query.skip(dto.page.index * dto.page.limit);
-            query.limit(dto.page.limit);
+         if (request.sort !== undefined)
+            query.sort({ [request.sort.field]: request.sort.order === 'asc' ? 1 : -1 });
+         if (request.page !== undefined) {
+            query.skip(request.page.index * request.page.limit);
+            query.limit(request.page.limit);
          }
          return query.exec();
       }
@@ -44,13 +44,13 @@ export const MongoProductsRepository : ProductsRepository = {
       }
    },
 
-   createProduct: async (dto : CreateProductRequest) : Promise<Product | Error> => {
+   createProduct: async (request : CreateProductRequest) : Promise<Product | Error> => {
       try {
          return new ProductModel({
-            name      : dto.name,
-            type      : dto.type,
-            costPrice : dto.costPrice,
-            markup    : dto.markup,
+            name      : request.name,
+            type      : request.type,
+            costPrice : request.costPrice,
+            markup    : request.markup,
          }).save();
       }
       catch (error) {
@@ -58,11 +58,11 @@ export const MongoProductsRepository : ProductsRepository = {
       }
    },
 
-   updateProduct: async (dto : UpdateProductRequest) : Promise<Product | Error> => {
+   updateProduct: async (request : UpdateProductRequest) : Promise<Product | Error> => {
       try {
          const product : Product | null = await ProductModel.findOneAndUpdate(
-            { _id: dto._id },
-            mapUpdateFieldsToUpdateQuery(dto.updateFields),
+            { _id: request._id },
+            mapUpdateFieldsToUpdateQuery(request.updateFields),
             { new: true },
          );
          if (!product) return { type: "NotFound", message: 'Product not found.' };
@@ -73,10 +73,10 @@ export const MongoProductsRepository : ProductsRepository = {
       }
    },
 
-   updateProducts: async (dto : UpdateProductsRequest) : Promise<CommandResult | Error> => {
+   updateProducts: async (request : UpdateProductsRequest) : Promise<CommandResult | Error> => {
       try {
-         const filter = mapUpdateProductsDtoToFilter(dto);
-         const updateQuery = mapUpdateFieldsToUpdateQuery(dto.updateFields);
+         const filter = mapUpdateProductsRequestToFilter(request);
+         const updateQuery = mapUpdateFieldsToUpdateQuery(request.updateFields);
          const updateResult : UpdateWriteOpResult = await ProductModel.updateMany(filter, updateQuery);
          return { success: updateResult.acknowledged, affectedCount: updateResult.modifiedCount };
       }
@@ -85,9 +85,9 @@ export const MongoProductsRepository : ProductsRepository = {
       }
    },
 
-   deleteProduct: async (dto : DeleteProductRequest) : Promise<CommandResult | Error> => {
+   deleteProduct: async (request : DeleteProductRequest) : Promise<CommandResult | Error> => {
       try {
-         const result : DeleteResult = await ProductModel.deleteOne({ _id: dto._id });
+         const result : DeleteResult = await ProductModel.deleteOne({ _id: request._id });
          return { success: result.acknowledged, affectedCount: result.deletedCount };
       }
       catch (error) {
@@ -95,9 +95,9 @@ export const MongoProductsRepository : ProductsRepository = {
       }
    },
 
-   deleteProducts: async (dto : ProductsRequest) : Promise<CommandResult | Error> => {
+   deleteProducts: async (request : ProductsRequest) : Promise<CommandResult | Error> => {
       try {
-         const filter = mapProductsDtoToProductsFilter(dto);
+         const filter = mapProductsRequestToProductsFilter(request);
          const result : DeleteResult = await ProductModel.deleteMany(filter);
          return { success: result.acknowledged, affectedCount: result.deletedCount };
       }
@@ -106,9 +106,9 @@ export const MongoProductsRepository : ProductsRepository = {
       }
    },
 
-   exists: async (dto : GetProductRequest) : Promise<boolean | Error> => {
+   exists: async (request : GetProductRequest) : Promise<boolean | Error> => {
       try {
-         const product : Product | null = await ProductModel.findById(dto._id);
+         const product : Product | null = await ProductModel.findById(request._id);
          return !!product;
       }
       catch (error) {
@@ -117,7 +117,7 @@ export const MongoProductsRepository : ProductsRepository = {
    },
 };
 
-const mapProductsDtoToProductsFilter = (dto : ProductsRequest) => ({
+const mapProductsRequestToProductsFilter = (dto : ProductsRequest) => ({
    ...dto.filter && {
       ...dto.filter.name && { name: dto.filter.name },
       ...dto.filter.nameRegex && { name: { $regex: dto.filter.nameRegex, $options: 'i' } },
@@ -176,7 +176,7 @@ const mapProductsDtoToProductsFilter = (dto : ProductsRequest) => ({
    },
 });
 
-const mapUpdateProductsDtoToFilter = (dto : UpdateProductsRequest) => ({
+const mapUpdateProductsRequestToFilter = (dto : UpdateProductsRequest) => ({
    ...dto.filter.name && { name: dto.filter.name },
    ...dto.filter.nameRegex && { name: { $regex: dto.filter.nameRegex, $options: 'i' } },
    ...dto.filter.type && { type: dto.filter.type },

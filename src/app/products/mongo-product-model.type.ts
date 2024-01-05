@@ -1,13 +1,13 @@
 import { Document, Schema } from "mongoose";
 import database from "../../database/mongodb.config";
-import { Price, Product, ProductType } from "./products.type";
+import { Price, Product, ProductCategory } from "./products.type";
 
 export interface ProductDocument extends Document, Product {
    _id: string,
    name: string,
    costPrice: Price,
    markup: number,
-   type: ProductType,
+   category: ProductCategory,
 }
 
 const CostPriceSchema = new Schema(
@@ -38,7 +38,7 @@ const ProductSchema = new Schema<ProductDocument>(
          type: Number,
          required: true,
       },
-      type: {
+      category: {
          type: String,
       },
    },

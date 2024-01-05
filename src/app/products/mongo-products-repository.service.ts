@@ -48,7 +48,7 @@ export const MongoProductsRepository : ProductsRepository = {
       try {
          return new ProductModel({
             name      : request.name,
-            type      : request.type,
+            category  : request.category,
             costPrice : request.costPrice,
             markup    : request.markup,
          }).save();
@@ -121,8 +121,8 @@ const mapProductsRequestToProductsFilter = (dto : ProductsRequest) => ({
    ...dto.filter && {
       ...dto.filter.name && { name: dto.filter.name },
       ...dto.filter.nameRegex && { name: { $regex: dto.filter.nameRegex, $options: 'i' } },
-      ...dto.filter.type && { type: dto.filter.type },
-      ...dto.filter.typeRegex && { type: { $regex: dto.filter.typeRegex, $options: 'i' } },
+      ...dto.filter.category && { category: dto.filter.category },
+      ...dto.filter.categoryRegex && { category: { $regex: dto.filter.categoryRegex, $options: 'i' } },
       ...dto.filter.costPriceRange && {
          ...(dto.filter.costPriceRange.start && !dto.filter.costPriceRange.end) &&
          { 'costPrice.price': { $gte: dto.filter.costPriceRange.start } },
@@ -179,8 +179,8 @@ const mapProductsRequestToProductsFilter = (dto : ProductsRequest) => ({
 const mapUpdateProductsRequestToFilter = (dto : UpdateProductsRequest) => ({
    ...dto.filter.name && { name: dto.filter.name },
    ...dto.filter.nameRegex && { name: { $regex: dto.filter.nameRegex, $options: 'i' } },
-   ...dto.filter.type && { type: dto.filter.type },
-   ...dto.filter.typeRegex && { type: { $regex: dto.filter.typeRegex, $options: 'i' } },
+   ...dto.filter.category && { category: dto.filter.category },
+   ...dto.filter.categoryRegex && { category: { $regex: dto.filter.categoryRegex, $options: 'i' } },
    ...dto.filter.costPriceRange && {
       ...(dto.filter.costPriceRange.start && !dto.filter.costPriceRange.end) &&
       { 'costPrice.price': { $gte: dto.filter.costPriceRange.start } },
@@ -235,7 +235,7 @@ const mapUpdateProductsRequestToFilter = (dto : UpdateProductsRequest) => ({
 
 const mapUpdateFieldsToUpdateQuery = (dto : ProductUpdateFields) => ({
    ...dto.newName && { name: dto.newName },
-   ...dto.newType && { type: dto.newType },
+   ...dto.newCategory && { category: dto.newCategory },
    ...dto.newCostPrice && { costPrice: dto.newCostPrice as Price },
    ...dto.newMarkup && { markup: dto.newMarkup },
 });

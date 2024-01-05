@@ -5,7 +5,7 @@ export type Product = {
    name : string,
    costPrice : Price,
    markup : number,
-   type : ProductType,
+   category : ProductCategory,
 };
 
 export type Price = {
@@ -13,7 +13,7 @@ export type Price = {
    currency : "ZAR" | "USD"
 };
 
-export type ProductType =
+export type ProductCategory =
    | "Xemote Gateway"
    | "Xemote Accessory"
    | "Wireless Temperature Sensor"
@@ -34,7 +34,7 @@ export type GetProductRequest = { _id : string };
 
 export type CreateProductRequest = {
    name: string,
-   type: ProductType,
+   category: ProductCategory,
    costPrice: Price,
    markup: number,
 };
@@ -54,7 +54,7 @@ export type ProductUpdateFields = {
    newName? : string,
    newCostPrice? : Price,
    newMarkup? : number,
-   newType? : ProductType,
+   newCategory? : ProductCategory,
 }
 
 export type DeleteProductRequest = { _id : string };
@@ -62,15 +62,15 @@ export type DeleteProductRequest = { _id : string };
 export type ProductsFilter = {
    name?: string,
    nameRegex?: string,
-   type?: ProductType,
-   typeRegex?: string,
+   category?: ProductCategory,
+   categoryRegex?: string,
    costPriceRange?: NumberRange,
    markupRange?: NumberRange,
 };
 
 export type ProductsSortOption =
    | "name"
-   | "type"
+   | "category"
    | "costPrice"
    | "markup"
    | "createdAt"

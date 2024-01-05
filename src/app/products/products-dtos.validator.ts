@@ -32,22 +32,22 @@ export const ProductsDtosValidator = (repository : ProductsRepository) : Product
             "BadRequest",
             'Invalid name. Provide either "name" or "nameRegex".',
          );
-         if (dto.filter.type && dto.filter.typeRegex) return ValidationError(
+         if (dto.filter.category && dto.filter.categoryRegex) return ValidationError(
             "BadRequest",
-            'Invalid type. Provide either "type" or "typeRegex".',
+            'Invalid category. Provide either "category" or "categoryRegex".',
          );
-         if (dto.filter.type)
-            if (dto.filter.type !== "Xemote Gateway"
-               && dto.filter.type !== "Xemote Accessory"
-               && dto.filter.type !== "Wireless Temperature Sensor"
-               && dto.filter.type !== "Wireless Humidity Sensor"
-               && dto.filter.type !== "Wireless AC Current Meter"
-               && dto.filter.type !== "Wireless Event-Based Sensor"
-               && dto.filter.type !== "Wireless Infrared Beam Sensor"
-               && dto.filter.type !== "Wireless 4-30mA Sensor")
+         if (dto.filter.category)
+            if (dto.filter.category !== "Xemote Gateway"
+               && dto.filter.category !== "Xemote Accessory"
+               && dto.filter.category !== "Wireless Temperature Sensor"
+               && dto.filter.category !== "Wireless Humidity Sensor"
+               && dto.filter.category !== "Wireless AC Current Meter"
+               && dto.filter.category !== "Wireless Event-Based Sensor"
+               && dto.filter.category !== "Wireless Infrared Beam Sensor"
+               && dto.filter.category !== "Wireless 4-30mA Sensor")
                return ValidationError(
                   "BadRequest",
-                  'Invalid filter type. Type must be "Xemote' +
+                  'Invalid filter category. Type must be "Xemote' +
                   ' Accessory", "Xemote Gateway", "Wireless Temperature Sensor", "Wireless' +
                   ' Humidity Sensor", "Wireless Ac Current Meter", "Wireless Event-Based' +
                   ' Sensor", "Wireless Infrared Beam Sensor", or "Wireless 4-30mA Sensor".',
@@ -133,7 +133,7 @@ export const ProductsDtosValidator = (repository : ProductsRepository) : Product
          if (!dto.sort.field && dto.sort.order)
             return ValidationError("BadRequest", 'Invalid sort. Provide sort field.');
          if (dto.sort.field !== "name"
-            && dto.sort.field !== "type"
+            && dto.sort.field !== "category"
             && dto.sort.field !== "costPrice"
             && dto.sort.field !== "markup"
             && dto.sort.field !== "createdAt"
@@ -141,7 +141,7 @@ export const ProductsDtosValidator = (repository : ProductsRepository) : Product
             return ValidationError(
                "BadRequest",
                'Invalid sort. Sort field must be' +
-               ' "name", "type", "costPrice", "markup", "createdAt", or' +
+               ' "name", "category", "costPrice", "markup", "createdAt", or' +
                ' "updatedAt".'
             );
          if (dto.sort.order !== "asc" && dto.sort.order !== "desc")
@@ -173,19 +173,19 @@ export const ProductsDtosValidator = (repository : ProductsRepository) : Product
    validateCreateProductDTO: async (dto : CreateProductRequest) : Promise<ValidationError | null> => {
       if (!dto.name)
          return ValidationError("BadRequest", 'Name required.');
-      if (!dto.type)
+      if (!dto.category)
          return ValidationError("BadRequest", 'Type required.');
-      if (dto.type !== "Xemote Gateway"
-         && dto.type !== "Xemote Accessory"
-         && dto.type !== "Wireless Temperature Sensor"
-         && dto.type !== "Wireless Humidity Sensor"
-         && dto.type !== "Wireless AC Current Meter"
-         && dto.type !== "Wireless Event-Based Sensor"
-         && dto.type !== "Wireless Infrared Beam Sensor"
-         && dto.type !== "Wireless 4-30mA Sensor")
+      if (dto.category !== "Xemote Gateway"
+         && dto.category !== "Xemote Accessory"
+         && dto.category !== "Wireless Temperature Sensor"
+         && dto.category !== "Wireless Humidity Sensor"
+         && dto.category !== "Wireless AC Current Meter"
+         && dto.category !== "Wireless Event-Based Sensor"
+         && dto.category !== "Wireless Infrared Beam Sensor"
+         && dto.category !== "Wireless 4-30mA Sensor")
          return ValidationError(
             "BadRequest",
-            'Invalid type. Type must be "Xemote' +
+            'Invalid category. Category must be "Xemote' +
             ' Accessory", "Xemote Gateway", "Wireless Temperature Sensor", "Wireless' +
             ' Humidity Sensor", "Wireless Ac Current Meter", "Wireless Event-Based' +
             ' Sensor", "Wireless Infrared Beam Sensor", or "Wireless 4-30mA Sensor".'
@@ -235,18 +235,18 @@ export const ProductsDtosValidator = (repository : ProductsRepository) : Product
             'Invalid name. Name cannot be empty' +
             ' string.'
          );
-      if (dto.updateFields.newType)
-         if (dto.updateFields.newType !== "Xemote Gateway"
-            && dto.updateFields.newType !== "Xemote Accessory"
-            && dto.updateFields.newType !== "Wireless Temperature Sensor"
-            && dto.updateFields.newType !== "Wireless Humidity Sensor"
-            && dto.updateFields.newType !== "Wireless AC Current Meter"
-            && dto.updateFields.newType !== "Wireless Event-Based Sensor"
-            && dto.updateFields.newType !== "Wireless Infrared Beam Sensor"
-            && dto.updateFields.newType !== "Wireless 4-30mA Sensor")
+      if (dto.updateFields.newCategory)
+         if (dto.updateFields.newCategory !== "Xemote Gateway"
+            && dto.updateFields.newCategory !== "Xemote Accessory"
+            && dto.updateFields.newCategory !== "Wireless Temperature Sensor"
+            && dto.updateFields.newCategory !== "Wireless Humidity Sensor"
+            && dto.updateFields.newCategory !== "Wireless AC Current Meter"
+            && dto.updateFields.newCategory !== "Wireless Event-Based Sensor"
+            && dto.updateFields.newCategory !== "Wireless Infrared Beam Sensor"
+            && dto.updateFields.newCategory !== "Wireless 4-30mA Sensor")
             return ValidationError(
                "BadRequest",
-               'Invalid type. New yype must be "Xemote' +
+               'Invalid category. New category must be "Xemote' +
                ' Accessory", "Xemote Gateway", "Wireless Temperature Sensor", "Wireless' +
                ' Humidity Sensor", "Wireless Ac Current Meter", "Wireless Event-Based' +
                ' Sensor", "Wireless Infrared Beam Sensor", or "Wireless 4-30mA Sensor".'
@@ -282,24 +282,24 @@ export const ProductsDtosValidator = (repository : ProductsRepository) : Product
             'Invalid name. Provide either "name"' +
             ' or "nameRegex".'
          );
-      if (dto.filter.type && dto.filter.typeRegex)
+      if (dto.filter.category && dto.filter.categoryRegex)
          return ValidationError(
             "BadRequest",
-            'Invalid type. Provide either "type"' +
-            ' or "typeRegex".'
+            'Invalid category. Provide either "category"' +
+            ' or "categoryRegex".'
          );
-      if (dto.filter.type)
-         if (dto.filter.type !== "Xemote Gateway"
-            && dto.filter.type !== "Xemote Accessory"
-            && dto.filter.type !== "Wireless Temperature Sensor"
-            && dto.filter.type !== "Wireless Humidity Sensor"
-            && dto.filter.type !== "Wireless AC Current Meter"
-            && dto.filter.type !== "Wireless Event-Based Sensor"
-            && dto.filter.type !== "Wireless Infrared Beam Sensor"
-            && dto.filter.type !== "Wireless 4-30mA Sensor")
+      if (dto.filter.category)
+         if (dto.filter.category !== "Xemote Gateway"
+            && dto.filter.category !== "Xemote Accessory"
+            && dto.filter.category !== "Wireless Temperature Sensor"
+            && dto.filter.category !== "Wireless Humidity Sensor"
+            && dto.filter.category !== "Wireless AC Current Meter"
+            && dto.filter.category !== "Wireless Event-Based Sensor"
+            && dto.filter.category !== "Wireless Infrared Beam Sensor"
+            && dto.filter.category !== "Wireless 4-30mA Sensor")
             return ValidationError(
                "BadRequest",
-               'Invalid filter type. Type must be "Xemote' +
+               'Invalid filter category. Category must be "Xemote' +
                ' Accessory", "Xemote Gateway", "Wireless Temperature Sensor", "Wireless' +
                ' Humidity Sensor", "Wireless Ac Current Meter", "Wireless Event-Based' +
                ' Sensor", "Wireless Infrared Beam Sensor", or "Wireless 4-30mA Sensor".'
@@ -391,18 +391,18 @@ export const ProductsDtosValidator = (repository : ProductsRepository) : Product
             'Invalid name. Name cannot be empty' +
             ' string.'
          );
-      if (dto.updateFields.newType)
-         if (dto.updateFields.newType !== "Xemote Gateway"
-            && dto.updateFields.newType !== "Xemote Accessory"
-            && dto.updateFields.newType !== "Wireless Temperature Sensor"
-            && dto.updateFields.newType !== "Wireless Humidity Sensor"
-            && dto.updateFields.newType !== "Wireless AC Current Meter"
-            && dto.updateFields.newType !== "Wireless Event-Based Sensor"
-            && dto.updateFields.newType !== "Wireless Infrared Beam Sensor"
-            && dto.updateFields.newType !== "Wireless 4-30mA Sensor")
+      if (dto.updateFields.newCategory)
+         if (dto.updateFields.newCategory !== "Xemote Gateway"
+            && dto.updateFields.newCategory !== "Xemote Accessory"
+            && dto.updateFields.newCategory !== "Wireless Temperature Sensor"
+            && dto.updateFields.newCategory !== "Wireless Humidity Sensor"
+            && dto.updateFields.newCategory !== "Wireless AC Current Meter"
+            && dto.updateFields.newCategory !== "Wireless Event-Based Sensor"
+            && dto.updateFields.newCategory !== "Wireless Infrared Beam Sensor"
+            && dto.updateFields.newCategory !== "Wireless 4-30mA Sensor")
             return ValidationError(
                "BadRequest",
-               'Invalid type. New yype must be "Xemote' +
+               'Invalid category. New category must be "Xemote' +
                ' Accessory", "Xemote Gateway", "Wireless Temperature Sensor", "Wireless' +
                ' Humidity Sensor", "Wireless Ac Current Meter", "Wireless Event-Based' +
                ' Sensor", "Wireless Infrared Beam Sensor", or "Wireless 4-30mA Sensor".'

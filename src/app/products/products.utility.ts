@@ -41,13 +41,12 @@ export const mapToGetProductRequest = (request : Request) : GetProductRequest =>
    _id: request.paramMap['id'],
 });
 
-export const mapRequestToProductsRequest = (request : Request) : ProductsRequest =>
-   ({
-      ...mapToProductsRequestFilter(request),
-      ...mapRequestToTimestamps(request),
-      ...mapToProductsSort(request),
-      ...mapRequestToPage(request),
-   });
+export const mapRequestToProductsRequest = (request : Request) : ProductsRequest => ({
+   ...mapToProductsRequestFilter(request),
+   ...mapRequestToTimestamps(request),
+   ...mapToProductsSort(request),
+   ...mapRequestToPage(request),
+});
 
 export const mapToCreateProductRequest = (request : Request) : CreateProductRequest => ({
    name     : request.payload['name'],
@@ -71,21 +70,20 @@ export const mapToDeleteProductRequest = (request : Request) : DeleteProductRequ
    _id: request.paramMap['id'],
 });
 
-const mapToProductsRequestFilter = (request : Request) =>
-   ({
-      filter: {
-         ...request.queryParamMap['name'] && { name: request.queryParamMap['name'] },
-         ...request.queryParamMap['nameRegex'] && { nameRegex: request.queryParamMap['nameRegex'] },
-         ...request.queryParamMap['category'] && { category: request.queryParamMap['category'] as ProductCategory },
-         ...request.queryParamMap['categoryRegex'] && { categoryRegex: request.queryParamMap['categoryRegex'] },
-         ...request.queryParamMap['costPriceRange'] && {
-            costPriceRange: JSON.parse(request.queryParamMap['costPriceRange']) as NumberRange,
-         },
-         ...request.queryParamMap['markupRange'] && {
-            markupRange: JSON.parse(request.queryParamMap['markupRange']) as NumberRange,
-         },
+const mapToProductsRequestFilter = (request : Request) => ({
+   filter: {
+      ...request.queryParamMap['name'] && { name: request.queryParamMap['name'] },
+      ...request.queryParamMap['nameRegex'] && { nameRegex: request.queryParamMap['nameRegex'] },
+      ...request.queryParamMap['category'] && { category: request.queryParamMap['category'] as ProductCategory },
+      ...request.queryParamMap['categoryRegex'] && { categoryRegex: request.queryParamMap['categoryRegex'] },
+      ...request.queryParamMap['costPriceRange'] && {
+         costPriceRange: JSON.parse(request.queryParamMap['costPriceRange']) as NumberRange,
       },
-   });
+      ...request.queryParamMap['markupRange'] && {
+         markupRange: JSON.parse(request.queryParamMap['markupRange']) as NumberRange,
+      },
+   },
+});
 
 const mapToProductsSort = (request : Request) => ({
    ...(request.queryParamMap['sort'] && request.queryParamMap['order']) && {
@@ -105,19 +103,17 @@ const mapToUpdateFields = (request : Request) => ({
    },
 });
 
-export const mapProductToSuccessResponse = (product : Product) : Response =>
-   ({
-      status     : OK,
-      collection : [ product ],
-      count      : 1,
-   });
+export const mapProductToSuccessResponse = (product : Product) : Response => ({
+   status     : OK,
+   collection : [ product ],
+   count      : 1,
+});
 
-export const mapProductsToSuccessResponse = (products : Product[]) : Response =>
-   ({
-      status     : OK,
-      collection : [ products ],
-      count      : products.length,
-   });
+export const mapProductsToSuccessResponse = (products : Product[]) : Response => ({
+   status     : OK,
+   collection : [ products ],
+   count      : products.length,
+});
 
 export const mapGetProductResultToResponse = (getProduct : GetProduct) =>
    async (getProductRequest : GetProductRequest) : Promise<Response> => {

@@ -32,64 +32,63 @@ export const ProductsService = (
    productsRepository : ProductsRepository,
    validator : ProductsValidator,
    inventoryRepository : InventoryRepository
-) : ProductsService =>
-   ({
-      getProduct: async (request : Request) : Promise<Response> =>
-         handleRequest(
-            mapToGetProductRequest(request),
-            validator.validateGetProductDTO,
-            mapGetProductResultToResponse(productsRepository.getProduct),
-         ),
+) : ProductsService => ({
+   getProduct: async (request : Request) : Promise<Response> =>
+      handleRequest(
+         mapToGetProductRequest(request),
+         validator.validateGetProductDTO,
+         mapGetProductResultToResponse(productsRepository.getProduct),
+      ),
 
-      getProducts: async (request : Request) : Promise<Response> =>
-         handleRequest(
-            mapRequestToProductsRequest(request),
-            validator.validateProductsDTO,
-            mapGetProductsResultToResponse(productsRepository.getProducts),
-         ),
+   getProducts: async (request : Request) : Promise<Response> =>
+      handleRequest(
+         mapRequestToProductsRequest(request),
+         validator.validateProductsDTO,
+         mapGetProductsResultToResponse(productsRepository.getProducts),
+      ),
 
-      createProduct: async (request : Request) : Promise<Response> =>
-         handleRequest(
-            mapToCreateProductRequest(request),
-            validator.validateCreateProductDTO,
-            mapCreateProductResultToResponse(
-               productsRepository.createProduct,
-               inventoryRepository.createRecord
-            ),
+   createProduct: async (request : Request) : Promise<Response> =>
+      handleRequest(
+         mapToCreateProductRequest(request),
+         validator.validateCreateProductDTO,
+         mapCreateProductResultToResponse(
+            productsRepository.createProduct,
+            inventoryRepository.createRecord
          ),
+      ),
 
-      updateProduct: async (request : Request) : Promise<Response> =>
-         handleRequest(
-            mapToUpdateProductRequest(request),
-            validator.validateUpdateProductDTO,
-            mapUpdateProductResultToResponse(productsRepository.updateProduct),
-         ),
+   updateProduct: async (request : Request) : Promise<Response> =>
+      handleRequest(
+         mapToUpdateProductRequest(request),
+         validator.validateUpdateProductDTO,
+         mapUpdateProductResultToResponse(productsRepository.updateProduct),
+      ),
 
-      updateProducts: async (request : Request) : Promise<Response> =>
-         handleRequest(
-            mapToUpdateProductsRequest(request),
-            validator.validateUpdateProductsDTO,
-            mapUpdateProductsResultToResponse(productsRepository.updateProducts),
-         ),
+   updateProducts: async (request : Request) : Promise<Response> =>
+      handleRequest(
+         mapToUpdateProductsRequest(request),
+         validator.validateUpdateProductsDTO,
+         mapUpdateProductsResultToResponse(productsRepository.updateProducts),
+      ),
 
-      deleteProduct: async (request : Request) : Promise<Response> =>
-         handleRequest(
-            mapToDeleteProductRequest(request),
-            validator.validateDeleteProductDTO,
-            mapDeleteProductResultToResponse(
-               productsRepository.deleteProduct,
-               inventoryRepository.deleteRecord
-            ),
+   deleteProduct: async (request : Request) : Promise<Response> =>
+      handleRequest(
+         mapToDeleteProductRequest(request),
+         validator.validateDeleteProductDTO,
+         mapDeleteProductResultToResponse(
+            productsRepository.deleteProduct,
+            inventoryRepository.deleteRecord
          ),
+      ),
 
-      deleteProducts: async (request : Request) : Promise<Response> =>
-         handleRequest(
-            mapRequestToProductsRequest(request),
-            validator.validateProductsDTO,
-            mapDeleteProductsResultToResponse(
-               productsRepository.getProducts,
-               productsRepository.deleteProducts,
-               inventoryRepository.deleteRecord
-            ),
+   deleteProducts: async (request : Request) : Promise<Response> =>
+      handleRequest(
+         mapRequestToProductsRequest(request),
+         validator.validateProductsDTO,
+         mapDeleteProductsResultToResponse(
+            productsRepository.getProducts,
+            productsRepository.deleteProducts,
+            inventoryRepository.deleteRecord
          ),
-   });
+      ),
+});

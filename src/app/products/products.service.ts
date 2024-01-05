@@ -51,19 +51,19 @@ export const ProductsService = (
    inventoryRepository : InventoryRepository) : ProductsService =>
    ({
       getProduct: async (request : Request) : Promise<Response> => {
-         const dto : GetProductRequest = mapToGetProductRequest(request);
-         const validationOutcome : ValidationOutcome = await validator.validateGetProductDTO(dto);
+         const getProductRequest : GetProductRequest = mapToGetProductRequest(request);
+         const validationOutcome : ValidationOutcome = await validator.validateGetProductDTO(getProductRequest);
          if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
-         const result : Product | Error = await repository.getProduct(dto);
+         const result : Product | Error = await repository.getProduct(getProductRequest);
          if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
          return mapProductToSuccessResponse(result);
       },
 
       getProducts: async (request : Request) : Promise<Response> => {
-         const dto : ProductsRequest = mapRequestToProductsRequest(request);
-         const validationOutcome : ValidationOutcome = await validator.validateProductsDTO(dto);
+         const productsRequest : ProductsRequest = mapRequestToProductsRequest(request);
+         const validationOutcome : ValidationOutcome = await validator.validateProductsDTO(productsRequest);
          if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
-         const result : Product[] | Error = await repository.getProducts(dto);
+         const result : Product[] | Error = await repository.getProducts(productsRequest);
          if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
          const addPageData = (response : Response) : Response =>
             addRequestPageDataToResponse(request, response);
@@ -71,10 +71,10 @@ export const ProductsService = (
       },
 
       createProduct: async (request : Request) : Promise<Response> => {
-         const dto : CreateProductRequest = mapToCreateProductRequest(request);
-         const validationOutcome : ValidationOutcome = await validator.validateCreateProductDTO(dto);
+         const createProductRequest : CreateProductRequest = mapToCreateProductRequest(request);
+         const validationOutcome : ValidationOutcome = await validator.validateCreateProductDTO(createProductRequest);
          if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
-         const result : Product | Error = await repository.createProduct(dto);
+         const result : Product | Error = await repository.createProduct(createProductRequest);
          if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
          // todo improve inventory repository error handling
          await inventoryRepository.createRecord({ productId: result._id, count: 0 });
@@ -82,45 +82,45 @@ export const ProductsService = (
       },
 
       updateProduct: async (request : Request) : Promise<Response> => {
-         const dto : UpdateProductRequest = mapToUpdateProductRequest(request);
-         const validationOutcome : ValidationOutcome = await validator.validateUpdateProductDTO(dto);
+         const updateProductRequest : UpdateProductRequest = mapToUpdateProductRequest(request);
+         const validationOutcome : ValidationOutcome = await validator.validateUpdateProductDTO(updateProductRequest);
          if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
-         const result : Product | Error = await repository.updateProduct(dto);
+         const result : Product | Error = await repository.updateProduct(updateProductRequest);
          if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
          return mapProductToSuccessResponse(result);
       },
 
       updateProducts: async (request : Request) : Promise<Response> => {
-         const dto : UpdateProductsRequest = mapToUpdateProductsRequest(request);
-         const validationOutcome : ValidationOutcome = await validator.validateUpdateProductsDTO(dto);
+         const updateProductsRequest : UpdateProductsRequest = mapToUpdateProductsRequest(request);
+         const validationOutcome : ValidationOutcome = await validator.validateUpdateProductsDTO(updateProductsRequest);
          if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
-         const result : CommandResult | Error = await repository.updateProducts(dto);
+         const result : CommandResult | Error = await repository.updateProducts(updateProductsRequest);
          if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
          return mapUpdateResultToResponse(result);
       },
 
       deleteProduct: async (request : Request) : Promise<Response> => {
-         const dto : DeleteProductRequest = mapToDeleteProductRequest(request);
-         const validationOutcome : ValidationOutcome = await validator.validateDeleteProductDTO(dto);
+         const deleteProductRequest : DeleteProductRequest = mapToDeleteProductRequest(request);
+         const validationOutcome : ValidationOutcome = await validator.validateDeleteProductDTO(deleteProductRequest);
          if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
-         const result : CommandResult | Error = await repository.deleteProduct(dto);
+         const result : CommandResult | Error = await repository.deleteProduct(deleteProductRequest);
          if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
          // todo improve inventory repository error handling
-         await inventoryRepository.deleteRecord({ productId: dto._id });
+         await inventoryRepository.deleteRecord({ productId: deleteProductRequest._id });
          return mapDeleteResultToResponse(result);
       },
 
       deleteProducts: async (request : Request) : Promise<Response> => {
-         const dto : ProductsRequest = mapRequestToProductsRequest(request);
-         const validationOutcome : ValidationOutcome = await validator.validateProductsDTO(dto);
+         const productsRequest : ProductsRequest = mapRequestToProductsRequest(request);
+         const validationOutcome : ValidationOutcome = await validator.validateProductsDTO(productsRequest);
          if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
-         const products : Product[] | Error = await repository.getProducts(dto);
+         const products : Product[] | Error = await repository.getProducts(productsRequest);
          if (isError(products)) return mapErrorToInternalServerErrorResponse(products);
          products.forEach(async (product) => {
             // todo improve inventory repository error handling
             await inventoryRepository.deleteRecord({ productId: product._id });
          });
-         const result : CommandResult | Error = await repository.deleteProducts(dto);
+         const result : CommandResult | Error = await repository.deleteProducts(productsRequest);
          if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
          return mapDeleteResultToResponse(result);
       },

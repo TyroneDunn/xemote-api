@@ -5,28 +5,28 @@ import {
    ProductsDTO,
    UpdateProductDTO,
    UpdateProductsDTO,
-} from "./products-dtos.type";
+} from "./products.type";
 import { ProductsRepository } from "./products-repository.type";
 import { ValidationOutcome } from "@hals/common";
 
 export type ProductsDtosValidator = {
-   validateGetProductDTO: (dto: GetProductDTO) => Promise<ValidationOutcome>,
-   validateProductsDTO: (dto: ProductsDTO) => Promise<ValidationOutcome>,
-   validateCreateProductDTO: (dto: CreateProductDTO) => Promise<ValidationOutcome>,
-   validateUpdateProductDTO: (dto: UpdateProductDTO) => Promise<ValidationOutcome>,
-   validateUpdateProductsDTO: (dto: UpdateProductsDTO) => Promise<ValidationOutcome>,
-   validateDeleteProductDTO: (dto: DeleteProductDTO) => Promise<ValidationOutcome>,
+   validateGetProductDTO : (dto : GetProductDTO) => Promise<ValidationOutcome>,
+   validateProductsDTO : (dto : ProductsDTO) => Promise<ValidationOutcome>,
+   validateCreateProductDTO : (dto : CreateProductDTO) => Promise<ValidationOutcome>,
+   validateUpdateProductDTO : (dto : UpdateProductDTO) => Promise<ValidationOutcome>,
+   validateUpdateProductsDTO : (dto : UpdateProductsDTO) => Promise<ValidationOutcome>,
+   validateDeleteProductDTO : (dto : DeleteProductDTO) => Promise<ValidationOutcome>,
 };
 
 export const ProductsDtosValidator = (repository : ProductsRepository) : ProductsDtosValidator => ({
-   validateGetProductDTO: async (dto: GetProductDTO): Promise<ValidationOutcome> => {
+   validateGetProductDTO: async (dto : GetProductDTO) : Promise<ValidationOutcome> => {
       if (!dto._id) return { error: { type: "BadRequest", message: 'ID required.' } };
       if (!(await repository.exists(dto)))
          return { error: { type: "NotFound", message: `Product "${dto._id}" not found.` } };
       return {};
    },
 
-   validateProductsDTO: async (dto: ProductsDTO): Promise<ValidationOutcome> => {
+   validateProductsDTO: async (dto : ProductsDTO) : Promise<ValidationOutcome> => {
       if (dto.filter) {
          if (dto.filter.name && dto.filter.nameRegex)
             return {

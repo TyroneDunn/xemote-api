@@ -1,8 +1,23 @@
-import { ProductType } from "./product.type";
 import { Price } from "./price.type";
 import { NumberRange, OrderOption, Page, Timestamps } from "@hals/common";
 
-export type GetProductDTO = { _id: string };
+export type Product = {
+   _id : string,
+   name : string,
+   costPrice : Price,
+   markup : number,
+   type : ProductType,
+};
+
+export type ProductType =
+   | "Xemote Gateway"
+   | "Xemote Accessory"
+   | "Wireless Temperature Sensor"
+   | "Wireless Humidity Sensor"
+   | "Wireless AC Current Meter"
+   | "Wireless Event-Based Sensor"
+   | "Wireless Infrared Beam Sensor"
+   | "Wireless 4-30mA Sensor";
 
 export type ProductsDTO = {
    filter?: ProductsFilter,
@@ -10,6 +25,8 @@ export type ProductsDTO = {
    sort?: ProductsSort,
    page?: Page,
 };
+
+export type GetProductDTO = { _id : string };
 
 export type CreateProductDTO = {
    name: string,

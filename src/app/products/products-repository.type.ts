@@ -1,12 +1,12 @@
-import { Product } from "./product.type";
 import {
    CreateProductDTO,
    DeleteProductDTO,
    GetProductDTO,
+   Product,
    ProductsDTO,
    UpdateProductDTO,
    UpdateProductsDTO,
-} from "./products-dtos.type";
+} from "./products.type";
 import { CommandResult, Error } from "@hals/common";
 
 export type ProductsRepository = {

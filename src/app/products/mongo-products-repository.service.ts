@@ -1,24 +1,24 @@
 import { ProductsRepository } from "./products-repository.type";
 import { ProductModel } from "./mongo-product-model.type";
-import { Product } from "./product.type";
 import {
    CreateProductDTO,
    DeleteProductDTO,
    GetProductDTO,
+   Product,
    ProductsDTO,
    ProductUpdateFields,
    UpdateProductDTO,
    UpdateProductsDTO,
-} from "./products-dtos.type";
+} from "./products.type";
 import { DeleteResult } from "mongodb";
 import { Price } from "./price.type";
 import { UpdateWriteOpResult } from "mongoose";
 import { CommandResult, Error } from "@hals/common";
 
-export const MongoProductsRepository: ProductsRepository = {
-   getProduct: async (dto: GetProductDTO): Promise<Product | Error> => {
+export const MongoProductsRepository : ProductsRepository = {
+   getProduct: async (dto : GetProductDTO) : Promise<Product | Error> => {
       try {
-         const product: Product | null = await ProductModel.findById(dto._id);
+         const product : Product | null = await ProductModel.findById(dto._id);
          if (!product) return { type: "NotFound", message: 'Product not found.' };
          return product;
       }
@@ -27,7 +27,7 @@ export const MongoProductsRepository: ProductsRepository = {
       }
    },
 
-   getProducts: async (dto: ProductsDTO): Promise<Product[] | Error> => {
+   getProducts: async (dto : ProductsDTO) : Promise<Product[] | Error> => {
       try {
          const filter = mapProductsDtoToProductsFilter(dto);
          const query = ProductModel.find(filter);
@@ -44,11 +44,11 @@ export const MongoProductsRepository: ProductsRepository = {
       }
    },
 
-   createProduct: async (dto: CreateProductDTO): Promise<Product | Error> => {
+   createProduct: async (dto : CreateProductDTO) : Promise<Product | Error> => {
       try {
          return new ProductModel({
-            name: dto.name,
-            type: dto.type,
+            name  : dto.name,
+            type  : dto.type,
             costPrice: dto.costPrice,
             markup: dto.markup,
          }).save();
@@ -58,9 +58,9 @@ export const MongoProductsRepository: ProductsRepository = {
       }
    },
 
-   updateProduct: async (dto: UpdateProductDTO): Promise<Product | Error> => {
+   updateProduct: async (dto : UpdateProductDTO) : Promise<Product | Error> => {
       try {
-         const product: Product | null = await ProductModel.findOneAndUpdate(
+         const product : Product | null = await ProductModel.findOneAndUpdate(
             { _id: dto._id },
             mapUpdateFieldsToUpdateQuery(dto.updateFields),
             { new: true },
@@ -73,11 +73,11 @@ export const MongoProductsRepository: ProductsRepository = {
       }
    },
 
-   updateProducts: async (dto: UpdateProductsDTO): Promise<CommandResult | Error> => {
+   updateProducts: async (dto : UpdateProductsDTO) : Promise<CommandResult | Error> => {
       try {
          const filter = mapUpdateProductsDtoToFilter(dto);
          const updateQuery = mapUpdateFieldsToUpdateQuery(dto.updateFields);
-         const updateResult: UpdateWriteOpResult = await ProductModel.updateMany(filter, updateQuery);
+         const updateResult : UpdateWriteOpResult = await ProductModel.updateMany(filter, updateQuery);
          return { success: updateResult.acknowledged, affectedCount: updateResult.modifiedCount };
       }
       catch (error) {
@@ -85,9 +85,9 @@ export const MongoProductsRepository: ProductsRepository = {
       }
    },
 
-   deleteProduct: async (dto: DeleteProductDTO): Promise<CommandResult | Error> => {
+   deleteProduct: async (dto : DeleteProductDTO) : Promise<CommandResult | Error> => {
       try {
-         const result: DeleteResult = await ProductModel.deleteOne({ _id: dto._id });
+         const result : DeleteResult = await ProductModel.deleteOne({ _id: dto._id });
          return { success: result.acknowledged, affectedCount: result.deletedCount };
       }
       catch (error) {
@@ -95,10 +95,10 @@ export const MongoProductsRepository: ProductsRepository = {
       }
    },
 
-   deleteProducts: async (dto: ProductsDTO): Promise<CommandResult | Error> => {
+   deleteProducts: async (dto : ProductsDTO) : Promise<CommandResult | Error> => {
       try {
          const filter = mapProductsDtoToProductsFilter(dto);
-         const result: DeleteResult = await ProductModel.deleteMany(filter);
+         const result : DeleteResult = await ProductModel.deleteMany(filter);
          return { success: result.acknowledged, affectedCount: result.deletedCount };
       }
       catch (error) {
@@ -106,9 +106,9 @@ export const MongoProductsRepository: ProductsRepository = {
       }
    },
 
-   exists: async (dto: GetProductDTO): Promise<boolean | Error> => {
+   exists: async (dto : GetProductDTO) : Promise<boolean | Error> => {
       try {
-         const product: Product | null = await ProductModel.findById(dto._id);
+         const product : Product | null = await ProductModel.findById(dto._id);
          return !!product;
       }
       catch (error) {
@@ -117,7 +117,7 @@ export const MongoProductsRepository: ProductsRepository = {
    },
 };
 
-const mapProductsDtoToProductsFilter = (dto: ProductsDTO) => ({
+const mapProductsDtoToProductsFilter = (dto : ProductsDTO) => ({
    ...dto.filter && {
       ...dto.filter.name && { name: dto.filter.name },
       ...dto.filter.nameRegex && { name: { $regex: dto.filter.nameRegex, $options: 'i' } },
@@ -176,7 +176,7 @@ const mapProductsDtoToProductsFilter = (dto: ProductsDTO) => ({
    },
 });
 
-const mapUpdateProductsDtoToFilter = (dto: UpdateProductsDTO) => ({
+const mapUpdateProductsDtoToFilter = (dto : UpdateProductsDTO) => ({
    ...dto.filter.name && { name: dto.filter.name },
    ...dto.filter.nameRegex && { name: { $regex: dto.filter.nameRegex, $options: 'i' } },
    ...dto.filter.type && { type: dto.filter.type },
@@ -233,7 +233,7 @@ const mapUpdateProductsDtoToFilter = (dto: UpdateProductsDTO) => ({
    },
 });
 
-const mapUpdateFieldsToUpdateQuery = (dto: ProductUpdateFields) => ({
+const mapUpdateFieldsToUpdateQuery = (dto : ProductUpdateFields) => ({
    ...dto.newName && { name: dto.newName },
    ...dto.newType && { type: dto.newType },
    ...dto.newCostPrice && { costPrice: dto.newCostPrice as Price },

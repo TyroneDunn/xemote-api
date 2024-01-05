@@ -6,16 +6,17 @@ import {
    UpdateInventoryRecordsDTO,
 } from "./inventory-records-dtos.type";
 import {
-   addRequestPageDataToResponse,
+   addPageDataToResponse,
    CommandResult,
    Error,
    isError,
+   isValidationError,
    mapCommandResultToSuccessResponse,
    mapErrorToInternalServerErrorResponse,
-   mapValidationOutcomeToErrorResponse,
+   mapValidationErrorToErrorResponse,
    Request,
    Response,
-   ValidationOutcome,
+   ValidationError,
 } from "@hals/common";
 import { InventoryRecord } from "./inventory-record.type";
 import {
@@ -35,8 +36,8 @@ export const configureInventoryService = (
 ): InventoryService => ({
    getRecord: async (request: Request): Promise<Response> => {
       const dto: GetInventoryRecordDTO = mapRequestToGetInventoryRecordDTO(request);
-      const validationOutcome: ValidationOutcome = await validator.validateGetInventoryRecordDto(dto);
-      if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
+      const validationOutcome: ValidationError | null = await validator.validateGetInventoryRecordDto(dto);
+      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: InventoryRecord | Error = await repository.getRecord(dto);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
       return mapInventoryRecordToSuccessResponse(result);
@@ -44,19 +45,19 @@ export const configureInventoryService = (
 
    getRecords: async (request: Request): Promise<Response> => {
       const dto: InventoryRecordsDTO = mapRequestToInventoryRecordsDTO(request);
-      const validationOutcome: ValidationOutcome = await validator.validateInventoryRecordsDto(dto);
-      if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
+      const validationOutcome: ValidationError | null = await validator.validateInventoryRecordsDto(dto);
+      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: InventoryRecord[] | Error = await repository.getRecords(dto);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
       const addPageData = (response: Response): Response =>
-         addRequestPageDataToResponse(request, response);
+         addPageDataToResponse(request, response);
       return addPageData(mapInventoryRecordsToSuccessResponse(result));
    },
 
    updateRecord: async (request: Request): Promise<Response> => {
       const dto: UpdateInventoryRecordDTO = mapRequestToUpdateInventoryRecordDTO(request);
-      const validationOutcome: ValidationOutcome = await validator.validateUpdateInventoryRecordDto(dto);
-      if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
+      const validationOutcome: ValidationError | null = await validator.validateUpdateInventoryRecordDto(dto);
+      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: InventoryRecord | Error = await repository.updateRecord(dto);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
       return mapInventoryRecordToSuccessResponse(result);
@@ -64,8 +65,8 @@ export const configureInventoryService = (
 
    updateRecords: async (request: Request): Promise<Response> => {
       const dto: UpdateInventoryRecordsDTO = mapRequestToUpdateInventoryRecordsDTO(request);
-      const validationOutcome: ValidationOutcome = await validator.validateUpdateInventoryRecordsDto(dto);
-      if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
+      const validationOutcome: ValidationError | null = await validator.validateUpdateInventoryRecordsDto(dto);
+      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: CommandResult | Error = await repository.updateRecords(dto);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
       return mapCommandResultToSuccessResponse(result);

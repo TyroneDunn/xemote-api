@@ -7,16 +7,16 @@ import {
    UpdateOrdersDTO,
 } from "./orders-dtos.type";
 import { OrdersRepository } from "./orders-repository.type";
-import { ValidationOutcome } from "@hals/common";
+import { ValidationError } from "@hals/common";
 import { ProductsRepository } from "../products/products-repository.type";
 
 export type OrdersDtosValidator = {
-   validateGetOrderDto: (dto: GetOrderDTO) => Promise<ValidationOutcome>,
-   validateOrdersDto: (dto: OrdersDTO) => Promise<ValidationOutcome>,
-   validateCreateOrderDto: (dto: CreateOrderDTO) => Promise<ValidationOutcome>,
-   validateUpdateOrderDto: (dto: UpdateOrderDTO) => Promise<ValidationOutcome>,
-   validateUpdateOrdersDto: (dto: UpdateOrdersDTO) => Promise<ValidationOutcome>,
-   validateDeleteOrderDto: (dto: DeleteOrderDTO) => Promise<ValidationOutcome>,
+   validateGetOrderDto: (dto: GetOrderDTO) => Promise<ValidationError | null>,
+   validateOrdersDto: (dto: OrdersDTO) => Promise<ValidationError | null>,
+   validateCreateOrderDto: (dto: CreateOrderDTO) => Promise<ValidationError | null>,
+   validateUpdateOrderDto: (dto: UpdateOrderDTO) => Promise<ValidationError | null>,
+   validateUpdateOrdersDto: (dto: UpdateOrdersDTO) => Promise<ValidationError | null>,
+   validateDeleteOrderDto: (dto: DeleteOrderDTO) => Promise<ValidationError | null>,
 };
 
 export const configureOrdersDtosValidator =
@@ -24,15 +24,15 @@ export const configureOrdersDtosValidator =
       ordersRepository: OrdersRepository,
       productsRepository: ProductsRepository,
    ): OrdersDtosValidator => ({
-      validateGetOrderDto: async (dto: GetOrderDTO): Promise<ValidationOutcome> => {
+      validateGetOrderDto: async (dto: GetOrderDTO): Promise<ValidationError | null> => {
          if (!dto._id)
             return { error: { type: "BadRequest", message: 'ID required.' } };
          if (!(await ordersRepository.exists(dto)))
             return { error: { type: "NotFound", message: `Order "${dto._id}" not found.` } };
-         return {};
+         return null;
       },
 
-      validateOrdersDto: async (dto: OrdersDTO): Promise<ValidationOutcome> => {
+      validateOrdersDto: async (dto: OrdersDTO): Promise<ValidationError | null> => {
          if (dto.filter) {
             if (dto.filter.status)
                if (dto.filter.status !== "complete"
@@ -168,10 +168,10 @@ export const configureOrdersDtosValidator =
                };
          }
 
-         return {};
+         return null;
       },
 
-      validateCreateOrderDto: async (dto: CreateOrderDTO): Promise<ValidationOutcome> => {
+      validateCreateOrderDto: async (dto: CreateOrderDTO): Promise<ValidationError | null> => {
          if (!dto.clientId)
             return { error: { type: "BadRequest", message: 'Client ID required.' } };
          if (!dto.status)
@@ -204,10 +204,10 @@ export const configureOrdersDtosValidator =
                   },
                };
          }
-         return {};
+         return null;
       },
 
-      validateUpdateOrderDto: async (dto: UpdateOrderDTO): Promise<ValidationOutcome> => {
+      validateUpdateOrderDto: async (dto: UpdateOrderDTO): Promise<ValidationError | null> => {
          if (!dto._id)
             return { error: { type: "BadRequest", message: 'ID required.' } };
          if (!(await ordersRepository.exists(dto)))
@@ -247,10 +247,10 @@ export const configureOrdersDtosValidator =
                   };
             }
          }
-         return {};
+         return null;
       },
 
-      validateUpdateOrdersDto: async (dto: UpdateOrdersDTO): Promise<ValidationOutcome> => {
+      validateUpdateOrdersDto: async (dto: UpdateOrdersDTO): Promise<ValidationError | null> => {
          if (dto.filter.status)
             if (dto.filter.status !== "complete"
                && dto.filter.status !== "pending"
@@ -358,14 +358,14 @@ export const configureOrdersDtosValidator =
             }
          }
 
-         return {};
+         return null;
       },
 
-      validateDeleteOrderDto: async (dto: DeleteOrderDTO): Promise<ValidationOutcome> => {
+      validateDeleteOrderDto: async (dto: DeleteOrderDTO): Promise<ValidationError | null> => {
          if (!dto._id)
             return { error: { type: "BadRequest", message: 'ID required.' } };
          if (!(await ordersRepository.exists(dto)))
             return { error: { type: "NotFound", message: `Order "${dto._id}" not found.` } };
-         return {};
+         return null;
       },
    });

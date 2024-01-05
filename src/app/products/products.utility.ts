@@ -20,41 +20,41 @@ import {
 } from "./products.type";
 import { Price } from "./price.type";
 
-export const mapToGetProductDTO = (request : Request) : GetProductRequest => ({
+export const mapToGetProductRequest = (request : Request) : GetProductRequest => ({
    _id: request.paramMap['id'],
 });
 
-export const mapRequestToProductsDTO = (request : Request) : ProductsRequest =>
+export const mapRequestToProductsRequest = (request : Request) : ProductsRequest =>
    ({
-      ...mapToProductsFilter(request),
+      ...mapToProductsRequestFilter(request),
       ...mapRequestToTimestamps(request),
       ...mapToProductsSort(request),
       ...mapRequestToPage(request),
    });
 
-export const mapToCreateProductDTO = (request : Request) : CreateProductRequest => ({
+export const mapToCreateProductRequest = (request : Request) : CreateProductRequest => ({
    name  : request.payload['name'],
    type  : request.payload['type'] as ProductType,
    costPrice: request.payload['costPrice'] as Price,
    markup: parseFloat(request.payload['markup']),
 });
 
-export const mapToUpdateProductDTO = (request : Request) : UpdateProductRequest => ({
+export const mapToUpdateProductRequest = (request : Request) : UpdateProductRequest => ({
    _id: request.paramMap['id'],
    ...mapToUpdateFields(request),
 });
 
-export const mapToUpdateProductsDTO = (request : Request) : UpdateProductsRequest => ({
-   ...mapToProductsFilter(request),
+export const mapToUpdateProductsRequest = (request : Request) : UpdateProductsRequest => ({
+   ...mapToProductsRequestFilter(request),
    ...mapRequestToTimestamps(request),
    ...mapToUpdateFields(request),
 });
 
-export const mapToDeleteProductDTO = (request : Request) : DeleteProductRequest => ({
+export const mapToDeleteProductRequest = (request : Request) : DeleteProductRequest => ({
    _id: request.paramMap['id'],
 });
 
-const mapToProductsFilter = (request : Request) =>
+const mapToProductsRequestFilter = (request : Request) =>
    ({
       filter: {
          ...request.queryParamMap['name'] && { name: request.queryParamMap['name'] },
@@ -90,14 +90,14 @@ const mapToUpdateFields = (request : Request) => ({
 
 export const mapProductToSuccessResponse = (product : Product) : Response =>
    ({
-      status: OK,
-      collection: [ product ],
-      count : 1,
+      status     : OK,
+      collection : [ product ],
+      count      : 1,
    });
 
 export const mapProductsToSuccessResponse = (products : Product[]) : Response =>
    ({
-      status: OK,
-      collection: [ products ],
-      count : products.length,
+      status     : OK,
+      collection : [ products ],
+      count      : products.length,
    });

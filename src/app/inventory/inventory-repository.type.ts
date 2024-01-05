@@ -10,12 +10,20 @@ import {
 import { CommandResult, Error } from "@hals/common";
 
 export type InventoryRepository = {
-   getRecord: (dto: GetInventoryRecordDTO) => Promise<InventoryRecord | Error>,
-   getRecords: (dto: InventoryRecordsDTO) => Promise<InventoryRecord[] | Error>,
-   createRecord: (dto: CreateInventoryRecordDTO) => Promise<InventoryRecord | Error>,
-   updateRecord: (dto: UpdateInventoryRecordDTO) => Promise<InventoryRecord | Error>,
-   updateRecords: (dto: UpdateInventoryRecordsDTO) => Promise<CommandResult | Error>,
-   deleteRecord: (dto: DeleteInventoryRecordDTO) => Promise<CommandResult | Error>,
-   deleteRecords: (dto: InventoryRecordsDTO) => Promise<CommandResult | Error>,
+   getRecord: GetRecord,
+   getRecords: GetRecords,
+   createRecord: CreateRecord,
+   updateRecord: UpdateRecord,
+   updateRecords: UpdateRecords,
+   deleteRecord: DeleteRecord,
+   deleteRecords: DeleteRecords,
    exists: (dto: GetInventoryRecordDTO) => Promise<boolean | Error>,
 };
+
+export type GetRecord = (request : GetInventoryRecordDTO) => Promise<InventoryRecord | Error>;
+export type GetRecords = (request : InventoryRecordsDTO) => Promise<InventoryRecord[] | Error>;
+export type CreateRecord = (request : CreateInventoryRecordDTO) => Promise<InventoryRecord | Error>;
+export type UpdateRecord = (request : UpdateInventoryRecordDTO) => Promise<InventoryRecord | Error>;
+export type UpdateRecords = (request : UpdateInventoryRecordsDTO) => Promise<CommandResult | Error>;
+export type DeleteRecord = (request : DeleteInventoryRecordDTO) => Promise<CommandResult | Error>;
+export type DeleteRecords = (request : InventoryRecordsDTO) => Promise<CommandResult | Error>;

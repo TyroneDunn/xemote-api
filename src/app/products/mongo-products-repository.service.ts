@@ -78,7 +78,7 @@ export const MongoProductsRepository : ProductsRepository = {
          const filter = mapUpdateProductsRequestToFilter(request);
          const updateQuery = mapUpdateFieldsToUpdateQuery(request.updateFields);
          const updateResult : UpdateWriteOpResult = await ProductModel.updateMany(filter, updateQuery);
-         return { success: updateResult.acknowledged, affectedCount: updateResult.modifiedCount };
+         return CommandResult(updateResult.acknowledged, updateResult.modifiedCount);
       }
       catch (error) {
          return Error("Internal", (error as Error).message);
@@ -88,7 +88,7 @@ export const MongoProductsRepository : ProductsRepository = {
    deleteProduct: async (request : DeleteProductRequest) : Promise<CommandResult | Error> => {
       try {
          const result : DeleteResult = await ProductModel.deleteOne({ _id: request._id });
-         return { success: result.acknowledged, affectedCount: result.deletedCount };
+         return CommandResult(result.acknowledged, result.deletedCount);
       }
       catch (error) {
          return Error("Internal", (error as Error).message);
@@ -99,7 +99,7 @@ export const MongoProductsRepository : ProductsRepository = {
       try {
          const filter = mapProductsRequestToProductsFilter(request);
          const result : DeleteResult = await ProductModel.deleteMany(filter);
-         return { success: result.acknowledged, affectedCount: result.deletedCount };
+         return CommandResult(result.acknowledged, result.deletedCount);
       }
       catch (error) {
          return Error("Internal", (error as Error).message);

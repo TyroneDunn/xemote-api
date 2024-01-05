@@ -18,6 +18,7 @@ import {
    CreateProductRequest,
    DeleteProductRequest,
    GetProductRequest,
+   Price,
    Product,
    ProductsRequest,
    ProductsSortOption,
@@ -25,7 +26,6 @@ import {
    UpdateProductRequest,
    UpdateProductsRequest,
 } from "./products.type";
-import { Price } from "./price.type";
 import {
    CreateProduct,
    DeleteProduct,
@@ -50,10 +50,10 @@ export const mapRequestToProductsRequest = (request : Request) : ProductsRequest
    });
 
 export const mapToCreateProductRequest = (request : Request) : CreateProductRequest => ({
-   name  : request.payload['name'],
-   type  : request.payload['type'] as ProductType,
-   costPrice: request.payload['costPrice'] as Price,
-   markup: parseFloat(request.payload['markup']),
+   name      : request.payload['name'],
+   type      : request.payload['type'] as ProductType,
+   costPrice : request.payload['costPrice'] as Price,
+   markup    : parseFloat(request.payload['markup']),
 });
 
 export const mapToUpdateProductRequest = (request : Request) : UpdateProductRequest => ({

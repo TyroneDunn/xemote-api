@@ -4,6 +4,7 @@ import {
    CreateProductRequest,
    DeleteProductRequest,
    GetProductRequest,
+   Price,
    Product,
    ProductsRequest,
    ProductUpdateFields,
@@ -11,7 +12,6 @@ import {
    UpdateProductsRequest,
 } from "./products.type";
 import { DeleteResult } from "mongodb";
-import { Price } from "./price.type";
 import { UpdateWriteOpResult } from "mongoose";
 import { CommandResult, Error } from "@hals/common";
 
@@ -47,10 +47,10 @@ export const MongoProductsRepository : ProductsRepository = {
    createProduct: async (dto : CreateProductRequest) : Promise<Product | Error> => {
       try {
          return new ProductModel({
-            name  : dto.name,
-            type  : dto.type,
-            costPrice: dto.costPrice,
-            markup: dto.markup,
+            name      : dto.name,
+            type      : dto.type,
+            costPrice : dto.costPrice,
+            markup    : dto.markup,
          }).save();
       }
       catch (error) {

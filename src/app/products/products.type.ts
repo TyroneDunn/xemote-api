@@ -1,4 +1,3 @@
-import { Price } from "./price.type";
 import { NumberRange, OrderOption, Page, Timestamps } from "@hals/common";
 
 export type Product = {
@@ -7,6 +6,11 @@ export type Product = {
    costPrice : Price,
    markup : number,
    type : ProductType,
+};
+
+export type Price = {
+   price : number,
+   currency : "ZAR" | "USD"
 };
 
 export type ProductType =

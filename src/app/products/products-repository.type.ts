@@ -10,12 +10,20 @@ import {
 import { CommandResult, Error } from "@hals/common";
 
 export type ProductsRepository = {
-   getProduct : (dto : GetProductRequest) => Promise<Product | Error>,
-   getProducts : (dto : ProductsRequest) => Promise<Product[] | Error>,
-   createProduct : (dto : CreateProductRequest) => Promise<Product | Error>,
-   updateProduct : (dto : UpdateProductRequest) => Promise<Product | Error>,
-   updateProducts : (dto : UpdateProductsRequest) => Promise<CommandResult | Error>,
-   deleteProduct : (dto : DeleteProductRequest) => Promise<CommandResult | Error>,
-   deleteProducts : (dto : ProductsRequest) => Promise<CommandResult | Error>,
+   getProduct : GetProduct,
+   getProducts : GetProducts,
+   createProduct : CreateProduct,
+   updateProduct : UpdateProduct,
+   updateProducts : UpdateProducts,
+   deleteProduct : DeleteProduct,
+   deleteProducts : DeleteProducts,
    exists : (dto : GetProductRequest) => Promise<boolean | Error>,
 };
+
+export type GetProduct = (request : GetProductRequest) => Promise<Product | Error>;
+export type GetProducts = (request : ProductsRequest) => Promise<Product[] | Error>;
+export type CreateProduct = (request : CreateProductRequest) => Promise<Product | Error>;
+export type UpdateProduct = (request : UpdateProductRequest) => Promise<Product | Error>;
+export type UpdateProducts = (request : UpdateProductsRequest) => Promise<CommandResult | Error>;
+export type DeleteProduct = (request : DeleteProductRequest) => Promise<CommandResult | Error>;
+export type DeleteProducts = (request : ProductsRequest) => Promise<CommandResult | Error>;

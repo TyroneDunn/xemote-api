@@ -7,26 +7,26 @@ import {
    UpdateProductsRequest,
 } from "./products.type";
 import { ProductsRepository } from "./products-repository.type";
-import { ValidationOutcome } from "@hals/common";
+import { ValidationError } from "@hals/common";
 
 export type ProductsDtosValidator = {
-   validateGetProductDTO : (dto : GetProductRequest) => Promise<ValidationOutcome>,
-   validateProductsDTO : (dto : ProductsRequest) => Promise<ValidationOutcome>,
-   validateCreateProductDTO : (dto : CreateProductRequest) => Promise<ValidationOutcome>,
-   validateUpdateProductDTO : (dto : UpdateProductRequest) => Promise<ValidationOutcome>,
-   validateUpdateProductsDTO : (dto : UpdateProductsRequest) => Promise<ValidationOutcome>,
-   validateDeleteProductDTO : (dto : DeleteProductRequest) => Promise<ValidationOutcome>,
+   validateGetProductDTO : (dto : GetProductRequest) => Promise<ValidationError | null>,
+   validateProductsDTO : (dto : ProductsRequest) => Promise<ValidationError | null>,
+   validateCreateProductDTO : (dto : CreateProductRequest) => Promise<ValidationError | null>,
+   validateUpdateProductDTO : (dto : UpdateProductRequest) => Promise<ValidationError | null>,
+   validateUpdateProductsDTO : (dto : UpdateProductsRequest) => Promise<ValidationError | null>,
+   validateDeleteProductDTO : (dto : DeleteProductRequest) => Promise<ValidationError | null>,
 };
 
 export const ProductsDtosValidator = (repository : ProductsRepository) : ProductsDtosValidator => ({
-   validateGetProductDTO: async (dto : GetProductRequest) : Promise<ValidationOutcome> => {
+   validateGetProductDTO: async (dto : GetProductRequest) : Promise<ValidationError | null> => {
       if (!dto._id) return { error: { type: "BadRequest", message: 'ID required.' } };
       if (!(await repository.exists(dto)))
          return { error: { type: "NotFound", message: `Product "${dto._id}" not found.` } };
-      return {};
+      return null;
    },
 
-   validateProductsDTO: async (dto : ProductsRequest) : Promise<ValidationOutcome> => {
+   validateProductsDTO: async (dto : ProductsRequest) : Promise<ValidationError | null> => {
       if (dto.filter) {
          if (dto.filter.name && dto.filter.nameRegex)
             return {
@@ -193,10 +193,10 @@ export const ProductsDtosValidator = (repository : ProductsRepository) : Product
             };
       }
 
-      return {};
+      return null;
    },
 
-   validateCreateProductDTO: async (dto : CreateProductRequest) : Promise<ValidationOutcome> => {
+   validateCreateProductDTO: async (dto : CreateProductRequest) : Promise<ValidationError | null> => {
       if (!dto.name)
          return { error: { type: "BadRequest", message: 'Name required.' } };
       if (!dto.type)
@@ -244,10 +244,10 @@ export const ProductsDtosValidator = (repository : ProductsRepository) : Product
          return { error: { type: "BadRequest", message: 'Markup required.' } };
       if (dto.markup < 0)
          return { error: { type: "BadRequest", message: 'Markup must be greater than 0.' } };
-      return {};
+      return null;
    },
 
-   validateUpdateProductDTO: async (dto : UpdateProductRequest) : Promise<ValidationOutcome> => {
+   validateUpdateProductDTO: async (dto : UpdateProductRequest) : Promise<ValidationError | null> => {
       if (!dto._id)
          return { error: { type: "BadRequest", message: 'ID required.' } };
       if (!(await repository.exists(dto)))
@@ -308,10 +308,10 @@ export const ProductsDtosValidator = (repository : ProductsRepository) : Product
                   ' must be greater than 0.',
             },
          };
-      return {};
+      return null;
    },
 
-   validateUpdateProductsDTO: async (dto : UpdateProductsRequest) : Promise<ValidationOutcome> => {
+   validateUpdateProductsDTO: async (dto : UpdateProductsRequest) : Promise<ValidationError | null> => {
       if (dto.filter.name && dto.filter.nameRegex)
          return {
             error: {
@@ -484,14 +484,14 @@ export const ProductsDtosValidator = (repository : ProductsRepository) : Product
                   ' must be greater than 0.',
             },
          };
-      return {};
+      return null;
    },
 
-   validateDeleteProductDTO: async (dto : DeleteProductRequest) : Promise<ValidationOutcome> => {
+   validateDeleteProductDTO: async (dto : DeleteProductRequest) : Promise<ValidationError | null> => {
       if (!dto._id)
          return { error: { type: "BadRequest", message: 'ID required.' } };
       if (!(await repository.exists(dto)))
          return { error: { type: "NotFound", message: `Product "${dto._id}" not found.` } };
-      return {};
+      return null;
    },
 });

@@ -1,5 +1,5 @@
 import { ProductsDtoValidator } from "./products-dto-validator.utility";
-import { ProductsController } from "./products-controller.utility";
+import { ProductsController } from "./products.controller";
 import { ProductsService } from "./products.service";
 import { ProductsRepository } from "./products-repository.type";
 import { MongoProductsRepository } from "./mongo-products-repository.service";

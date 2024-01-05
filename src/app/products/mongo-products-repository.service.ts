@@ -19,11 +19,11 @@ export const MongoProductsRepository : ProductsRepository = {
    getProduct: async (request : GetProductRequest) : Promise<Product | Error> => {
       try {
          const product : Product | null = await ProductModel.findById(request._id);
-         if (!product) return { type: "NotFound", message: 'Product not found.' };
+         if (!product) return Error("NotFound", 'Product not found.');
          return product;
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -40,7 +40,7 @@ export const MongoProductsRepository : ProductsRepository = {
          return query.exec();
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -54,7 +54,7 @@ export const MongoProductsRepository : ProductsRepository = {
          }).save();
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -65,11 +65,11 @@ export const MongoProductsRepository : ProductsRepository = {
             mapUpdateFieldsToUpdateQuery(request.updateFields),
             { new: true },
          );
-         if (!product) return { type: "NotFound", message: 'Product not found.' };
+         if (!product) return Error("NotFound", 'Product not found.');
          return product;
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -81,7 +81,7 @@ export const MongoProductsRepository : ProductsRepository = {
          return { success: updateResult.acknowledged, affectedCount: updateResult.modifiedCount };
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -91,7 +91,7 @@ export const MongoProductsRepository : ProductsRepository = {
          return { success: result.acknowledged, affectedCount: result.deletedCount };
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -102,7 +102,7 @@ export const MongoProductsRepository : ProductsRepository = {
          return { success: result.acknowledged, affectedCount: result.deletedCount };
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -112,7 +112,7 @@ export const MongoProductsRepository : ProductsRepository = {
          return !!product;
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 };

@@ -1,6 +1,6 @@
 import { handleRequest, Request, RequestHandler, Response } from "@hals/common";
 import { ProductsRepository } from "./products-repository.type";
-import { ProductsDtosValidator } from "./products-dtos.validator";
+import { ProductsValidator } from "./products.validator";
 import {
    mapCreateProductResultToResponse,
    mapDeleteProductResultToResponse,
@@ -30,7 +30,7 @@ export type ProductsService = {
 
 export const ProductsService = (
    productsRepository : ProductsRepository,
-   validator : ProductsDtosValidator,
+   validator : ProductsValidator,
    inventoryRepository : InventoryRepository
 ) : ProductsService =>
    ({

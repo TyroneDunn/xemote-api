@@ -1,4 +1,4 @@
-import { ProductsDtosValidator } from "./products-dtos.validator";
+import { ProductsValidator } from "./products.validator";
 import { ProductsController } from "./products.controller";
 import { ProductsService } from "./products.service";
 import { MongoProductsRepository } from "./mongo-products-repository.service";
@@ -6,7 +6,7 @@ import { MongoInventoryRepository } from "../inventory/mongo-inventory-repositor
 
 const productsService : ProductsService = ProductsService(
    MongoProductsRepository,
-   ProductsDtosValidator(MongoProductsRepository),
+   ProductsValidator(MongoProductsRepository),
    MongoInventoryRepository,
 );
 const productsController : ProductsController = ProductsController(productsService);

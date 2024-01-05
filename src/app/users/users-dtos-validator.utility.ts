@@ -1,24 +1,24 @@
-import { ValidationOutcome } from "@hals/common";
+import { ValidationError } from "@hals/common";
 import { DeleteUserDTO, GetUserDTO, UpdateUserDTO, UsersDTO } from "./users-dtos.type";
 import { UsersRepository } from "./users-repository.type";
 
 export type UsersDtosValidator = {
-   validateGetUserDto: (dto: GetUserDTO) => Promise<ValidationOutcome>,
-   validateUsersDto: (dto: UsersDTO) => Promise<ValidationOutcome>,
-   validateUpdateUserDto: (dto: UpdateUserDTO) => Promise<ValidationOutcome>,
-   validateDeleteUserDto: (dto: DeleteUserDTO) => Promise<ValidationOutcome>,
+   validateGetUserDto: (dto: GetUserDTO) => Promise<ValidationError | null>,
+   validateUsersDto: (dto: UsersDTO) => Promise<ValidationError | null>,
+   validateUpdateUserDto: (dto: UpdateUserDTO) => Promise<ValidationError | null>,
+   validateDeleteUserDto: (dto: DeleteUserDTO) => Promise<ValidationError | null>,
 };
 
 export const configureUsersDtosValidator = (repository: UsersRepository): UsersDtosValidator => ({
-   validateGetUserDto: async (dto: GetUserDTO): Promise<ValidationOutcome> => {
+   validateGetUserDto: async (dto: GetUserDTO): Promise<ValidationError | null> => {
       if (!dto.username)
          return { error: { type: "BadRequest", message: 'Username required.' } };
       if (!(await repository.exists(dto.username)))
          return { error: { type: "NotFound", message: `User "${dto.username}" not found.` } };
-      return {};
+      return null;
    },
 
-   validateUsersDto: async (dto: UsersDTO): Promise<ValidationOutcome> => {
+   validateUsersDto: async (dto: UsersDTO): Promise<ValidationError | null> => {
       if (dto.filter)
          if (dto.filter.username && dto.filter.usernameRegex)
             return {
@@ -107,10 +107,10 @@ export const configureUsersDtosValidator = (repository: UsersRepository): UsersD
             };
       }
 
-      return {};
+      return null;
    },
 
-   validateUpdateUserDto: async (dto: UpdateUserDTO): Promise<ValidationOutcome> => {
+   validateUpdateUserDto: async (dto: UpdateUserDTO): Promise<ValidationError | null> => {
       if (!dto.username)
          return { error: { type: "BadRequest", message: 'Username required.' } };
 
@@ -125,14 +125,14 @@ export const configureUsersDtosValidator = (repository: UsersRepository): UsersD
             },
          };
 
-      return {};
+      return null;
    },
 
-   validateDeleteUserDto: async (dto: DeleteUserDTO): Promise<ValidationOutcome> => {
+   validateDeleteUserDto: async (dto: DeleteUserDTO): Promise<ValidationError | null> => {
       if (!dto.username)
          return { error: { type: "BadRequest", message: 'Username required.' } };
       if (!(await repository.exists(dto.username)))
          return { error: { type: "NotFound", message: `User "${dto.username}" not found.` } };
-      return {};
+      return null;
    },
 });

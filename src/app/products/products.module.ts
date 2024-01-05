@@ -1,7 +1,4 @@
-import {
-   configureProductsDtoValidator,
-   ProductsDtoValidator,
-} from "./products-dto-validator.utility";
+import { ProductsDtoValidator } from "./products-dto-validator.utility";
 import { configureProductsController, ProductsController } from "./products-controller.utility";
 import { configureProductsService } from "./products-service.utility";
 import { ProductsRepository } from "./products-repository.type";
@@ -12,7 +9,7 @@ import { MongoInventoryRepository } from "../inventory/mongo-inventory-repositor
 
 const productsRepository: ProductsRepository = MongoProductsRepository;
 const inventoryRepository: InventoryRepository = MongoInventoryRepository;
-const productsDtoValidator: ProductsDtoValidator = configureProductsDtoValidator(productsRepository);
+const productsDtoValidator : ProductsDtoValidator = ProductsDtoValidator(productsRepository);
 const productsService: ProductsService = configureProductsService(productsRepository, productsDtoValidator, inventoryRepository);
 const productsController: ProductsController = configureProductsController(productsService);
 

@@ -18,7 +18,7 @@ export type ProductsDtoValidator = {
    validateDeleteProductDTO: (dto: DeleteProductDTO) => Promise<ValidationOutcome>,
 };
 
-export const configureProductsDtoValidator = (repository: ProductsRepository): ProductsDtoValidator => ({
+export const ProductsDtoValidator = (repository : ProductsRepository) : ProductsDtoValidator => ({
    validateGetProductDTO: async (dto: GetProductDTO): Promise<ValidationOutcome> => {
       if (!dto._id) return { error: { type: "BadRequest", message: 'ID required.' } };
       if (!(await repository.exists(dto)))

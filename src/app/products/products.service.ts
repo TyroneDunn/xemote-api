@@ -13,7 +13,7 @@ import {
    ValidationOutcome,
 } from "@hals/common";
 import { ProductsRepository } from "./products-repository.type";
-import { ProductsDtoValidator } from "./products-dto-validator.utility";
+import { ProductsDtosValidator } from "./products-dtos.validator";
 import { Product } from "./product.type";
 import {
    mapProductsToSuccessResponse,
@@ -47,7 +47,7 @@ export type ProductsService = {
 
 export const ProductsService = (
    repository: ProductsRepository,
-   validator: ProductsDtoValidator,
+   validator : ProductsDtosValidator,
    inventoryRepository: InventoryRepository): ProductsService =>
    ({
       getProduct: async (request: Request): Promise<Response> => {

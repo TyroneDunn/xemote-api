@@ -9,7 +9,7 @@ import {
 import { ProductsRepository } from "./products-repository.type";
 import { ValidationOutcome } from "@hals/common";
 
-export type ProductsDtoValidator = {
+export type ProductsDtosValidator = {
    validateGetProductDTO: (dto: GetProductDTO) => Promise<ValidationOutcome>,
    validateProductsDTO: (dto: ProductsDTO) => Promise<ValidationOutcome>,
    validateCreateProductDTO: (dto: CreateProductDTO) => Promise<ValidationOutcome>,
@@ -18,7 +18,7 @@ export type ProductsDtoValidator = {
    validateDeleteProductDTO: (dto: DeleteProductDTO) => Promise<ValidationOutcome>,
 };
 
-export const ProductsDtoValidator = (repository : ProductsRepository) : ProductsDtoValidator => ({
+export const ProductsDtosValidator = (repository : ProductsRepository) : ProductsDtosValidator => ({
    validateGetProductDTO: async (dto: GetProductDTO): Promise<ValidationOutcome> => {
       if (!dto._id) return { error: { type: "BadRequest", message: 'ID required.' } };
       if (!(await repository.exists(dto)))

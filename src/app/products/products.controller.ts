@@ -65,7 +65,7 @@ export const ProductsController = (service : ProductsService) : Controller => ({
    guard: true,
    methods: [
       getProductsMethod(service.getProducts),
-      getProductMethod(service.getProducts),
+      getProductMethod(service.getProduct),
       createProductMethod(service.createProduct),
       updateProductsMethod(service.updateProducts),
       updateProductMethod(service.updateProduct),

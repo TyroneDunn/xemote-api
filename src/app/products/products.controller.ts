@@ -19,64 +19,42 @@ export const ProductsQueryParamKeys: string[] = [
 
 const getProductsMethod = (getProducts: RequestHandler): Method => ({
    type: "GET",
-   paramKeys: [],
    queryParamKeys: ProductsQueryParamKeys,
-   sideEffects: [],
-   middleware: [],
    requestHandler: getProducts,
 });
 
 const getProductMethod = (getProduct: RequestHandler): Method => ({
    type: "GET",
    paramKeys: [ 'id' ],
-   queryParamKeys: [],
-   sideEffects: [],
-   middleware: [],
    requestHandler: getProduct,
 });
 
 const createProductMethod = (createProduct: RequestHandler): Method => ({
    type: "POST",
-   paramKeys: [],
-   queryParamKeys: [],
-   sideEffects: [],
-   middleware: [],
    requestHandler: createProduct,
 });
 
 const updateProductsMethod = (updateProducts: RequestHandler): Method => ({
    type: "PATCH",
-   paramKeys: [],
    queryParamKeys: ProductsQueryParamKeys,
-   sideEffects: [],
-   middleware: [],
    requestHandler: updateProducts,
 });
 
 const updateProductMethod = (updateProduct: RequestHandler): Method => ({
    type: "PATCH",
    paramKeys: [ 'id' ],
-   queryParamKeys: [],
-   sideEffects: [],
-   middleware: [],
    requestHandler: updateProduct,
 });
 
 const deleteProductsMethod = (deleteProducts: RequestHandler): Method => ({
    type: "DELETE",
-   paramKeys: [],
    queryParamKeys: ProductsQueryParamKeys,
-   sideEffects: [],
-   middleware: [],
    requestHandler: deleteProducts,
 });
 
 const deleteProductMethod = (deleteProduct: RequestHandler): Method => ({
    type: "DELETE",
    paramKeys: [ 'id' ],
-   queryParamKeys: [],
-   sideEffects: [],
-   middleware: [],
    requestHandler: deleteProduct,
 });
 

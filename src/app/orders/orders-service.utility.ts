@@ -1,5 +1,5 @@
 import {
-   addRequestPageDataToResponse,
+   addPageDataToResponse,
    CommandResult,
    Error,
    isError,
@@ -53,9 +53,9 @@ export const configureOrdersService = (
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: Order[] | Error = await repository.getOrders(dto);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
-      const addPageData = (response: Response): Response =>
-         addRequestPageDataToResponse(request, response);
-      return addPageData(mapOrdersToSuccessResponse(result));
+      const response : Response = mapOrdersToSuccessResponse(result);
+      if (dto.page !== undefined) return addPageDataToResponse(dto.page, response);
+      return response;
    },
 
    createOrder: async (request: Request): Promise<Response> => {

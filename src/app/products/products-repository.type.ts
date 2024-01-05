@@ -1,21 +1,21 @@
 import {
-   CreateProductDTO,
-   DeleteProductDTO,
-   GetProductDTO,
+   CreateProductRequest,
+   DeleteProductRequest,
+   GetProductRequest,
    Product,
-   ProductsDTO,
-   UpdateProductDTO,
-   UpdateProductsDTO,
+   ProductsRequest,
+   UpdateProductRequest,
+   UpdateProductsRequest,
 } from "./products.type";
 import { CommandResult, Error } from "@hals/common";
 
 export type ProductsRepository = {
-   getProduct: (dto: GetProductDTO) => Promise<Product | Error>,
-   getProducts: (dto: ProductsDTO) => Promise<Product[] | Error>,
-   createProduct: (dto: CreateProductDTO) => Promise<Product | Error>,
-   updateProduct: (dto: UpdateProductDTO) => Promise<Product | Error>,
-   updateProducts: (dto: UpdateProductsDTO) => Promise<CommandResult | Error>,
-   deleteProduct: (dto: DeleteProductDTO) => Promise<CommandResult | Error>,
-   deleteProducts: (dto: ProductsDTO) => Promise<CommandResult | Error>,
-   exists: (dto: GetProductDTO) => Promise<boolean | Error>,
+   getProduct : (dto : GetProductRequest) => Promise<Product | Error>,
+   getProducts : (dto : ProductsRequest) => Promise<Product[] | Error>,
+   createProduct : (dto : CreateProductRequest) => Promise<Product | Error>,
+   updateProduct : (dto : UpdateProductRequest) => Promise<Product | Error>,
+   updateProducts : (dto : UpdateProductsRequest) => Promise<CommandResult | Error>,
+   deleteProduct : (dto : DeleteProductRequest) => Promise<CommandResult | Error>,
+   deleteProducts : (dto : ProductsRequest) => Promise<CommandResult | Error>,
+   exists : (dto : GetProductRequest) => Promise<boolean | Error>,
 };

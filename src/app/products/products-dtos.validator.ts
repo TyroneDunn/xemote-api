@@ -1,32 +1,32 @@
 import {
-   CreateProductDTO,
-   DeleteProductDTO,
-   GetProductDTO,
-   ProductsDTO,
-   UpdateProductDTO,
-   UpdateProductsDTO,
+   CreateProductRequest,
+   DeleteProductRequest,
+   GetProductRequest,
+   ProductsRequest,
+   UpdateProductRequest,
+   UpdateProductsRequest,
 } from "./products.type";
 import { ProductsRepository } from "./products-repository.type";
 import { ValidationOutcome } from "@hals/common";
 
 export type ProductsDtosValidator = {
-   validateGetProductDTO : (dto : GetProductDTO) => Promise<ValidationOutcome>,
-   validateProductsDTO : (dto : ProductsDTO) => Promise<ValidationOutcome>,
-   validateCreateProductDTO : (dto : CreateProductDTO) => Promise<ValidationOutcome>,
-   validateUpdateProductDTO : (dto : UpdateProductDTO) => Promise<ValidationOutcome>,
-   validateUpdateProductsDTO : (dto : UpdateProductsDTO) => Promise<ValidationOutcome>,
-   validateDeleteProductDTO : (dto : DeleteProductDTO) => Promise<ValidationOutcome>,
+   validateGetProductDTO : (dto : GetProductRequest) => Promise<ValidationOutcome>,
+   validateProductsDTO : (dto : ProductsRequest) => Promise<ValidationOutcome>,
+   validateCreateProductDTO : (dto : CreateProductRequest) => Promise<ValidationOutcome>,
+   validateUpdateProductDTO : (dto : UpdateProductRequest) => Promise<ValidationOutcome>,
+   validateUpdateProductsDTO : (dto : UpdateProductsRequest) => Promise<ValidationOutcome>,
+   validateDeleteProductDTO : (dto : DeleteProductRequest) => Promise<ValidationOutcome>,
 };
 
 export const ProductsDtosValidator = (repository : ProductsRepository) : ProductsDtosValidator => ({
-   validateGetProductDTO: async (dto : GetProductDTO) : Promise<ValidationOutcome> => {
+   validateGetProductDTO: async (dto : GetProductRequest) : Promise<ValidationOutcome> => {
       if (!dto._id) return { error: { type: "BadRequest", message: 'ID required.' } };
       if (!(await repository.exists(dto)))
          return { error: { type: "NotFound", message: `Product "${dto._id}" not found.` } };
       return {};
    },
 
-   validateProductsDTO: async (dto : ProductsDTO) : Promise<ValidationOutcome> => {
+   validateProductsDTO: async (dto : ProductsRequest) : Promise<ValidationOutcome> => {
       if (dto.filter) {
          if (dto.filter.name && dto.filter.nameRegex)
             return {
@@ -196,7 +196,7 @@ export const ProductsDtosValidator = (repository : ProductsRepository) : Product
       return {};
    },
 
-   validateCreateProductDTO: async (dto: CreateProductDTO): Promise<ValidationOutcome> => {
+   validateCreateProductDTO: async (dto : CreateProductRequest) : Promise<ValidationOutcome> => {
       if (!dto.name)
          return { error: { type: "BadRequest", message: 'Name required.' } };
       if (!dto.type)
@@ -247,7 +247,7 @@ export const ProductsDtosValidator = (repository : ProductsRepository) : Product
       return {};
    },
 
-   validateUpdateProductDTO: async (dto: UpdateProductDTO): Promise<ValidationOutcome> => {
+   validateUpdateProductDTO: async (dto : UpdateProductRequest) : Promise<ValidationOutcome> => {
       if (!dto._id)
          return { error: { type: "BadRequest", message: 'ID required.' } };
       if (!(await repository.exists(dto)))
@@ -311,7 +311,7 @@ export const ProductsDtosValidator = (repository : ProductsRepository) : Product
       return {};
    },
 
-   validateUpdateProductsDTO: async (dto: UpdateProductsDTO): Promise<ValidationOutcome> => {
+   validateUpdateProductsDTO: async (dto : UpdateProductsRequest) : Promise<ValidationOutcome> => {
       if (dto.filter.name && dto.filter.nameRegex)
          return {
             error: {
@@ -487,7 +487,7 @@ export const ProductsDtosValidator = (repository : ProductsRepository) : Product
       return {};
    },
 
-   validateDeleteProductDTO: async (dto: DeleteProductDTO): Promise<ValidationOutcome> => {
+   validateDeleteProductDTO: async (dto : DeleteProductRequest) : Promise<ValidationOutcome> => {
       if (!dto._id)
          return { error: { type: "BadRequest", message: 'ID required.' } };
       if (!(await repository.exists(dto)))

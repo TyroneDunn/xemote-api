@@ -19,41 +19,41 @@ export type ProductType =
    | "Wireless Infrared Beam Sensor"
    | "Wireless 4-30mA Sensor";
 
-export type ProductsDTO = {
+export type ProductsRequest = {
    filter?: ProductsFilter,
    timestamps?: Timestamps,
    sort?: ProductsSort,
    page?: Page,
 };
 
-export type GetProductDTO = { _id : string };
+export type GetProductRequest = { _id : string };
 
-export type CreateProductDTO = {
+export type CreateProductRequest = {
    name: string,
    type: ProductType,
    costPrice: Price,
    markup: number,
 };
 
-export type ProductUpdateFields = {
-   newName?: string,
-   newCostPrice?: Price,
-   newMarkup?: number,
-   newType?: ProductType,
-}
-
-export type UpdateProductDTO = {
+export type UpdateProductRequest = {
    _id: string,
    updateFields: ProductUpdateFields,
 };
 
-export type UpdateProductsDTO = {
+export type UpdateProductsRequest = {
    filter: ProductsFilter,
    timestamps?: Timestamps,
    updateFields: ProductUpdateFields,
 };
 
-export type DeleteProductDTO = { _id: string };
+export type ProductUpdateFields = {
+   newName? : string,
+   newCostPrice? : Price,
+   newMarkup? : number,
+   newType? : ProductType,
+}
+
+export type DeleteProductRequest = { _id : string };
 
 export type ProductsFilter = {
    name?: string,
@@ -64,7 +64,7 @@ export type ProductsFilter = {
    markupRange?: NumberRange,
 };
 
-export type ProductsSortOptions =
+export type ProductsSortOption =
    | "name"
    | "type"
    | "costPrice"
@@ -73,6 +73,6 @@ export type ProductsSortOptions =
    | "updatedAt";
 
 export type ProductsSort = {
-   field: ProductsSortOptions,
+   field : ProductsSortOption,
    order: OrderOption,
 };

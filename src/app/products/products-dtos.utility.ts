@@ -8,23 +8,23 @@ import {
    Response,
 } from "@hals/common";
 import {
-   CreateProductDTO,
-   DeleteProductDTO,
-   GetProductDTO,
+   CreateProductRequest,
+   DeleteProductRequest,
+   GetProductRequest,
    Product,
-   ProductsDTO,
-   ProductsSortOptions,
+   ProductsRequest,
+   ProductsSortOption,
    ProductType,
-   UpdateProductDTO,
-   UpdateProductsDTO,
+   UpdateProductRequest,
+   UpdateProductsRequest,
 } from "./products.type";
 import { Price } from "./price.type";
 
-export const mapToGetProductDTO = (request : Request) : GetProductDTO => ({
+export const mapToGetProductDTO = (request : Request) : GetProductRequest => ({
    _id: request.paramMap['id'],
 });
 
-export const mapRequestToProductsDTO = (request : Request) : ProductsDTO =>
+export const mapRequestToProductsDTO = (request : Request) : ProductsRequest =>
    ({
       ...mapToProductsFilter(request),
       ...mapRequestToTimestamps(request),
@@ -32,25 +32,25 @@ export const mapRequestToProductsDTO = (request : Request) : ProductsDTO =>
       ...mapRequestToPage(request),
    });
 
-export const mapToCreateProductDTO = (request : Request) : CreateProductDTO => ({
+export const mapToCreateProductDTO = (request : Request) : CreateProductRequest => ({
    name  : request.payload['name'],
    type  : request.payload['type'] as ProductType,
    costPrice: request.payload['costPrice'] as Price,
    markup: parseFloat(request.payload['markup']),
 });
 
-export const mapToUpdateProductDTO = (request : Request) : UpdateProductDTO => ({
+export const mapToUpdateProductDTO = (request : Request) : UpdateProductRequest => ({
    _id: request.paramMap['id'],
    ...mapToUpdateFields(request),
 });
 
-export const mapToUpdateProductsDTO = (request : Request) : UpdateProductsDTO => ({
+export const mapToUpdateProductsDTO = (request : Request) : UpdateProductsRequest => ({
    ...mapToProductsFilter(request),
    ...mapRequestToTimestamps(request),
    ...mapToUpdateFields(request),
 });
 
-export const mapToDeleteProductDTO = (request : Request) : DeleteProductDTO => ({
+export const mapToDeleteProductDTO = (request : Request) : DeleteProductRequest => ({
    _id: request.paramMap['id'],
 });
 
@@ -73,7 +73,7 @@ const mapToProductsFilter = (request : Request) =>
 const mapToProductsSort = (request : Request) => ({
    ...(request.queryParamMap['sort'] && request.queryParamMap['order']) && {
       sort: {
-         field: request.queryParamMap['sort'] as ProductsSortOptions,
+         field: request.queryParamMap['sort'] as ProductsSortOption,
          order: request.queryParamMap['order'] as OrderOption,
       },
    },

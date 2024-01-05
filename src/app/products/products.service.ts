@@ -25,13 +25,13 @@ import {
    mapToUpdateProductsDTO,
 } from "./products-dtos.utility";
 import {
-   CreateProductDTO,
-   DeleteProductDTO,
-   GetProductDTO,
+   CreateProductRequest,
+   DeleteProductRequest,
+   GetProductRequest,
    Product,
-   ProductsDTO,
-   UpdateProductDTO,
-   UpdateProductsDTO,
+   ProductsRequest,
+   UpdateProductRequest,
+   UpdateProductsRequest,
 } from "./products.type";
 import { InventoryRepository } from "../inventory/inventory-repository.type";
 
@@ -51,7 +51,7 @@ export const ProductsService = (
    inventoryRepository : InventoryRepository) : ProductsService =>
    ({
       getProduct: async (request : Request) : Promise<Response> => {
-         const dto : GetProductDTO = mapToGetProductDTO(request);
+         const dto : GetProductRequest = mapToGetProductDTO(request);
          const validationOutcome : ValidationOutcome = await validator.validateGetProductDTO(dto);
          if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
          const result : Product | Error = await repository.getProduct(dto);
@@ -60,7 +60,7 @@ export const ProductsService = (
       },
 
       getProducts: async (request : Request) : Promise<Response> => {
-         const dto : ProductsDTO = mapRequestToProductsDTO(request);
+         const dto : ProductsRequest = mapRequestToProductsDTO(request);
          const validationOutcome : ValidationOutcome = await validator.validateProductsDTO(dto);
          if (validationOutcome.error !== undefined) return mapValidationOutcomeToErrorResponse(validationOutcome);
          const result : Product[] | Error = await repository.getProducts(dto);
@@ -71,7 +71,7 @@ export const ProductsService = (
       },
 
       createProduct: async (request : Request) : Promise<Response> => {
-         const dto : CreateProductDTO = mapToCreateProductDTO(request);
+         const dto : CreateProductRequest = mapToCreateProductDTO(request);
          const validationOutcome : ValidationOutcome = await validator.validateCreateProductDTO(dto);
          if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
          const result : Product | Error = await repository.createProduct(dto);
@@ -82,7 +82,7 @@ export const ProductsService = (
       },
 
       updateProduct: async (request : Request) : Promise<Response> => {
-         const dto : UpdateProductDTO = mapToUpdateProductDTO(request);
+         const dto : UpdateProductRequest = mapToUpdateProductDTO(request);
          const validationOutcome : ValidationOutcome = await validator.validateUpdateProductDTO(dto);
          if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
          const result : Product | Error = await repository.updateProduct(dto);
@@ -91,7 +91,7 @@ export const ProductsService = (
       },
 
       updateProducts: async (request : Request) : Promise<Response> => {
-         const dto : UpdateProductsDTO = mapToUpdateProductsDTO(request);
+         const dto : UpdateProductsRequest = mapToUpdateProductsDTO(request);
          const validationOutcome : ValidationOutcome = await validator.validateUpdateProductsDTO(dto);
          if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
          const result : CommandResult | Error = await repository.updateProducts(dto);
@@ -100,7 +100,7 @@ export const ProductsService = (
       },
 
       deleteProduct: async (request : Request) : Promise<Response> => {
-         const dto : DeleteProductDTO = mapToDeleteProductDTO(request);
+         const dto : DeleteProductRequest = mapToDeleteProductDTO(request);
          const validationOutcome : ValidationOutcome = await validator.validateDeleteProductDTO(dto);
          if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
          const result : CommandResult | Error = await repository.deleteProduct(dto);
@@ -111,7 +111,7 @@ export const ProductsService = (
       },
 
       deleteProducts: async (request : Request) : Promise<Response> => {
-         const dto : ProductsDTO = mapRequestToProductsDTO(request);
+         const dto : ProductsRequest = mapRequestToProductsDTO(request);
          const validationOutcome : ValidationOutcome = await validator.validateProductsDTO(dto);
          if (validationOutcome.error) return mapValidationOutcomeToErrorResponse(validationOutcome);
          const products : Product[] | Error = await repository.getProducts(dto);

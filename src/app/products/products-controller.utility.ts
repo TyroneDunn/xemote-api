@@ -82,7 +82,7 @@ const deleteProductMethod = (deleteProduct: RequestHandler): Method => ({
 
 export type ProductsController = Controller;
 
-export const configureProductsController = (service: ProductsService): Controller => ({
+export const ProductsController = (service : ProductsService) : Controller => ({
    path: 'products/',
    guard: true,
    methods: [

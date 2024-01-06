@@ -1,4 +1,8 @@
 import {
+   addPageDataToResponse,
+   Error,
+   isError,
+   mapErrorToInternalServerErrorResponse,
    mapRequestToPage,
    mapRequestToTimestamps,
    OK,
@@ -14,6 +18,7 @@ import {
    UsersRequest,
    UsersSortOption,
 } from "./users.type";
+import { GetUser, GetUsers } from './users-repository.type';
 
 export const mapRequestToGetUserDto = (request: Request): GetUserRequest =>
    ({ username: request.paramMap['username'] });
@@ -71,3 +76,20 @@ const mapRequestToUpdateFields = (request: Request) => ({
 
 export const mapRequestToDeleteUserDto = (request: Request): DeleteUserRequest =>
    ({ username: request.paramMap['username'] });
+
+export const getUserAndMapResultToResponse = (getUser : GetUser) =>
+   async (getUserRequest : GetUserRequest) : Promise<Response> => {
+      const getUserResult : User | Error = await getUser(getUserRequest);
+      if (isError(getUserResult)) return mapErrorToInternalServerErrorResponse(getUserResult);
+      else return mapUserToSuccessResponse(getUserResult);
+   };
+
+export const getUsersAndMapResultToResponse = (getUsers : GetUsers) =>
+   async (usersRequest : UsersRequest) : Promise<Response> => {
+      const getUsersResult: User[] | Error = await getUsers(usersRequest);
+      if (isError(getUsersResult)) return mapErrorToInternalServerErrorResponse(getUsersResult);
+      const response : Response = mapUsersToSuccessResponse(getUsersResult);
+      if (usersRequest.page !== undefined)
+         return addPageDataToResponse(usersRequest.page, response)
+      else return response;
+   }

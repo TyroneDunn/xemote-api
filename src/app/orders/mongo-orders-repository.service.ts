@@ -18,11 +18,11 @@ export const MongoOrdersRepository: OrdersRepository = {
    getOrder: async (dto: GetOrderRequest): Promise<Order | Error> => {
       try {
          const order: Order | null = await OrdersModel.findById(dto._id);
-         if (!order) return { type: "NotFound", message: 'Order not found.' };
+         if (!order) return Error("NotFound", 'Order not found.');
          return order;
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -39,7 +39,7 @@ export const MongoOrdersRepository: OrdersRepository = {
          return query.exec();
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -52,7 +52,7 @@ export const MongoOrdersRepository: OrdersRepository = {
          }).save();
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -63,11 +63,11 @@ export const MongoOrdersRepository: OrdersRepository = {
             mapUpdateFieldsToUpdateQuery(dto.updateFields),
             { new: true },
          );
-         if (!order) return { type: "NotFound", message: 'Order not found.' };
+         if (!order) return Error("NotFound", 'Order not found.');
          return order;
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -79,7 +79,7 @@ export const MongoOrdersRepository: OrdersRepository = {
          return { success: updateResult.acknowledged, affectedCount: updateResult.modifiedCount };
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -89,7 +89,7 @@ export const MongoOrdersRepository: OrdersRepository = {
          return { success: result.acknowledged, affectedCount: result.deletedCount };
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -100,7 +100,7 @@ export const MongoOrdersRepository: OrdersRepository = {
          return { success: result.acknowledged, affectedCount: result.deletedCount };
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -110,7 +110,7 @@ export const MongoOrdersRepository: OrdersRepository = {
          return !!order;
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 };

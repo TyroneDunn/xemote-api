@@ -8,6 +8,7 @@ import {
    mapErrorToInternalServerErrorResponse,
    mapValidationErrorToErrorResponse,
    Request,
+   RequestHandler,
    Response,
    ValidationError,
 } from "@hals/common";
@@ -32,9 +33,18 @@ import {
    mapRequestToUpdateOrdersDTO,
 } from "./orders-dtos.utility";
 import { OrdersDtosValidator } from "./orders-dtos-validator.utility";
-import { OrdersService } from "./orders-service.type";
 
-export const configureOrdersService = (
+export type OrdersService = {
+   getOrder : RequestHandler,
+   getOrders : RequestHandler,
+   createOrder : RequestHandler,
+   updateOrder : RequestHandler,
+   updateOrders : RequestHandler,
+   deleteOrder : RequestHandler,
+   deleteOrders : RequestHandler,
+};
+
+export const OrdersService = (
    repository: OrdersRepository,
    validator: OrdersDtosValidator,
 ): OrdersService => ({

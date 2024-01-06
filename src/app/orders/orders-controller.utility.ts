@@ -1,5 +1,5 @@
 import { Controller, Method, RequestHandler } from "@hals/common";
-import { OrdersService } from "./orders-service.type";
+import { OrdersService } from './orders.service';
 
 export const OrdersQueryParamsKeys: string[] = [
    'clientId',

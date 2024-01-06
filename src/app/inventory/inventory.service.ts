@@ -1,9 +1,5 @@
 import { InventoryRepository } from "./inventory-repository.type";
-import {
-   InventoryRecord,
-   UpdateInventoryRecordRequest,
-   UpdateInventoryRecordsRequest,
-} from "./inventory-records.type";
+import { UpdateInventoryRecordsRequest } from "./inventory-records.type";
 import {
    CommandResult,
    Error,
@@ -21,11 +17,11 @@ import {
 import {
    getInventoryRecordAndMapResultToResponse,
    getRecordsAndMapResultToResponse,
-   mapInventoryRecordToSuccessResponse,
    mapRequestToGetInventoryRecordRequest,
    mapRequestToInventoryRecordsRequest,
    mapRequestToUpdateInventoryRecordRequest,
    mapRequestToUpdateInventoryRecordsRequest,
+   updateRecordAndMapResultToResponse,
 } from "./inventory-records.utility";
 import { InventoryRecordsValidator } from "./inventory-records.validator";
 
@@ -52,14 +48,11 @@ export const InventoryService = (
       getRecordsAndMapResultToResponse(repository.getRecords),
    ),
 
-   updateRecord: async (request: Request): Promise<Response> => {
-      const dto: UpdateInventoryRecordRequest = mapRequestToUpdateInventoryRecordRequest(request);
-      const validationOutcome: ValidationError | null = await validator.validateUpdateInventoryRecordRequest(dto);
-      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
-      const result: InventoryRecord | Error = await repository.updateRecord(dto);
-      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
-      return mapInventoryRecordToSuccessResponse(result);
-   },
+   updateRecord: async (request: Request): Promise<Response> => handleRequest(
+      mapRequestToUpdateInventoryRecordRequest(request),
+      validator.validateUpdateInventoryRecordRequest,
+      updateRecordAndMapResultToResponse(repository.updateRecord),
+   ),
 
    updateRecords: async (request: Request): Promise<Response> => {
       const dto: UpdateInventoryRecordsRequest = mapRequestToUpdateInventoryRecordsRequest(request);

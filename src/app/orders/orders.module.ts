@@ -1,4 +1,4 @@
-import { OrdersController } from "./orders-controller.utility";
+import { OrdersController } from "./orders.controller";
 import { OrdersService } from "./orders.service";
 import { MongoOrdersRepository } from "./mongo-orders-repository.service";
 import { configureOrdersDtosValidator, OrdersDtosValidator } from "./orders-dtos-validator.utility";

@@ -6,10 +6,10 @@ import { InventoryRepository } from "./inventory-repository.type";
 import { Controller } from '@hals/common';
 
 const inventoryRepository: InventoryRepository = MongoInventoryRepository;
-const inventoryDtosValidator: InventoryRecordsValidator
+const inventoryValidator: InventoryRecordsValidator
    = InventoryRecordsValidator(inventoryRepository);
 const inventoryService: InventoryService
-   = InventoryService(inventoryRepository, inventoryDtosValidator);
+   = InventoryService(inventoryRepository, inventoryValidator);
 const inventoryController: Controller = InventoryController(inventoryService);
 
 export default inventoryController;

@@ -1,22 +1,9 @@
-import {
-   CommandResult,
-   Error,
-   handleRequest,
-   isError,
-   isValidationError,
-   mapCommandResultToSuccessResponse,
-   mapErrorToInternalServerErrorResponse,
-   mapValidationErrorToErrorResponse,
-   Request,
-   RequestHandler,
-   Response,
-   ValidationError,
-} from "@hals/common";
+import { handleRequest, Request, RequestHandler, Response } from "@hals/common";
 import { OrdersRepository } from "./orders-repository.type";
-import { OrdersRequest } from "./orders.type";
 import {
    createOrderAndMapResultToResponse,
    deleteOrderAndMapResultToResponse,
+   deleteOrdersAndMapResultToResponse,
    getOrderAndMapToResponse,
    getOrdersAndMapResultToResponse,
    mapRequestToCreateOrderRequest,
@@ -80,12 +67,9 @@ export const OrdersService = (
       deleteOrderAndMapResultToResponse(repository.deleteOrder),
    ),
 
-   deleteOrders: async (request: Request): Promise<Response> => {
-      const dto: OrdersRequest = mapRequestToOrdersRequest(request);
-      const validationOutcome: ValidationError | null = await validator.validateOrdersRequest(dto);
-      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
-      const result: CommandResult | Error = await repository.deleteOrders(dto);
-      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
-      return mapCommandResultToSuccessResponse(result);
-   },
+   deleteOrders: async (request: Request): Promise<Response> => handleRequest(
+      mapRequestToOrdersRequest(request),
+      validator.validateOrdersRequest,
+      deleteOrdersAndMapResultToResponse(repository.deleteOrders),
+   ),
 });

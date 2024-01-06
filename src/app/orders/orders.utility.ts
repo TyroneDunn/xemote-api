@@ -26,6 +26,7 @@ import { Order, OrderStatus, ProductCount } from "./order.type";
 import {
    CreateOrder,
    DeleteOrder,
+   DeleteOrders,
    GetOrder,
    GetOrders,
    UpdateOrder,
@@ -143,6 +144,13 @@ export const updateOrdersAndMapResultToResponse = (updateOrders : UpdateOrders) 
 export const deleteOrderAndMapResultToResponse = (deleteOrder : DeleteOrder) =>
    async (deleteOrderRequest : DeleteOrderRequest) : Promise<Response> => {
       const result : CommandResult | Error = await deleteOrder(deleteOrderRequest);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      return mapCommandResultToSuccessResponse(result);
+   };
+
+export const deleteOrdersAndMapResultToResponse = (deleteOrders : DeleteOrders) =>
+   async (ordersRequest : OrdersRequest) : Promise<Response> => {
+      const result : CommandResult | Error = await deleteOrders(ordersRequest);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
       return mapCommandResultToSuccessResponse(result);
    };

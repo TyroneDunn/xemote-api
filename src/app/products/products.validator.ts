@@ -10,23 +10,23 @@ import { ProductsRepository } from "./products-repository.type";
 import { ValidationError } from "@hals/common";
 
 export type ProductsValidator = {
-   validateGetProductDTO : (dto : GetProductRequest) => Promise<ValidationError | null>,
-   validateProductsDTO : (dto : ProductsRequest) => Promise<ValidationError | null>,
-   validateCreateProductDTO : (dto : CreateProductRequest) => Promise<ValidationError | null>,
-   validateUpdateProductDTO : (dto : UpdateProductRequest) => Promise<ValidationError | null>,
-   validateUpdateProductsDTO : (dto : UpdateProductsRequest) => Promise<ValidationError | null>,
-   validateDeleteProductDTO : (dto : DeleteProductRequest) => Promise<ValidationError | null>,
+   validateGetProductRequest : (dto : GetProductRequest) => Promise<ValidationError | null>,
+   validateProductsRequest : (dto : ProductsRequest) => Promise<ValidationError | null>,
+   validateCreateProductRequest : (dto : CreateProductRequest) => Promise<ValidationError | null>,
+   validateUpdateProductRequest : (dto : UpdateProductRequest) => Promise<ValidationError | null>,
+   validateUpdateProductsRequest : (dto : UpdateProductsRequest) => Promise<ValidationError | null>,
+   validateDeleteProductRequest : (dto : DeleteProductRequest) => Promise<ValidationError | null>,
 };
 
 export const ProductsValidator = (repository : ProductsRepository) : ProductsValidator => ({
-   validateGetProductDTO: async (dto : GetProductRequest) : Promise<ValidationError | null> => {
+   validateGetProductRequest: async (dto : GetProductRequest) : Promise<ValidationError | null> => {
       if (!dto._id) return ValidationError("BadRequest", 'ID required.');
       if (!(await repository.exists(dto)))
          return ValidationError("NotFound", `Product "${dto._id}" not found.`);
       return null;
    },
 
-   validateProductsDTO: async (dto : ProductsRequest) : Promise<ValidationError | null> => {
+   validateProductsRequest: async (dto : ProductsRequest) : Promise<ValidationError | null> => {
       if (dto.filter) {
          if (dto.filter.name && dto.filter.nameRegex) return ValidationError(
             "BadRequest",
@@ -170,7 +170,7 @@ export const ProductsValidator = (repository : ProductsRepository) : ProductsVal
       return null;
    },
 
-   validateCreateProductDTO: async (dto : CreateProductRequest) : Promise<ValidationError | null> => {
+   validateCreateProductRequest: async (dto : CreateProductRequest) : Promise<ValidationError | null> => {
       if (!dto.name)
          return ValidationError("BadRequest", 'Name required.');
       if (!dto.category)
@@ -218,7 +218,7 @@ export const ProductsValidator = (repository : ProductsRepository) : ProductsVal
       return null;
    },
 
-   validateUpdateProductDTO: async (dto : UpdateProductRequest) : Promise<ValidationError | null> => {
+   validateUpdateProductRequest: async (dto : UpdateProductRequest) : Promise<ValidationError | null> => {
       if (!dto._id)
          return ValidationError("BadRequest", 'ID required.');
       if (!(await repository.exists(dto)))
@@ -275,7 +275,7 @@ export const ProductsValidator = (repository : ProductsRepository) : ProductsVal
       return null;
    },
 
-   validateUpdateProductsDTO: async (dto : UpdateProductsRequest) : Promise<ValidationError | null> => {
+   validateUpdateProductsRequest: async (dto : UpdateProductsRequest) : Promise<ValidationError | null> => {
       if (dto.filter.name && dto.filter.nameRegex)
          return ValidationError(
             "BadRequest",
@@ -432,7 +432,7 @@ export const ProductsValidator = (repository : ProductsRepository) : ProductsVal
       return null;
    },
 
-   validateDeleteProductDTO: async (dto : DeleteProductRequest) : Promise<ValidationError | null> => {
+   validateDeleteProductRequest: async (dto : DeleteProductRequest) : Promise<ValidationError | null> => {
       if (!dto._id)
          return ValidationError("BadRequest", 'ID required.');
       if (!(await repository.exists(dto)))

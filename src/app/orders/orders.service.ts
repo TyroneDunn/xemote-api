@@ -1,5 +1,4 @@
 import {
-   addPageDataToResponse,
    CommandResult,
    Error,
    handleRequest,
@@ -24,7 +23,7 @@ import {
 import { Order } from "./order.type";
 import {
    getOrderAndMapToResponse,
-   mapOrdersToSuccessResponse,
+   getOrdersAndMapResultToResponse,
    mapOrderToSuccessResponse,
    mapRequestToCreateOrderRequest,
    mapRequestToDeleteOrderRequest,
@@ -55,16 +54,11 @@ export const OrdersService = (
       getOrderAndMapToResponse(repository.getOrder),
    ),
 
-   getOrders: async (request: Request): Promise<Response> => {
-      const dto: OrdersRequest = mapRequestToOrdersRequest(request);
-      const validationOutcome: ValidationError | null = await validator.validateOrdersRequest(dto);
-      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
-      const result: Order[] | Error = await repository.getOrders(dto);
-      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
-      const response : Response = mapOrdersToSuccessResponse(result);
-      if (dto.page !== undefined) return addPageDataToResponse(dto.page, response);
-      return response;
-   },
+   getOrders: async (request: Request): Promise<Response> => handleRequest(
+      mapRequestToOrdersRequest(request),
+      validator.validateOrdersRequest,
+      getOrdersAndMapResultToResponse(repository.getOrders),
+   ),
 
    createOrder: async (request: Request): Promise<Response> => {
       const dto: CreateOrderRequest = mapRequestToCreateOrderRequest(request);

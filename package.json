@@ -14,7 +14,7 @@
     "Server"
   ],
   "author": "Tyrone B. Dunn",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@hals/common": "file:../../../lib/@hals/common",
     "@hals/core": "file:../../../lib/@hals/core",

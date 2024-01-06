@@ -7,12 +7,12 @@ import {
    deleteProductsAndTheirInventoryRecordsAndMapResultToResponse,
    getProductAndMapResultToResponse,
    getProductsAndMapResultToResponse,
+   mapRequestToCreateProductRequest,
+   mapRequestToDeleteProductRequest,
+   mapRequestToGetProductRequest,
    mapRequestToProductsRequest,
-   mapToCreateProductRequest,
-   mapToDeleteProductRequest,
-   mapToGetProductRequest,
-   mapToUpdateProductRequest,
-   mapToUpdateProductsRequest,
+   mapRequestToUpdateProductRequest,
+   mapRequestToUpdateProductsRequest,
    updateProductAndMapResultToResponse,
    updateProductsAndMapResultToResponse,
 } from "./products.utility";
@@ -35,7 +35,7 @@ export const ProductsService = (
 ) : ProductsService => ({
    getProduct: async (request : Request) : Promise<Response> =>
       handleRequest(
-         mapToGetProductRequest(request),
+         mapRequestToGetProductRequest(request),
          validator.validateGetProductDTO,
          getProductAndMapResultToResponse(productsRepository.getProduct),
       ),
@@ -49,7 +49,7 @@ export const ProductsService = (
 
    createProduct: async (request : Request) : Promise<Response> =>
       handleRequest(
-         mapToCreateProductRequest(request),
+         mapRequestToCreateProductRequest(request),
          validator.validateCreateProductDTO,
          createProductAndItsInventoryRecordsAndMapResultToResponse(
             productsRepository.createProduct,
@@ -59,21 +59,21 @@ export const ProductsService = (
 
    updateProduct: async (request : Request) : Promise<Response> =>
       handleRequest(
-         mapToUpdateProductRequest(request),
+         mapRequestToUpdateProductRequest(request),
          validator.validateUpdateProductDTO,
          updateProductAndMapResultToResponse(productsRepository.updateProduct),
       ),
 
    updateProducts: async (request : Request) : Promise<Response> =>
       handleRequest(
-         mapToUpdateProductsRequest(request),
+         mapRequestToUpdateProductsRequest(request),
          validator.validateUpdateProductsDTO,
          updateProductsAndMapResultToResponse(productsRepository.updateProducts),
       ),
 
    deleteProduct: async (request : Request) : Promise<Response> =>
       handleRequest(
-         mapToDeleteProductRequest(request),
+         mapRequestToDeleteProductRequest(request),
          validator.validateDeleteProductDTO,
          deleteProductAndItsInventoryRecordAndMapResultToResponse(
             productsRepository.deleteProduct,

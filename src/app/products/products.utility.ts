@@ -39,7 +39,7 @@ import { CreateRecord, DeleteRecord } from "../inventory/inventory-repository.ty
 import { Either } from '../../shared/either.type';
 import { InventoryRecord } from '../inventory/inventory-record.type';
 
-export const mapToGetProductRequest = (request : Request) : GetProductRequest => ({
+export const mapRequestToGetProductRequest = (request : Request) : GetProductRequest => ({
    _id: request.paramMap['id'],
 });
 
@@ -50,25 +50,25 @@ export const mapRequestToProductsRequest = (request : Request) : ProductsRequest
    ...mapRequestToPage(request),
 });
 
-export const mapToCreateProductRequest = (request : Request) : CreateProductRequest => ({
+export const mapRequestToCreateProductRequest = (request : Request) : CreateProductRequest => ({
    name     : request.payload['name'],
    category : request.payload['category'] as ProductCategory,
    costPrice: request.payload['costPrice'] as Price,
    markup   : parseFloat(request.payload['markup']),
 });
 
-export const mapToUpdateProductRequest = (request : Request) : UpdateProductRequest => ({
+export const mapRequestToUpdateProductRequest = (request : Request) : UpdateProductRequest => ({
    _id: request.paramMap['id'],
    ...mapToUpdateFields(request),
 });
 
-export const mapToUpdateProductsRequest = (request : Request) : UpdateProductsRequest => ({
+export const mapRequestToUpdateProductsRequest = (request : Request) : UpdateProductsRequest => ({
    ...mapToProductsRequestFilter(request),
    ...mapRequestToTimestamps(request),
    ...mapToUpdateFields(request),
 });
 
-export const mapToDeleteProductRequest = (request : Request) : DeleteProductRequest => ({
+export const mapRequestToDeleteProductRequest = (request : Request) : DeleteProductRequest => ({
    _id: request.paramMap['id'],
 });
 

@@ -15,6 +15,7 @@ import {
    mapErrorToInternalServerErrorResponse,
    mapValidationErrorToErrorResponse,
    Request,
+   RequestHandler,
    Response,
    ValidationError,
 } from "@hals/common";
@@ -28,9 +29,15 @@ import {
    mapRequestToUpdateInventoryRecordsDTO,
 } from "./inventory-records-dtos.utility";
 import { InventoryRecordsDtosValidator } from "./inventory-records-dtos-validator.utility";
-import { InventoryService } from "./inventory-service.type";
 
-export const configureInventoryService = (
+export type InventoryService = {
+   getRecord : RequestHandler,
+   getRecords : RequestHandler,
+   updateRecord : RequestHandler,
+   updateRecords : RequestHandler,
+};
+
+export const InventoryService = (
    repository: InventoryRepository,
    validator: InventoryRecordsDtosValidator,
 ): InventoryService => ({

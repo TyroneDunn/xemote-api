@@ -18,7 +18,7 @@ import {
    UsersRequest,
    UsersSortOption,
 } from "./users.type";
-import { GetUser, GetUsers } from './users-repository.type';
+import { GetUser, GetUsers, UpdateUser } from './users-repository.type';
 
 export const mapRequestToGetUserDto = (request: Request): GetUserRequest =>
    ({ username: request.paramMap['username'] });
@@ -92,4 +92,11 @@ export const getUsersAndMapResultToResponse = (getUsers : GetUsers) =>
       if (usersRequest.page !== undefined)
          return addPageDataToResponse(usersRequest.page, response)
       else return response;
-   }
+   };
+
+export const updateUserAndMapResultToResponse = (updateUser: UpdateUser) =>
+   async (updateUserRequest: UpdateUserRequest) : Promise<Response> => {
+      const updateUserResult: User | Error = await updateUser(updateUserRequest);
+      if (isError(updateUserResult)) return mapErrorToInternalServerErrorResponse(updateUserResult);
+      return mapUserToSuccessResponse(updateUserResult);
+   };

@@ -21,7 +21,7 @@ import {
    UpdateOrdersRequest,
 } from "./orders.type";
 import { Order, OrderStatus, ProductCount } from "./order.type";
-import { CreateOrder, GetOrder, GetOrders } from './orders-repository.type';
+import { CreateOrder, GetOrder, GetOrders, UpdateOrder } from './orders-repository.type';
 
 export const mapRequestToGetOrderRequest = (request : Request) : GetOrderRequest =>
    ({ _id : request.paramMap['id'] });
@@ -113,6 +113,13 @@ export const getOrdersAndMapResultToResponse = (getOrders : GetOrders) =>
 export const createOrderAndMapResultToResponse = (createOrder : CreateOrder) =>
    async (createOrderRequest : CreateOrderRequest) : Promise<Response> => {
       const result : Order | Error = await createOrder(createOrderRequest);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      return mapOrderToSuccessResponse(result);
+   };
+
+export const updateOrderAndMapResultToResponse = (updateOrder : UpdateOrder) =>
+   async (updateOrderRequest : UpdateOrderRequest) : Promise<Response> => {
+      const result : Order | Error = await updateOrder(updateOrderRequest);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
       return mapOrderToSuccessResponse(result);
    };

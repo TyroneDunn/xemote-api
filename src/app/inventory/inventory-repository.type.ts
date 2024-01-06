@@ -11,14 +11,14 @@ import { CommandResult, Error } from "@hals/common";
 import { Either } from '../../shared/either.type';
 
 export type InventoryRepository = {
-   getRecord: GetRecord,
-   getRecords: GetRecords,
-   createRecord: CreateRecord,
-   updateRecord: UpdateRecord,
-   updateRecords: UpdateRecords,
-   deleteRecord: DeleteRecord,
-   deleteRecords: DeleteRecords,
-   exists: (request: GetInventoryRecordRequest) => Promise<boolean | Error>,
+   getRecord : GetRecord,
+   getRecords : GetRecords,
+   createRecord : CreateRecord,
+   updateRecord : UpdateRecord,
+   updateRecords : UpdateRecords,
+   deleteRecord : DeleteRecord,
+   deleteRecords : DeleteRecords,
+   exists : (request : GetInventoryRecordRequest) => Promise<boolean | Error>,
 };
 
 export type GetRecord = (request : GetInventoryRecordRequest) => Promise<InventoryRecord | Error>;

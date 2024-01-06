@@ -1,9 +1,8 @@
 import { configureUsersController, UsersController } from "./users.controller";
-import { UsersService } from "./users-service.type";
 import { MongoUsersRepository } from "./mongo-users-repository.service";
 import { UsersRepository } from "./users-repository.type";
 import { configureUsersDtosValidator, UsersDtosValidator } from "./users-dtos-validator.utility";
-import { configureUsersService } from "./users-service.utility";
+import { configureUsersService, UsersService } from "./users.service";
 
 const usersRepository: UsersRepository = MongoUsersRepository;
 const usersDtosValidator: UsersDtosValidator = configureUsersDtosValidator(usersRepository);

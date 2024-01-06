@@ -1,5 +1,4 @@
 import { UsersRepository } from "./users-repository.type";
-import { UsersService } from "./users-service.type";
 import {
    addPageDataToResponse,
    CommandResult,
@@ -10,6 +9,7 @@ import {
    mapErrorToInternalServerErrorResponse,
    mapValidationErrorToErrorResponse,
    Request,
+   RequestHandler,
    Response,
    User,
    ValidationError,
@@ -24,6 +24,14 @@ import {
    mapUsersToSuccessResponse,
    mapUserToSuccessResponse,
 } from "./users-dtos.utility";
+
+export type UsersService = {
+   getUser : RequestHandler,
+   getUsers : RequestHandler,
+   updateUser : RequestHandler,
+   deleteUser : RequestHandler,
+   deleteUsers : RequestHandler,
+};
 
 export const configureUsersService = (
    repository: UsersRepository,

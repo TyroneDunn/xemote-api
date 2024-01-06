@@ -10,12 +10,20 @@ import {
 import { CommandResult, Error } from "@hals/common";
 
 export type OrdersRepository = {
-   getOrder: (dto: GetOrderDTO) => Promise<Order | Error>,
-   getOrders: (dto: OrdersDTO) => Promise<Order[] | Error>,
-   createOrder: (dto: CreateOrderDTO) => Promise<Order | Error>,
-   updateOrder: (dto: UpdateOrderDTO) => Promise<Order | Error>,
-   updateOrders: (dto: UpdateOrdersDTO) => Promise<CommandResult | Error>,
-   deleteOrder: (dto: DeleteOrderDTO) => Promise<CommandResult | Error>,
-   deleteOrders: (dto: OrdersDTO) => Promise<CommandResult | Error>,
+   getOrder: GetOrder,
+   getOrders: GetOrders,
+   createOrder: CreateOrder,
+   updateOrder: UpdateOrder,
+   updateOrders: UpdateOrders,
+   deleteOrder: DeleteOrder,
+   deleteOrders: DeleteOrders,
    exists: (dto: GetOrderDTO) => Promise<boolean | Error>,
 };
+
+export type GetOrder = (dto : GetOrderDTO) => Promise<Order | Error>;
+export type GetOrders = (dto : OrdersDTO) => Promise<Order[] | Error>;
+export type CreateOrder = (dto : CreateOrderDTO) => Promise<Order | Error>;
+export type UpdateOrder = (dto : UpdateOrderDTO) => Promise<Order | Error>;
+export type UpdateOrders = (dto : UpdateOrdersDTO) => Promise<CommandResult | Error>;
+export type DeleteOrder = (dto : DeleteOrderDTO) => Promise<CommandResult | Error>;
+export type DeleteOrders = (dto : OrdersDTO) => Promise<CommandResult | Error>;

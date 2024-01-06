@@ -10,14 +10,14 @@ import {
 import { CommandResult, Error } from "@hals/common";
 
 export type OrdersRepository = {
-   getOrder: GetOrder,
-   getOrders: GetOrders,
-   createOrder: CreateOrder,
-   updateOrder: UpdateOrder,
-   updateOrders: UpdateOrders,
-   deleteOrder: DeleteOrder,
-   deleteOrders: DeleteOrders,
-   exists: (dto: GetOrderRequest) => Promise<boolean | Error>,
+   getOrder : GetOrder,
+   getOrders : GetOrders,
+   createOrder : CreateOrder,
+   updateOrder : UpdateOrder,
+   updateOrders : UpdateOrders,
+   deleteOrder : DeleteOrder,
+   deleteOrders : DeleteOrders,
+   exists : (dto : GetOrderRequest) => Promise<boolean | Error>,
 };
 
 export type GetOrder = (dto : GetOrderRequest) => Promise<Order | Error>;

@@ -14,10 +14,10 @@ import { DeleteResult } from "mongodb";
 import { UpdateWriteOpResult } from "mongoose";
 import { CommandResult, Error } from "@hals/common";
 
-export const MongoOrdersRepository: OrdersRepository = {
-   getOrder: async (dto: GetOrderRequest): Promise<Order | Error> => {
+export const MongoOrdersRepository : OrdersRepository = {
+   getOrder: async (dto : GetOrderRequest) : Promise<Order | Error> => {
       try {
-         const order: Order | null = await OrdersModel.findById(dto._id);
+         const order : Order | null = await OrdersModel.findById(dto._id);
          if (!order) return Error("NotFound", 'Order not found.');
          return order;
       }
@@ -26,7 +26,7 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   getOrders: async (dto: OrdersRequest): Promise<Order[] | Error> => {
+   getOrders: async (dto : OrdersRequest) : Promise<Order[] | Error> => {
       try {
          const filter = mapOrdersRequestToOrdersFilter(dto);
          const query = OrdersModel.find(filter);
@@ -43,12 +43,12 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   createOrder: async (dto: CreateOrderRequest): Promise<Order | Error> => {
+   createOrder: async (dto : CreateOrderRequest) : Promise<Order | Error> => {
       try {
          return new OrdersModel({
             clientId: dto.clientId,
-            cart: dto.cart,
-            status: dto.status,
+            cart    : dto.cart,
+            status  : dto.status,
          }).save();
       }
       catch (error) {
@@ -56,9 +56,9 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   updateOrder: async (dto: UpdateOrderRequest): Promise<Order | Error> => {
+   updateOrder: async (dto : UpdateOrderRequest) : Promise<Order | Error> => {
       try {
-         const order: Order | null = await OrdersModel.findOneAndUpdate(
+         const order : Order | null = await OrdersModel.findOneAndUpdate(
             { _id: dto._id },
             mapUpdateFieldsToUpdateQuery(dto.updateFields),
             { new: true },
@@ -71,11 +71,11 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   updateOrders: async (dto: UpdateOrdersRequest): Promise<CommandResult | Error> => {
+   updateOrders: async (dto : UpdateOrdersRequest) : Promise<CommandResult | Error> => {
       try {
          const filter = mapUpdateOrdersRequestToOrdersFilter(dto);
          const updateQuery = mapUpdateFieldsToUpdateQuery(dto.updateFields);
-         const updateResult: UpdateWriteOpResult = await OrdersModel.updateMany(filter, updateQuery);
+         const updateResult : UpdateWriteOpResult = await OrdersModel.updateMany(filter, updateQuery);
          return CommandResult(updateResult.acknowledged, updateResult.modifiedCount);
       }
       catch (error) {
@@ -83,9 +83,9 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   deleteOrder: async (dto: DeleteOrderRequest): Promise<CommandResult | Error> => {
+   deleteOrder: async (dto : DeleteOrderRequest) : Promise<CommandResult | Error> => {
       try {
-         const result: DeleteResult = await OrdersModel.deleteOne({ _id: dto._id });
+         const result : DeleteResult = await OrdersModel.deleteOne({ _id: dto._id });
          return CommandResult(result.acknowledged, result.deletedCount);
       }
       catch (error) {
@@ -93,10 +93,10 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   deleteOrders: async (dto: OrdersRequest): Promise<CommandResult | Error> => {
+   deleteOrders: async (dto : OrdersRequest) : Promise<CommandResult | Error> => {
       try {
          const filter = mapOrdersRequestToOrdersFilter(dto);
-         const result: DeleteResult = await OrdersModel.deleteMany(filter);
+         const result : DeleteResult = await OrdersModel.deleteMany(filter);
          return CommandResult(result.acknowledged, result.deletedCount);
       }
       catch (error) {
@@ -104,9 +104,9 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   exists: async (dto: GetOrderRequest): Promise<boolean | Error> => {
+   exists: async (dto : GetOrderRequest) : Promise<boolean | Error> => {
       try {
-         const order: Order | null = await OrdersModel.findById(dto._id);
+         const order : Order | null = await OrdersModel.findById(dto._id);
          return !!order;
       }
       catch (error) {
@@ -115,7 +115,7 @@ export const MongoOrdersRepository: OrdersRepository = {
    },
 };
 
-const mapOrdersRequestToOrdersFilter = (dto: OrdersRequest) => ({
+const mapOrdersRequestToOrdersFilter = (dto : OrdersRequest) => ({
    ...dto.filter && {
       ...dto.filter.clientId && { clientId: dto.filter.clientId },
       ...dto.filter.productId && { productId: dto.filter.productId },
@@ -163,12 +163,12 @@ const mapOrdersRequestToOrdersFilter = (dto: OrdersRequest) => ({
    },
 });
 
-const mapUpdateFieldsToUpdateQuery = (updateFields: OrderUpdateFields) => ({
+const mapUpdateFieldsToUpdateQuery = (updateFields : OrderUpdateFields) => ({
    ...updateFields.newStatus && { status: updateFields.newStatus },
    ...updateFields.newCart && { cart: updateFields.newCart },
 });
 
-const mapUpdateOrdersRequestToOrdersFilter = (dto: UpdateOrdersRequest) => ({
+const mapUpdateOrdersRequestToOrdersFilter = (dto : UpdateOrdersRequest) => ({
    ...dto.filter.clientId && { clientId: dto.filter.clientId },
    ...dto.filter.productId && { productId: dto.filter.productId },
    ...dto.filter.status && { status: dto.filter.status },

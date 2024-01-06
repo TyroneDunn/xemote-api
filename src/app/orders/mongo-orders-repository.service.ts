@@ -28,7 +28,7 @@ export const MongoOrdersRepository: OrdersRepository = {
 
    getOrders: async (dto: OrdersRequest): Promise<Order[] | Error> => {
       try {
-         const filter = mapOrdersDtoToFilter(dto);
+         const filter = mapOrdersRequestToOrdersFilter(dto);
          const query = OrdersModel.find(filter);
          if (dto.sort !== undefined)
             query.sort({ [dto.sort.field]: dto.sort.order === 'asc' ? 1 : -1 });
@@ -73,7 +73,7 @@ export const MongoOrdersRepository: OrdersRepository = {
 
    updateOrders: async (dto: UpdateOrdersRequest): Promise<CommandResult | Error> => {
       try {
-         const filter = mapUpdateOrdersDtoToFilter(dto);
+         const filter = mapUpdateOrdersRequestToOrdersFilter(dto);
          const updateQuery = mapUpdateFieldsToUpdateQuery(dto.updateFields);
          const updateResult: UpdateWriteOpResult = await OrdersModel.updateMany(filter, updateQuery);
          return { success: updateResult.acknowledged, affectedCount: updateResult.modifiedCount };
@@ -95,7 +95,7 @@ export const MongoOrdersRepository: OrdersRepository = {
 
    deleteOrders: async (dto: OrdersRequest): Promise<CommandResult | Error> => {
       try {
-         const filter = mapOrdersDtoToFilter(dto);
+         const filter = mapOrdersRequestToOrdersFilter(dto);
          const result: DeleteResult = await OrdersModel.deleteMany(filter);
          return { success: result.acknowledged, affectedCount: result.deletedCount };
       }
@@ -115,7 +115,7 @@ export const MongoOrdersRepository: OrdersRepository = {
    },
 };
 
-const mapOrdersDtoToFilter = (dto: OrdersRequest) => ({
+const mapOrdersRequestToOrdersFilter = (dto: OrdersRequest) => ({
    ...dto.filter && {
       ...dto.filter.clientId && { clientId: dto.filter.clientId },
       ...dto.filter.productId && { productId: dto.filter.productId },
@@ -133,6 +133,7 @@ const mapOrdersDtoToFilter = (dto: OrdersRequest) => ({
          },
       },
    },
+
    ...dto.timestamps && {
       ...dto.timestamps.createdAt && {
          ...(dto.timestamps.createdAt.start && !dto.timestamps.createdAt.end) &&
@@ -146,6 +147,7 @@ const mapOrdersDtoToFilter = (dto: OrdersRequest) => ({
             },
          },
       },
+
       ...dto.timestamps.updatedAt && {
          ...(dto.timestamps.updatedAt.start && !dto.timestamps.updatedAt.end) &&
          { updatedAt: { $gte: dto.timestamps.updatedAt.start } },
@@ -166,7 +168,7 @@ const mapUpdateFieldsToUpdateQuery = (updateFields: OrderUpdateFields) => ({
    ...updateFields.newCart && { cart: updateFields.newCart },
 });
 
-const mapUpdateOrdersDtoToFilter = (dto: UpdateOrdersRequest) => ({
+const mapUpdateOrdersRequestToOrdersFilter = (dto: UpdateOrdersRequest) => ({
    ...dto.filter.clientId && { clientId: dto.filter.clientId },
    ...dto.filter.productId && { productId: dto.filter.productId },
    ...dto.filter.status && { status: dto.filter.status },
@@ -182,6 +184,7 @@ const mapUpdateOrdersDtoToFilter = (dto: UpdateOrdersRequest) => ({
          },
       },
    },
+
    ...dto.timestamps && {
       ...dto.timestamps.createdAt && {
          ...(dto.timestamps.createdAt.start && !dto.timestamps.createdAt.end) &&
@@ -195,6 +198,7 @@ const mapUpdateOrdersDtoToFilter = (dto: UpdateOrdersRequest) => ({
             },
          },
       },
+
       ...dto.timestamps.updatedAt && {
          ...(dto.timestamps.updatedAt.start && !dto.timestamps.updatedAt.end) &&
          { updatedAt: { $gte: dto.timestamps.updatedAt.start } },

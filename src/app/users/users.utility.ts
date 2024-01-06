@@ -20,7 +20,7 @@ import {
    UsersRequest,
    UsersSortOption,
 } from "./users.type";
-import { DeleteUser, GetUser, GetUsers, UpdateUser } from './users-repository.type';
+import { DeleteUser, DeleteUsers, GetUser, GetUsers, UpdateUser } from './users-repository.type';
 
 export const mapRequestToGetUserDto = (request: Request): GetUserRequest =>
    ({ username: request.paramMap['username'] });
@@ -108,4 +108,11 @@ export const deleteUserAndMapResultToResponse = (deleteUser : DeleteUser) =>
       const deleteUserResult: CommandResult | Error = await deleteUser(deleteUserRequest);
       if (isError(deleteUserResult)) return mapErrorToInternalServerErrorResponse(deleteUserResult);
       return mapDeleteResultToResponse(deleteUserResult);
+   };
+
+export const deleteUsersAndMapResultToResponse = (deleteUsers : DeleteUsers) =>
+   async (usersRequest : UsersRequest) : Promise<Response> => {
+      const deleteUsersResult: CommandResult | Error = await deleteUsers(usersRequest);
+      if (isError(deleteUsersResult)) return mapErrorToInternalServerErrorResponse(deleteUsersResult);
+      return mapDeleteResultToResponse(deleteUsersResult);
    };

@@ -14,10 +14,10 @@ import { DeleteResult } from "mongodb";
 import { UpdateWriteOpResult } from "mongoose";
 import { CommandResult, Error } from "@hals/common";
 
-export const MongoInventoryRepository: InventoryRepository = {
-   getRecord: async (dto: GetInventoryRecordRequest): Promise<InventoryRecord | Error> => {
+export const MongoInventoryRepository : InventoryRepository = {
+   getRecord: async (dto : GetInventoryRecordRequest) : Promise<InventoryRecord | Error> => {
       try {
-         const record: InventoryRecord | null = await InventoryRecordsModel.findOne({ productId: dto.productId });
+         const record : InventoryRecord | null = await InventoryRecordsModel.findOne({ productId: dto.productId });
          if (!record) return { type: "NotFound", message: 'Inventory record not found.' };
          return record;
       }
@@ -26,9 +26,9 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   getRecords: async (dto: InventoryRecordsRequest): Promise<InventoryRecord[] | Error> => {
+   getRecords: async (dto : InventoryRecordsRequest) : Promise<InventoryRecord[] | Error> => {
       try {
-         const filter = mapDTOToFilter(dto);
+         const filter = mapInventoryRecordsRequestToFilter(dto);
          const query = InventoryRecordsModel.find(filter);
          if (dto.sort !== undefined)
             query.sort({ [dto.sort.field]: dto.sort.order === 'asc' ? 1 : -1 });
@@ -43,11 +43,11 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   createRecord: async (dto: CreateInventoryRecordRequest): Promise<InventoryRecord | Error> => {
+   createRecord: async (dto : CreateInventoryRecordRequest) : Promise<InventoryRecord | Error> => {
       try {
          return new InventoryRecordsModel({
             productId: dto.productId,
-            count: dto.count,
+            count    : dto.count,
          }).save();
       }
       catch (error) {
@@ -55,11 +55,11 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   updateRecord: async (dto: UpdateInventoryRecordRequest): Promise<InventoryRecord | Error> => {
+   updateRecord: async (dto : UpdateInventoryRecordRequest) : Promise<InventoryRecord | Error> => {
       try {
-         const record: InventoryRecord | null = await InventoryRecordsModel.findOneAndUpdate(
+         const record : InventoryRecord | null = await InventoryRecordsModel.findOneAndUpdate(
             { productId: dto.productId },
-            mapUpdateFieldsToUpdateQuery(dto.updateFields),
+            mapInventoryRecordsUpdateFieldsToUpdateQuery(dto.updateFields),
             { new: true },
          );
          if (!record) return { type: "NotFound", message: 'Inventory record not found.' };
@@ -70,11 +70,11 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   updateRecords: async (dto: UpdateInventoryRecordsRequest): Promise<CommandResult | Error> => {
+   updateRecords: async (dto : UpdateInventoryRecordsRequest) : Promise<CommandResult | Error> => {
       try {
-         const filter = mapUpdateInventoryRecordsDTOToFilter(dto);
-         const query = mapUpdateFieldsToUpdateQuery(dto.updateFields);
-         const result: UpdateWriteOpResult = await InventoryRecordsModel.updateMany(filter, query);
+         const filter = mapUpdateInventoryRecordsRequestToFilter(dto);
+         const query = mapInventoryRecordsUpdateFieldsToUpdateQuery(dto.updateFields);
+         const result : UpdateWriteOpResult = await InventoryRecordsModel.updateMany(filter, query);
          return { success: result.acknowledged, affectedCount: result.modifiedCount };
       }
       catch (error) {
@@ -82,9 +82,9 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   deleteRecord: async (dto: DeleteInventoryRecordRequest): Promise<CommandResult | Error> => {
+   deleteRecord: async (dto : DeleteInventoryRecordRequest) : Promise<CommandResult | Error> => {
       try {
-         const result: DeleteResult = await InventoryRecordsModel.deleteOne({ productId: dto.productId });
+         const result : DeleteResult = await InventoryRecordsModel.deleteOne({ productId: dto.productId });
          return { success: result.acknowledged, affectedCount: result.deletedCount };
       }
       catch (error) {
@@ -92,10 +92,10 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   deleteRecords: async (dto: InventoryRecordsRequest): Promise<CommandResult | Error> => {
+   deleteRecords: async (dto : InventoryRecordsRequest) : Promise<CommandResult | Error> => {
       try {
-         const filter = mapDTOToFilter(dto);
-         const result: DeleteResult = await InventoryRecordsModel.deleteMany(filter);
+         const filter = mapInventoryRecordsRequestToFilter(dto);
+         const result : DeleteResult = await InventoryRecordsModel.deleteMany(filter);
          return { success: result.acknowledged, affectedCount: result.deletedCount };
       }
       catch (error) {
@@ -103,9 +103,9 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   exists: async (dto: GetInventoryRecordRequest): Promise<boolean | Error> => {
+   exists: async (dto : GetInventoryRecordRequest) : Promise<boolean | Error> => {
       try {
-         const record: InventoryRecord | null = await InventoryRecordsModel.findOne({ productId: dto.productId });
+         const record : InventoryRecord | null = await InventoryRecordsModel.findOne({ productId: dto.productId });
          return !!record;
       }
       catch (error) {
@@ -114,87 +114,91 @@ export const MongoInventoryRepository: InventoryRepository = {
    },
 };
 
-const mapDTOToFilter = (dto: InventoryRecordsRequest) => ({
-   ...dto.filter && {
-      ...dto.filter.countRange && {
-         ...(dto.filter.countRange.start && !dto.filter.countRange.end) &&
-         { count: { $gte: dto.filter.countRange.start } },
-         ...(!dto.filter.countRange.start && dto.filter.countRange.end) &&
-         { count: { $lte: dto.filter.countRange.end } },
-         ...(dto.filter.countRange.start && dto.filter.countRange.end) && {
-            count: {
-               $gte: dto.filter.countRange.start,
-               $lte: dto.filter.countRange.end,
+const mapInventoryRecordsRequestToFilter = (request : InventoryRecordsRequest) => ({
+   ...request.filter && {
+      ...request.filter.countRange && {
+         ...(request.filter.countRange.start && !request.filter.countRange.end) &&
+         { count : { $gte: request.filter.countRange.start } },
+         ...(!request.filter.countRange.start && request.filter.countRange.end) &&
+         { count : { $lte : request.filter.countRange.end } },
+         ...(request.filter.countRange.start && request.filter.countRange.end) && {
+            count : {
+               $gte : request.filter.countRange.start,
+               $lte : request.filter.countRange.end,
             },
          },
       },
    },
-   ...dto.timestamps && {
-      ...dto.timestamps.createdAt && {
-         ...(dto.timestamps.createdAt.start && !dto.timestamps.createdAt.end) &&
-         { createdAt: { $gte: dto.timestamps.createdAt.start } },
-         ...(!dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) &&
-         { createdAt: { $lte: dto.timestamps.createdAt.end } },
-         ...(dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
-            createdAt: {
-               $gte: dto.timestamps.createdAt.start,
-               $lte: dto.timestamps.createdAt.end,
+
+   ...request.timestamps && {
+      ...request.timestamps.createdAt && {
+         ...(request.timestamps.createdAt.start && !request.timestamps.createdAt.end) &&
+         { createdAt : { $gte : request.timestamps.createdAt.start } },
+         ...(!request.timestamps.createdAt.start && request.timestamps.createdAt.end) &&
+         { createdAt : { $lte : request.timestamps.createdAt.end } },
+         ...(request.timestamps.createdAt.start && request.timestamps.createdAt.end) && {
+            createdAt : {
+               $gte : request.timestamps.createdAt.start,
+               $lte : request.timestamps.createdAt.end,
             },
          },
       },
-      ...dto.timestamps.updatedAt && {
-         ...(dto.timestamps.updatedAt.start && !dto.timestamps.updatedAt.end) &&
-         { updatedAt: { $gte: dto.timestamps.updatedAt.start } },
-         ...(!dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) &&
-         { updatedAt: { $lte: dto.timestamps.updatedAt.end } },
-         ...(dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
-            updatedAt: {
-               $gte: dto.timestamps.updatedAt.start,
-               $lte: dto.timestamps.updatedAt.end,
+
+      ...request.timestamps.updatedAt && {
+         ...(request.timestamps.updatedAt.start && !request.timestamps.updatedAt.end) &&
+         { updatedAt : { $gte : request.timestamps.updatedAt.start } },
+         ...(!request.timestamps.updatedAt.start && request.timestamps.updatedAt.end) &&
+         { updatedAt : { $lte : request.timestamps.updatedAt.end } },
+         ...(request.timestamps.updatedAt.start && request.timestamps.updatedAt.end) && {
+            updatedAt : {
+               $gte : request.timestamps.updatedAt.start,
+               $lte : request.timestamps.updatedAt.end,
             },
          },
       },
    },
 });
 
-const mapUpdateFieldsToUpdateQuery = (updateFields: InventoryRecordUpdateFields) => ({
-   ...updateFields.newCount && { count: updateFields.newCount },
-   ...updateFields.countDelta && { $inc: { count: updateFields.countDelta } },
+const mapInventoryRecordsUpdateFieldsToUpdateQuery = (updateFields : InventoryRecordUpdateFields) => ({
+   ...updateFields.newCount && { count : updateFields.newCount },
+   ...updateFields.countDelta && { $inc : { count : updateFields.countDelta } },
 });
 
-const mapUpdateInventoryRecordsDTOToFilter = (dto: UpdateInventoryRecordsRequest) => ({
+const mapUpdateInventoryRecordsRequestToFilter = (dto : UpdateInventoryRecordsRequest) => ({
    ...dto.filter.countRange && {
       ...(dto.filter.countRange.start && !dto.filter.countRange.end) &&
-      { count: { $gte: dto.filter.countRange.start } },
+      { count : { $gte : dto.filter.countRange.start } },
       ...(!dto.filter.countRange.start && dto.filter.countRange.end) &&
-      { count: { $lte: dto.filter.countRange.end } },
+      { count : { $lte : dto.filter.countRange.end } },
       ...(dto.filter.countRange.start && dto.filter.countRange.end) && {
-         count: {
-            $gte: dto.filter.countRange.start,
-            $lte: dto.filter.countRange.end,
+         count : {
+            $gte : dto.filter.countRange.start,
+            $lte : dto.filter.countRange.end,
          },
       },
    },
+
    ...dto.timestamps && {
       ...dto.timestamps.createdAt && {
          ...(dto.timestamps.createdAt.start && !dto.timestamps.createdAt.end) &&
-         { createdAt: { $gte: dto.timestamps.createdAt.start } },
+         { createdAt : { $gte : dto.timestamps.createdAt.start } },
          ...(!dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) &&
-         { createdAt: { $lte: dto.timestamps.createdAt.end } },
+         { createdAt : { $lte : dto.timestamps.createdAt.end } },
          ...(dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
-            createdAt: {
-               $gte: dto.timestamps.createdAt.start,
-               $lte: dto.timestamps.createdAt.end,
+            createdAt : {
+               $gte : dto.timestamps.createdAt.start,
+               $lte : dto.timestamps.createdAt.end,
             },
          },
       },
+
       ...dto.timestamps.updatedAt && {
          ...(dto.timestamps.updatedAt.start && !dto.timestamps.updatedAt.end) &&
-         { updatedAt: { $gte: dto.timestamps.updatedAt.start } },
+         { updatedAt : { $gte : dto.timestamps.updatedAt.start } },
          ...(!dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) &&
-         { updatedAt: { $lte: dto.timestamps.updatedAt.end } },
+         { updatedAt : { $lte : dto.timestamps.updatedAt.end } },
          ...(dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
-            updatedAt: {
+            updatedAt : {
                $gte: dto.timestamps.updatedAt.start,
                $lte: dto.timestamps.updatedAt.end,
             },

@@ -117,14 +117,14 @@ export const mapProductsToSuccessResponse = (products : Product[]) : Response =>
    count      : products.length,
 });
 
-export const mapGetProductResultToResponse = (getProduct : GetProduct) =>
+export const getProductAndMapResultToResponse = (getProduct : GetProduct) =>
    async (getProductRequest : GetProductRequest) : Promise<Response> => {
       const result : Product | Error = await getProduct(getProductRequest);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
       else return mapProductToSuccessResponse(result);
    };
 
-export const mapGetProductsResultToResponse = (getProducts : GetProducts) =>
+export const getProductsAndMapResultToResponse = (getProducts : GetProducts) =>
    async (productsRequest : ProductsRequest) : Promise<Response> => {
       const getProductsResult : Product[] | Error = await getProducts(productsRequest);
       if (isError(getProductsResult))
@@ -136,7 +136,7 @@ export const mapGetProductsResultToResponse = (getProducts : GetProducts) =>
       }
    };
 
-export const mapCreateProductResultToResponse = (
+export const createProductAndItsInventoryRecordsAndMapResultToResponse = (
    createProduct : CreateProduct,
    createRecord : CreateRecord,
 ) => async (createProductRequest : CreateProductRequest) : Promise<Response> => {
@@ -152,21 +152,21 @@ export const mapCreateProductResultToResponse = (
    return mapProductToSuccessResponse(createProductResult);
 };
 
-export const mapUpdateProductResultToResponse = (updateProduct : UpdateProduct) =>
+export const updateProductAndMapResultToResponse = (updateProduct : UpdateProduct) =>
    async (updateProductRequest : UpdateProductRequest) : Promise<Response> => {
       const result : Product | Error = await updateProduct(updateProductRequest);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
       else return mapProductToSuccessResponse(result);
    };
 
-export const mapUpdateProductsResultToResponse = (updateProducts : UpdateProducts) =>
+export const updateProductsAndMapResultToResponse = (updateProducts : UpdateProducts) =>
    async (updateProductsRequest : UpdateProductsRequest) : Promise<Response> => {
       const result : CommandResult | Error = await updateProducts(updateProductsRequest);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
       else return mapUpdateResultToResponse(result);
    };
 
-export const mapDeleteProductResultToResponse = (
+export const deleteProductAndItsInventoryRecordAndMapResultToResponse = (
    deleteProduct : DeleteProduct,
    deleteRecord : DeleteRecord,
 ) => async (deleteProductRequest : DeleteProductRequest) : Promise<Response> => {
@@ -179,7 +179,7 @@ export const mapDeleteProductResultToResponse = (
    return mapDeleteResultToResponse(deleteProductResult);
 };
 
-export const mapDeleteProductsResultToResponse = (
+export const deleteProductsAndTheirInventoryRecordsAndMapResultToResponse = (
    getProducts : GetProducts,
    deleteProducts : DeleteProducts,
    deleteRecord : DeleteRecord,

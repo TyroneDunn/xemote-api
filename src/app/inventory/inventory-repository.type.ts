@@ -8,6 +8,7 @@ import {
    UpdateInventoryRecordsDTO,
 } from "./inventory-records-dtos.type";
 import { CommandResult, Error } from "@hals/common";
+import { Either } from '../../shared/either.type';
 
 export type InventoryRepository = {
    getRecord: GetRecord,
@@ -24,6 +25,6 @@ export type GetRecord = (request : GetInventoryRecordDTO) => Promise<InventoryRe
 export type GetRecords = (request : InventoryRecordsDTO) => Promise<InventoryRecord[] | Error>;
 export type CreateRecord = (request : CreateInventoryRecordDTO) => Promise<InventoryRecord | Error>;
 export type UpdateRecord = (request : UpdateInventoryRecordDTO) => Promise<InventoryRecord | Error>;
-export type UpdateRecords = (request : UpdateInventoryRecordsDTO) => Promise<CommandResult | Error>;
-export type DeleteRecord = (request : DeleteInventoryRecordDTO) => Promise<CommandResult | Error>;
-export type DeleteRecords = (request : InventoryRecordsDTO) => Promise<CommandResult | Error>;
+export type UpdateRecords = (request : UpdateInventoryRecordsDTO) => Promise<Either<Error, CommandResult>>;
+export type DeleteRecord = (request : DeleteInventoryRecordDTO) => Promise<Either<Error, CommandResult>>;
+export type DeleteRecords = (request : InventoryRecordsDTO) => Promise<Either<Error, CommandResult>>;

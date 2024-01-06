@@ -32,7 +32,7 @@ import {
    mapRequestToUpdateOrderDTO,
    mapRequestToUpdateOrdersDTO,
 } from "./orders-dtos.utility";
-import { OrdersDtosValidator } from "./orders-dtos-validator.utility";
+import { OrdersValidator } from "./orders.validator";
 
 export type OrdersService = {
    getOrder : RequestHandler,
@@ -46,7 +46,7 @@ export type OrdersService = {
 
 export const OrdersService = (
    repository: OrdersRepository,
-   validator: OrdersDtosValidator,
+   validator: OrdersValidator,
 ): OrdersService => ({
    getOrder: async (request: Request): Promise<Response> => {
       const dto: GetOrderDTO = mapRequestToGetOrderDTO(request);

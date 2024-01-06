@@ -10,7 +10,7 @@ import { OrdersRepository } from "./orders-repository.type";
 import { ValidationError } from "@hals/common";
 import { ProductsRepository } from "../products/products-repository.type";
 
-export type OrdersDtosValidator = {
+export type OrdersValidator = {
    validateGetOrderDto: (dto: GetOrderDTO) => Promise<ValidationError | null>,
    validateOrdersDto: (dto: OrdersDTO) => Promise<ValidationError | null>,
    validateCreateOrderDto: (dto: CreateOrderDTO) => Promise<ValidationError | null>,
@@ -19,11 +19,11 @@ export type OrdersDtosValidator = {
    validateDeleteOrderDto: (dto: DeleteOrderDTO) => Promise<ValidationError | null>,
 };
 
-export const configureOrdersDtosValidator =
+export const OrdersValidator =
    (
       ordersRepository: OrdersRepository,
       productsRepository: ProductsRepository,
-   ): OrdersDtosValidator => ({
+   ): OrdersValidator => ({
       validateGetOrderDto: async (dto: GetOrderDTO): Promise<ValidationError | null> => {
          if (!dto._id)
             return { error: { type: "BadRequest", message: 'ID required.' } };

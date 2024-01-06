@@ -7,9 +7,15 @@ import {
    Response,
    User,
 } from "@hals/common";
-import { DeleteUserDTO, GetUserDTO, UpdateUserDTO, UsersDTO, UsersSortOption } from "./users.type";
+import {
+   DeleteUserRequest,
+   GetUserRequest,
+   UpdateUserRequest,
+   UsersRequest,
+   UsersSortOption,
+} from "./users.type";
 
-export const mapRequestToGetUserDto = (request: Request): GetUserDTO =>
+export const mapRequestToGetUserDto = (request: Request): GetUserRequest =>
    ({ username: request.paramMap['username'] });
 
 export const mapUserToSuccessResponse = (user: User): Response => ({
@@ -18,7 +24,7 @@ export const mapUserToSuccessResponse = (user: User): Response => ({
    count: 1,
 });
 
-export const mapRequestToUsersDto = (request: Request): UsersDTO => ({
+export const mapRequestToUsersDto = (request: Request): UsersRequest => ({
    ...mapRequestToUsersFilter(request),
    ...mapRequestToTimestamps(request),
    ...mapRequestToUsersSort(request),
@@ -51,7 +57,7 @@ export const mapUsersToSuccessResponse = (users: User[]): Response => ({
    count: users.length,
 });
 
-export const mapRequestToUpdateUserDto = (request: Request): UpdateUserDTO => ({
+export const mapRequestToUpdateUserDto = (request: Request): UpdateUserRequest => ({
    username: request.paramMap['username'],
    ...mapRequestToUpdateFields(request),
 });
@@ -63,5 +69,5 @@ const mapRequestToUpdateFields = (request: Request) => ({
    },
 });
 
-export const mapRequestToDeleteUserDto = (request: Request): DeleteUserDTO =>
+export const mapRequestToDeleteUserDto = (request: Request): DeleteUserRequest =>
    ({ username: request.paramMap['username'] });

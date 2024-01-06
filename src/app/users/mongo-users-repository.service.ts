@@ -1,9 +1,9 @@
 import { UsersRepository } from "./users-repository.type";
 import {
-   DeleteUserDTO,
-   GetUserDTO,
-   UpdateUserDTO,
-   UsersDTO,
+   DeleteUserRequest,
+   GetUserRequest,
+   UpdateUserRequest,
+   UsersRequest,
    UserUpdateFields,
 } from "./users.type";
 import { CommandResult, configureHashUtility, Error, User } from "@hals/common";
@@ -17,7 +17,7 @@ import {
 import { DeleteResult } from "mongodb";
 
 export const MongoUsersRepository: UsersRepository = {
-   getUser: async (dto: GetUserDTO): Promise<User | Error> => {
+   getUser: async (dto: GetUserRequest): Promise<User | Error> => {
       try {
          const user: User | null = await UsersModel.findOne({ username: dto.username });
          if (!user) return { type: "NotFound", message: 'User not found.' };
@@ -28,7 +28,7 @@ export const MongoUsersRepository: UsersRepository = {
       }
    },
 
-   getUsers: async (dto: UsersDTO): Promise<User[] | Error> => {
+   getUsers: async (dto: UsersRequest): Promise<User[] | Error> => {
       try {
          const filter = mapUsersDtoToUsersFilter(dto);
          const query = UsersModel.find(filter);
@@ -45,7 +45,7 @@ export const MongoUsersRepository: UsersRepository = {
       }
    },
 
-   updateUser: async (dto: UpdateUserDTO): Promise<User | Error> => {
+   updateUser: async (dto: UpdateUserRequest): Promise<User | Error> => {
       try {
          const user: User | null = await UsersModel.findOneAndUpdate(
             { username: dto.username },
@@ -60,7 +60,7 @@ export const MongoUsersRepository: UsersRepository = {
       }
    },
 
-   deleteUser: async (dto: DeleteUserDTO): Promise<CommandResult | Error> => {
+   deleteUser: async (dto: DeleteUserRequest): Promise<CommandResult | Error> => {
       try {
          const result: DeleteResult = await UsersModel.deleteOne({ username: dto.username });
          return { success: result.acknowledged, affectedCount: result.deletedCount };
@@ -70,7 +70,7 @@ export const MongoUsersRepository: UsersRepository = {
       }
    },
 
-   deleteUsers: async (dto: UsersDTO): Promise<CommandResult | Error> => {
+   deleteUsers: async (dto: UsersRequest): Promise<CommandResult | Error> => {
       try {
          const filter = mapUsersDtoToUsersFilter(dto);
          const result: DeleteResult = await UsersModel.deleteMany(filter);
@@ -92,7 +92,7 @@ export const MongoUsersRepository: UsersRepository = {
    },
 };
 
-const mapUsersDtoToUsersFilter = (dto: UsersDTO) => ({
+const mapUsersDtoToUsersFilter = (dto: UsersRequest) => ({
    ...dto.filter && {
       ...dto.filter.username && { username: dto.filter.username },
       ...dto.filter.usernameRegex && {

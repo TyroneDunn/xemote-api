@@ -1,8 +1,8 @@
 import { OrderOption, Page, Timestamps } from "@hals/common";
 
-export type GetUserDTO = { username: string };
+export type GetUserRequest = { username: string };
 
-export type UsersDTO = {
+export type UsersRequest = {
    filter?: UsersFilter,
    timestamps?: Timestamps,
    sort?: UsersSort,
@@ -21,7 +21,7 @@ export type UsersSort = {
 
 export type UsersSortOption = 'username' | 'createdAt' | 'updatedAt';
 
-export type UpdateUserDTO = {
+export type UpdateUserRequest = {
    username: string,
    updateFields: UserUpdateFields
 };
@@ -31,4 +31,4 @@ export type UserUpdateFields = {
    newPassword?: string,
 };
 
-export type DeleteUserDTO = { username: string };
+export type DeleteUserRequest = { username: string };

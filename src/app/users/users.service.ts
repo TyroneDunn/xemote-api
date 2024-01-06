@@ -14,7 +14,7 @@ import {
    User,
    ValidationError,
 } from "@hals/common";
-import { DeleteUserDTO, GetUserDTO, UpdateUserDTO, UsersDTO } from "./users.type";
+import { DeleteUserRequest, GetUserRequest, UpdateUserRequest, UsersRequest } from "./users.type";
 import { UsersDtosValidator } from "./users.validator";
 import {
    mapRequestToDeleteUserDto,
@@ -38,7 +38,7 @@ export const configureUsersService = (
    validator: UsersDtosValidator,
 ): UsersService => ({
    getUser: async (request: Request): Promise<Response> => {
-      const dto: GetUserDTO = mapRequestToGetUserDto(request);
+      const dto: GetUserRequest = mapRequestToGetUserDto(request);
       const validationOutcome: ValidationError | null = await validator.validateGetUserDto(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: User | Error = await repository.getUser(dto);
@@ -47,7 +47,7 @@ export const configureUsersService = (
    },
 
    getUsers: async (request: Request): Promise<Response> => {
-      const dto: UsersDTO = await mapRequestToUsersDto(request);
+      const dto: UsersRequest = await mapRequestToUsersDto(request);
       const validationOutcome: ValidationError | null = await validator.validateUsersDto(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: User[] | Error = await repository.getUsers(dto);
@@ -59,7 +59,7 @@ export const configureUsersService = (
    },
 
    updateUser: async (request: Request): Promise<Response> => {
-      const dto: UpdateUserDTO = mapRequestToUpdateUserDto(request);
+      const dto: UpdateUserRequest = mapRequestToUpdateUserDto(request);
       const validationOutcome: ValidationError | null = await validator.validateUpdateUserDto(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: User | Error = await repository.updateUser(dto);
@@ -68,7 +68,7 @@ export const configureUsersService = (
    },
 
    deleteUser: async (request: Request): Promise<Response> => {
-      const dto: DeleteUserDTO = mapRequestToDeleteUserDto(request);
+      const dto: DeleteUserRequest = mapRequestToDeleteUserDto(request);
       const validationOutcome: ValidationError | null = await validator.validateDeleteUserDto(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: CommandResult | Error = await repository.deleteUser(dto);
@@ -77,7 +77,7 @@ export const configureUsersService = (
    },
 
    deleteUsers: async (request: Request): Promise<Response> => {
-      const dto: UsersDTO = mapRequestToUsersDto(request);
+      const dto: UsersRequest = mapRequestToUsersDto(request);
       const validationOutcome: ValidationError | null = await validator.validateUsersDto(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: CommandResult | Error = await repository.deleteUsers(dto);

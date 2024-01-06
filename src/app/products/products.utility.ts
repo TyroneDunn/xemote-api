@@ -37,6 +37,7 @@ import {
 } from "./products-repository.type";
 import { CreateRecord, DeleteRecord } from "../inventory/inventory-repository.type";
 import { Either } from '../../shared/either.type';
+import { InventoryRecord } from '../inventory/inventory-record.type';
 
 export const mapToGetProductRequest = (request : Request) : GetProductRequest => ({
    _id: request.paramMap['id'],
@@ -143,8 +144,11 @@ export const mapCreateProductResultToResponse = (
       await createProduct(createProductRequest);
    if (isError(createProductResult))
       return mapErrorToInternalServerErrorResponse(createProductResult);
-   // todo improve inventory repository error handling
-   await createRecord({ productId: createProductResult._id, count: 0 });
+
+   const createRecordResult: InventoryRecord | Error =
+      await createRecord({ productId: createProductResult._id, count: 0 });
+   if (isError(createRecordResult)) return mapErrorToInternalServerErrorResponse(createRecordResult);
+
    return mapProductToSuccessResponse(createProductResult);
 };
 

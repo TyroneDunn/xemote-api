@@ -13,9 +13,10 @@ import {
    ValidationError,
 } from "@hals/common";
 import { OrdersRepository } from "./orders-repository.type";
-import { DeleteOrderRequest, OrdersRequest } from "./orders.type";
+import { OrdersRequest } from "./orders.type";
 import {
    createOrderAndMapResultToResponse,
+   deleteOrderAndMapResultToResponse,
    getOrderAndMapToResponse,
    getOrdersAndMapResultToResponse,
    mapRequestToCreateOrderRequest,
@@ -73,14 +74,11 @@ export const OrdersService = (
       updateOrdersAndMapResultToResponse(repository.updateOrders),
    ),
 
-   deleteOrder: async (request: Request): Promise<Response> => {
-      const dto: DeleteOrderRequest = mapRequestToDeleteOrderRequest(request);
-      const validationOutcome: ValidationError | null = await validator.validateDeleteOrderRequest(dto);
-      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
-      const result: CommandResult | Error = await repository.deleteOrder(dto);
-      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
-      return mapCommandResultToSuccessResponse(result);
-   },
+   deleteOrder: async (request: Request): Promise<Response> => handleRequest(
+      mapRequestToDeleteOrderRequest(request),
+      validator.validateDeleteOrderRequest,
+      deleteOrderAndMapResultToResponse(repository.deleteOrder),
+   ),
 
    deleteOrders: async (request: Request): Promise<Response> => {
       const dto: OrdersRequest = mapRequestToOrdersRequest(request);

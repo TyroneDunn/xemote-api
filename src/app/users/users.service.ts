@@ -15,7 +15,7 @@ import {
    ValidationError,
 } from "@hals/common";
 import { DeleteUserRequest, GetUserRequest, UpdateUserRequest, UsersRequest } from "./users.type";
-import { UsersDtosValidator } from "./users.validator";
+import { UsersValidator } from "./users.validator";
 import {
    mapRequestToDeleteUserDto,
    mapRequestToGetUserDto,
@@ -35,11 +35,11 @@ export type UsersService = {
 
 export const configureUsersService = (
    repository: UsersRepository,
-   validator: UsersDtosValidator,
+   validator: UsersValidator,
 ): UsersService => ({
    getUser: async (request: Request): Promise<Response> => {
       const dto: GetUserRequest = mapRequestToGetUserDto(request);
-      const validationOutcome: ValidationError | null = await validator.validateGetUserDto(dto);
+      const validationOutcome: ValidationError | null = await validator.validateGetUserRequest(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: User | Error = await repository.getUser(dto);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
@@ -48,7 +48,7 @@ export const configureUsersService = (
 
    getUsers: async (request: Request): Promise<Response> => {
       const dto: UsersRequest = await mapRequestToUsersDto(request);
-      const validationOutcome: ValidationError | null = await validator.validateUsersDto(dto);
+      const validationOutcome: ValidationError | null = await validator.validateUsersRequest(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: User[] | Error = await repository.getUsers(dto);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
@@ -60,7 +60,7 @@ export const configureUsersService = (
 
    updateUser: async (request: Request): Promise<Response> => {
       const dto: UpdateUserRequest = mapRequestToUpdateUserDto(request);
-      const validationOutcome: ValidationError | null = await validator.validateUpdateUserDto(dto);
+      const validationOutcome: ValidationError | null = await validator.validateUpdateUserRequest(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: User | Error = await repository.updateUser(dto);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
@@ -69,7 +69,7 @@ export const configureUsersService = (
 
    deleteUser: async (request: Request): Promise<Response> => {
       const dto: DeleteUserRequest = mapRequestToDeleteUserDto(request);
-      const validationOutcome: ValidationError | null = await validator.validateDeleteUserDto(dto);
+      const validationOutcome: ValidationError | null = await validator.validateDeleteUserRequest(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: CommandResult | Error = await repository.deleteUser(dto);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
@@ -78,7 +78,7 @@ export const configureUsersService = (
 
    deleteUsers: async (request: Request): Promise<Response> => {
       const dto: UsersRequest = mapRequestToUsersDto(request);
-      const validationOutcome: ValidationError | null = await validator.validateUsersDto(dto);
+      const validationOutcome: ValidationError | null = await validator.validateUsersRequest(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: CommandResult | Error = await repository.deleteUsers(dto);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);

@@ -2,25 +2,25 @@ import { ValidationError } from "@hals/common";
 import { DeleteUserRequest, GetUserRequest, UpdateUserRequest, UsersRequest } from "./users.type";
 import { UsersRepository } from "./users-repository.type";
 
-export type UsersDtosValidator = {
-   validateGetUserDto: (dto: GetUserRequest) => Promise<ValidationError | null>,
-   validateUsersDto: (dto: UsersRequest) => Promise<ValidationError | null>,
-   validateUpdateUserDto: (dto: UpdateUserRequest) => Promise<ValidationError | null>,
-   validateDeleteUserDto: (dto: DeleteUserRequest) => Promise<ValidationError | null>,
+export type UsersValidator = {
+   validateGetUserRequest: (request: GetUserRequest) => Promise<ValidationError | null>,
+   validateUsersRequest: (request: UsersRequest) => Promise<ValidationError | null>,
+   validateUpdateUserRequest: (request: UpdateUserRequest) => Promise<ValidationError | null>,
+   validateDeleteUserRequest: (request: DeleteUserRequest) => Promise<ValidationError | null>,
 };
 
-export const configureUsersDtosValidator = (repository: UsersRepository): UsersDtosValidator => ({
-   validateGetUserDto: async (dto: GetUserRequest): Promise<ValidationError | null> => {
-      if (!dto.username)
+export const UsersValidator = (repository: UsersRepository): UsersValidator => ({
+   validateGetUserRequest: async (request: GetUserRequest): Promise<ValidationError | null> => {
+      if (!request.username)
          return { error: { type: "BadRequest", message: 'Username required.' } };
-      if (!(await repository.exists(dto.username)))
-         return { error: { type: "NotFound", message: `User "${dto.username}" not found.` } };
+      if (!(await repository.exists(request.username)))
+         return { error: { type: "NotFound", message: `User "${request.username}" not found.` } };
       return null;
    },
 
-   validateUsersDto: async (dto: UsersRequest): Promise<ValidationError | null> => {
-      if (dto.filter)
-         if (dto.filter.username && dto.filter.usernameRegex)
+   validateUsersRequest: async (request: UsersRequest): Promise<ValidationError | null> => {
+      if (request.filter)
+         if (request.filter.username && request.filter.usernameRegex)
             return {
                error: {
                   type: "BadRequest", message: 'Invalid query. Provide either username or' +
@@ -28,16 +28,16 @@ export const configureUsersDtosValidator = (repository: UsersRepository): UsersD
                },
             };
 
-      if (dto.timestamps) {
-         if (dto.timestamps.createdAt) {
-            if (dto.timestamps.createdAt.start && isNaN(Date.parse(dto.timestamps.createdAt.start)))
+      if (request.timestamps) {
+         if (request.timestamps.createdAt) {
+            if (request.timestamps.createdAt.start && isNaN(Date.parse(request.timestamps.createdAt.start)))
                return {
                   error: {
                      type: "BadRequest", message: 'Invalid createdAt start' +
                         ' date. Provide a valid ISO date string.',
                   },
                };
-            if (dto.timestamps.createdAt.end && isNaN(Date.parse(dto.timestamps.createdAt.end)))
+            if (request.timestamps.createdAt.end && isNaN(Date.parse(request.timestamps.createdAt.end)))
                return {
                   error: {
                      type: "BadRequest", message: 'Invalid createdAt end' +
@@ -45,15 +45,15 @@ export const configureUsersDtosValidator = (repository: UsersRepository): UsersD
                   },
                };
          }
-         if (dto.timestamps.updatedAt) {
-            if (dto.timestamps.updatedAt.start && isNaN(Date.parse(dto.timestamps.updatedAt.start)))
+         if (request.timestamps.updatedAt) {
+            if (request.timestamps.updatedAt.start && isNaN(Date.parse(request.timestamps.updatedAt.start)))
                return {
                   error: {
                      type: "BadRequest", message: 'Invalid updatedAt start' +
                         ' date. Provide a valid ISO date string.',
                   },
                };
-            if (dto.timestamps.updatedAt.end && isNaN(Date.parse(dto.timestamps.updatedAt.end)))
+            if (request.timestamps.updatedAt.end && isNaN(Date.parse(request.timestamps.updatedAt.end)))
                return {
                   error: {
                      type: "BadRequest", message: 'Invalid updatedAt end' +
@@ -63,21 +63,21 @@ export const configureUsersDtosValidator = (repository: UsersRepository): UsersD
          }
       }
 
-      if (dto.sort) {
-         if (dto.sort.field && !dto.sort.order)
+      if (request.sort) {
+         if (request.sort.field && !request.sort.order)
             return { error: { type: "BadRequest", message: 'Invalid sort. Provide sort order.' } };
-         if (!dto.sort.field && dto.sort.order)
+         if (!request.sort.field && request.sort.order)
             return { error: { type: "BadRequest", message: 'Invalid sort. Provide sort field.' } };
-         if (dto.sort.field !== "username"
-            && dto.sort.field !== "createdAt"
-            && dto.sort.field !== "updatedAt")
+         if (request.sort.field !== "username"
+            && request.sort.field !== "createdAt"
+            && request.sort.field !== "updatedAt")
             return {
                error: {
                   type: "BadRequest", message: 'Invalid sort. Sort field must be' +
                      ' "username", "createdAt", or "updatedAt".',
                },
             };
-         if (dto.sort.order !== "asc" && dto.sort.order !== "desc")
+         if (request.sort.order !== "asc" && request.sort.order !== "desc")
             return {
                error: {
                   type: "BadRequest", message: 'Invalid sort. Sort order must be' +
@@ -86,19 +86,19 @@ export const configureUsersDtosValidator = (repository: UsersRepository): UsersD
             };
       }
 
-      if (dto.page) {
-         if (dto.page.index && !dto.page.limit)
+      if (request.page) {
+         if (request.page.index && !request.page.limit)
             return { error: { type: "BadRequest", message: 'Invalid page. Provide page limit.' } };
-         if (!dto.page.index && dto.page.limit)
+         if (!request.page.index && request.page.limit)
             return { error: { type: "BadRequest", message: 'Invalid page. Provide page index.' } };
-         if (dto.page.index < 0)
+         if (request.page.index < 0)
             return {
                error: {
                   type: "BadRequest", message: 'Invalid page. Page index must be' +
                      ' 0 or greater.',
                },
             };
-         if (dto.page.limit < 1)
+         if (request.page.limit < 1)
             return {
                error: {
                   type: "BadRequest", message: 'Invalid page. Page limit must be' +
@@ -110,14 +110,14 @@ export const configureUsersDtosValidator = (repository: UsersRepository): UsersD
       return null;
    },
 
-   validateUpdateUserDto: async (dto: UpdateUserRequest): Promise<ValidationError | null> => {
-      if (!dto.username)
+   validateUpdateUserRequest: async (request: UpdateUserRequest): Promise<ValidationError | null> => {
+      if (!request.username)
          return { error: { type: "BadRequest", message: 'Username required.' } };
 
-      if (!(await repository.exists(dto.username)))
-         return { error: { type: "NotFound", message: `User "${dto.username}" not found.` } };
+      if (!(await repository.exists(request.username)))
+         return { error: { type: "NotFound", message: `User "${request.username}" not found.` } };
 
-      if (!dto.updateFields)
+      if (!request.updateFields)
          return {
             error: {
                type: "BadRequest", message: 'Invalid request. Update field(s)' +
@@ -128,11 +128,11 @@ export const configureUsersDtosValidator = (repository: UsersRepository): UsersD
       return null;
    },
 
-   validateDeleteUserDto: async (dto: DeleteUserRequest): Promise<ValidationError | null> => {
-      if (!dto.username)
+   validateDeleteUserRequest: async (request: DeleteUserRequest): Promise<ValidationError | null> => {
+      if (!request.username)
          return { error: { type: "BadRequest", message: 'Username required.' } };
-      if (!(await repository.exists(dto.username)))
-         return { error: { type: "NotFound", message: `User "${dto.username}" not found.` } };
+      if (!(await repository.exists(request.username)))
+         return { error: { type: "NotFound", message: `User "${request.username}" not found.` } };
       return null;
    },
 });

@@ -1,4 +1,7 @@
 import {
+   Error,
+   isError,
+   mapErrorToInternalServerErrorResponse,
    mapRequestToPage,
    mapRequestToTimestamps,
    NumberRange,
@@ -15,6 +18,7 @@ import {
    UpdateInventoryRecordRequest,
    UpdateInventoryRecordsRequest,
 } from "./inventory-records.type";
+import { GetRecord } from './inventory-repository.type';
 
 export const mapRequestToGetInventoryRecordRequest = (request : Request) : GetInventoryRecordRequest =>
    ({ productId : request.paramMap['id'] });
@@ -75,3 +79,10 @@ export const mapRequestToUpdateInventoryRecordsRequest = (request : Request) : U
    ...mapRequestToPage(request),
    ...mapRequestPayloadToInventoryRecordUpdateFields(request.payload),
 });
+
+export const getInventoryRecordAndMapResultToResponse = (getRecord : GetRecord) =>
+   async (getRecordRequest : GetInventoryRecordRequest) : Promise<Response> => {
+      const result : InventoryRecord | Error = await getRecord(getRecordRequest);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      return mapInventoryRecordToSuccessResponse(result);
+   };

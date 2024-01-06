@@ -6,7 +6,7 @@ import {
    UsersRequest,
    UserUpdateFields,
 } from "./users.type";
-import { CommandResult, configureHashUtility, Error, User } from "@hals/common";
+import { CommandResult, configureHashUtility, Error, HashUtility, User } from "@hals/common";
 import UsersModel from "./mongo-user-model.type";
 import {
    HASHING_ALGORITHM,
@@ -130,7 +130,7 @@ const mapUsersDtoToUsersFilter = (dto: UsersRequest) => ({
    },
 });
 
-const hashUtility = configureHashUtility(
+const hashUtility: HashUtility = configureHashUtility(
    PASSWORD_SALT,
    HASHING_ITERATIONS,
    PASSWORD_LENGTH,

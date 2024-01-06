@@ -18,11 +18,11 @@ export const MongoInventoryRepository : InventoryRepository = {
    getRecord: async (dto : GetInventoryRecordRequest) : Promise<InventoryRecord | Error> => {
       try {
          const record : InventoryRecord | null = await InventoryRecordsModel.findOne({ productId: dto.productId });
-         if (!record) return { type: "NotFound", message: 'Inventory record not found.' };
+         if (!record) return Error("NotFound", 'Inventory record not found.');
          return record;
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -39,7 +39,7 @@ export const MongoInventoryRepository : InventoryRepository = {
          return query.exec();
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -51,7 +51,7 @@ export const MongoInventoryRepository : InventoryRepository = {
          }).save();
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -62,11 +62,11 @@ export const MongoInventoryRepository : InventoryRepository = {
             mapInventoryRecordsUpdateFieldsToUpdateQuery(dto.updateFields),
             { new: true },
          );
-         if (!record) return { type: "NotFound", message: 'Inventory record not found.' };
+         if (!record) return Error("NotFound", 'Inventory record not found.');
          return record;
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -78,7 +78,7 @@ export const MongoInventoryRepository : InventoryRepository = {
          return { success: result.acknowledged, affectedCount: result.modifiedCount };
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -88,7 +88,7 @@ export const MongoInventoryRepository : InventoryRepository = {
          return { success: result.acknowledged, affectedCount: result.deletedCount };
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -99,7 +99,7 @@ export const MongoInventoryRepository : InventoryRepository = {
          return { success: result.acknowledged, affectedCount: result.deletedCount };
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -109,7 +109,7 @@ export const MongoInventoryRepository : InventoryRepository = {
          return !!record;
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 };

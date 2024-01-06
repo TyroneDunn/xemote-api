@@ -7,9 +7,9 @@ import {
    getUserAndMapResultToResponse,
    getUsersAndMapResultToResponse,
    mapRequestToDeleteUserDto,
-   mapRequestToGetUserDto,
-   mapRequestToUpdateUserDto,
-   mapRequestToUsersDto,
+   mapRequestToGetUserRequest,
+   mapRequestToUpdateUserRequest,
+   mapRequestToUsersRequest,
    updateUserAndMapResultToResponse,
 } from "./users.utility";
 
@@ -26,19 +26,19 @@ export const configureUsersService = (
    validator: UsersValidator,
 ): UsersService => ({
    getUser: async (request: Request): Promise<Response> => handleRequest(
-      mapRequestToGetUserDto(request),
+      mapRequestToGetUserRequest(request),
       validator.validateGetUserRequest,
       getUserAndMapResultToResponse(repository.getUser),
    ),
 
    getUsers: async (request: Request): Promise<Response> => handleRequest(
-      mapRequestToUsersDto(request),
+      mapRequestToUsersRequest(request),
       validator.validateUsersRequest,
       getUsersAndMapResultToResponse(repository.getUsers),
    ),
 
    updateUser: async (request: Request): Promise<Response> => handleRequest(
-      mapRequestToUpdateUserDto(request),
+      mapRequestToUpdateUserRequest(request),
       validator.validateUpdateUserRequest,
       updateUserAndMapResultToResponse(repository.updateUser),
    ),
@@ -50,7 +50,7 @@ export const configureUsersService = (
    ),
 
    deleteUsers: async (request: Request): Promise<Response> => handleRequest(
-      mapRequestToUsersDto(request),
+      mapRequestToUsersRequest(request),
       validator.validateUsersRequest,
       deleteUsersAndMapResultToResponse(repository.deleteUsers),
    ),

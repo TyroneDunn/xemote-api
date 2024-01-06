@@ -22,7 +22,7 @@ import {
 } from "./users.type";
 import { DeleteUser, DeleteUsers, GetUser, GetUsers, UpdateUser } from './users-repository.type';
 
-export const mapRequestToGetUserDto = (request : Request) : GetUserRequest =>
+export const mapRequestToGetUserRequest = (request : Request) : GetUserRequest =>
    ({ username : request.paramMap['username'] });
 
 export const mapUserToSuccessResponse = (user : User) : Response => ({
@@ -31,7 +31,7 @@ export const mapUserToSuccessResponse = (user : User) : Response => ({
    count      : 1,
 });
 
-export const mapRequestToUsersDto = (request : Request) : UsersRequest => ({
+export const mapRequestToUsersRequest = (request : Request) : UsersRequest => ({
    ...mapRequestToUsersFilter(request),
    ...mapRequestToTimestamps(request),
    ...mapRequestToUsersSort(request),
@@ -47,16 +47,14 @@ const mapRequestToUsersFilter = (request : Request) => ({
    },
 });
 
-const mapRequestToUsersSort = (request : Request) => {
-   return {
-      ...(request.queryParamMap['sort'] && request.queryParamMap['order']) && {
-         sort: {
-            field: request.queryParamMap['sort'] as UsersSortOption,
-            order: request.queryParamMap['order'] as OrderOption,
-         },
+const mapRequestToUsersSort = (request : Request) => ({
+   ...(request.queryParamMap['sort'] && request.queryParamMap['order']) && {
+      sort: {
+         field: request.queryParamMap['sort'] as UsersSortOption,
+         order: request.queryParamMap['order'] as OrderOption,
       },
-   };
-};
+   },
+});
 
 export const mapUsersToSuccessResponse = (users : User[]) : Response => ({
    status     : OK,
@@ -64,12 +62,12 @@ export const mapUsersToSuccessResponse = (users : User[]) : Response => ({
    count      : users.length,
 });
 
-export const mapRequestToUpdateUserDto = (request : Request) : UpdateUserRequest => ({
+export const mapRequestToUpdateUserRequest = (request : Request) : UpdateUserRequest => ({
    username : request.paramMap['username'],
-   ...mapRequestToUpdateFields(request),
+   ...mapRequestToUserUpdateFields(request),
 });
 
-const mapRequestToUpdateFields = (request : Request) => ({
+const mapRequestToUserUpdateFields = (request : Request) => ({
    updateFields : {
       ...request.payload['newUsername'] && { newUsername: request.payload['newUsername'] },
       ...request.payload['newPassword'] && { newPassword: request.payload['newPassword'] },

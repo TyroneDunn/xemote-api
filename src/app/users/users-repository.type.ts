@@ -2,10 +2,10 @@ import { DeleteUserRequest, GetUserRequest, UpdateUserRequest, UsersRequest } fr
 import { CommandResult, Error, User } from "@hals/common";
 
 export type UsersRepository = {
-   getUser: (dto: GetUserRequest) => Promise<User | Error>,
-   getUsers: (dto: UsersRequest) => Promise<User[] | Error>,
-   updateUser: (dto: UpdateUserRequest) => Promise<User | Error>,
-   deleteUser: (dto: DeleteUserRequest) => Promise<CommandResult | Error>,
-   deleteUsers: (dto: UsersRequest) => Promise<CommandResult | Error>,
+   getUser: (request: GetUserRequest) => Promise<User | Error>,
+   getUsers: (request: UsersRequest) => Promise<User[] | Error>,
+   updateUser: (request: UpdateUserRequest) => Promise<User | Error>,
+   deleteUser: (request: DeleteUserRequest) => Promise<CommandResult | Error>,
+   deleteUsers: (request: UsersRequest) => Promise<CommandResult | Error>,
    exists: (username: string) => Promise<boolean | Error>,
 };

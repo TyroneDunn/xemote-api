@@ -1,4 +1,5 @@
 import {
+   addPageDataToResponse,
    Error,
    isError,
    mapErrorToInternalServerErrorResponse,
@@ -18,7 +19,7 @@ import {
    UpdateInventoryRecordRequest,
    UpdateInventoryRecordsRequest,
 } from "./inventory-records.type";
-import { GetRecord } from './inventory-repository.type';
+import { GetRecord, GetRecords } from './inventory-repository.type';
 
 export const mapRequestToGetInventoryRecordRequest = (request : Request) : GetInventoryRecordRequest =>
    ({ productId : request.paramMap['id'] });
@@ -85,4 +86,13 @@ export const getInventoryRecordAndMapResultToResponse = (getRecord : GetRecord) 
       const result : InventoryRecord | Error = await getRecord(getRecordRequest);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
       return mapInventoryRecordToSuccessResponse(result);
+   };
+
+export const getRecordsAndMapResultToResponse = (getRecords : GetRecords) =>
+   async (recordsRequest : InventoryRecordsRequest) : Promise<Response> => {
+      const result : InventoryRecord[] | Error = await getRecords(recordsRequest);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      const response : Response = mapInventoryRecordsToSuccessResponse(result);
+      if (recordsRequest.page !== undefined) return addPageDataToResponse(recordsRequest.page, response);
+      else return response;
    };

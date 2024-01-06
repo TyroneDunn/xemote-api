@@ -1,12 +1,10 @@
 import { InventoryRepository } from "./inventory-repository.type";
 import {
    InventoryRecord,
-   InventoryRecordsRequest,
    UpdateInventoryRecordRequest,
    UpdateInventoryRecordsRequest,
 } from "./inventory-records.type";
 import {
-   addPageDataToResponse,
    CommandResult,
    Error,
    handleRequest,
@@ -22,7 +20,7 @@ import {
 } from "@hals/common";
 import {
    getInventoryRecordAndMapResultToResponse,
-   mapInventoryRecordsToSuccessResponse,
+   getRecordsAndMapResultToResponse,
    mapInventoryRecordToSuccessResponse,
    mapRequestToGetInventoryRecordRequest,
    mapRequestToInventoryRecordsRequest,
@@ -48,16 +46,11 @@ export const InventoryService = (
       getInventoryRecordAndMapResultToResponse(repository.getRecord),
    ),
 
-   getRecords: async (request: Request): Promise<Response> => {
-      const dto: InventoryRecordsRequest = mapRequestToInventoryRecordsRequest(request);
-      const validationOutcome: ValidationError | null = await validator.validateInventoryRecordsRequest(dto);
-      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
-      const result: InventoryRecord[] | Error = await repository.getRecords(dto);
-      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
-      const response : Response = mapInventoryRecordsToSuccessResponse(result);
-      if (dto.page !== undefined) return addPageDataToResponse(dto.page, response);
-      else return response;
-   },
+   getRecords: async (request: Request): Promise<Response> => handleRequest(
+      mapRequestToInventoryRecordsRequest(request),
+      validator.validateInventoryRecordsRequest,
+      getRecordsAndMapResultToResponse(repository.getRecords),
+   ),
 
    updateRecord: async (request: Request): Promise<Response> => {
       const dto: UpdateInventoryRecordRequest = mapRequestToUpdateInventoryRecordRequest(request);

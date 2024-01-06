@@ -1,7 +1,9 @@
 import {
    addPageDataToResponse,
+   CommandResult,
    Error,
    isError,
+   mapDeleteResultToResponse,
    mapErrorToInternalServerErrorResponse,
    mapRequestToPage,
    mapRequestToTimestamps,
@@ -18,7 +20,7 @@ import {
    UsersRequest,
    UsersSortOption,
 } from "./users.type";
-import { GetUser, GetUsers, UpdateUser } from './users-repository.type';
+import { DeleteUser, GetUser, GetUsers, UpdateUser } from './users-repository.type';
 
 export const mapRequestToGetUserDto = (request: Request): GetUserRequest =>
    ({ username: request.paramMap['username'] });
@@ -99,4 +101,11 @@ export const updateUserAndMapResultToResponse = (updateUser: UpdateUser) =>
       const updateUserResult: User | Error = await updateUser(updateUserRequest);
       if (isError(updateUserResult)) return mapErrorToInternalServerErrorResponse(updateUserResult);
       return mapUserToSuccessResponse(updateUserResult);
+   };
+
+export const deleteUserAndMapResultToResponse = (deleteUser : DeleteUser) =>
+   async (deleteUserRequest: DeleteUserRequest) : Promise<Response> => {
+      const deleteUserResult: CommandResult | Error = await deleteUser(deleteUserRequest);
+      if (isError(deleteUserResult)) return mapErrorToInternalServerErrorResponse(deleteUserResult);
+      return mapDeleteResultToResponse(deleteUserResult);
    };

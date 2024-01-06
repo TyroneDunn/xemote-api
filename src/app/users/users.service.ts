@@ -13,9 +13,10 @@ import {
    Response,
    ValidationError,
 } from "@hals/common";
-import { DeleteUserRequest, UsersRequest } from "./users.type";
+import { UsersRequest } from "./users.type";
 import { UsersValidator } from "./users.validator";
 import {
+   deleteUserAndMapResultToResponse,
    getUserAndMapResultToResponse,
    getUsersAndMapResultToResponse,
    mapRequestToDeleteUserDto,
@@ -55,14 +56,11 @@ export const configureUsersService = (
       updateUserAndMapResultToResponse(repository.updateUser),
    ),
 
-   deleteUser: async (request: Request): Promise<Response> => {
-      const dto: DeleteUserRequest = mapRequestToDeleteUserDto(request);
-      const validationOutcome: ValidationError | null = await validator.validateDeleteUserRequest(dto);
-      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
-      const result: CommandResult | Error = await repository.deleteUser(dto);
-      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
-      return mapDeleteResultToResponse(result);
-   },
+   deleteUser: async (request: Request): Promise<Response> => handleRequest(
+      mapRequestToDeleteUserDto(request),
+      validator.validateDeleteUserRequest,
+      deleteUserAndMapResultToResponse(repository.deleteUser),
+   ),
 
    deleteUsers: async (request: Request): Promise<Response> => {
       const dto: UsersRequest = mapRequestToUsersDto(request);

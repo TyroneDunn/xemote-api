@@ -5,8 +5,8 @@ import { OrdersValidator } from "./orders.validator";
 import { MongoProductsRepository } from "../products/mongo-products-repository.service";
 import { Controller } from '@hals/common';
 
-const ordersDtosValidator : OrdersValidator = OrdersValidator(MongoOrdersRepository, MongoProductsRepository);
-const ordersService : OrdersService = OrdersService(MongoOrdersRepository, ordersDtosValidator);
+const ordersValidator : OrdersValidator = OrdersValidator(MongoOrdersRepository, MongoProductsRepository);
+const ordersService : OrdersService = OrdersService(MongoOrdersRepository, ordersValidator);
 const ordersController : Controller = OrdersController(ordersService);
 
 export default ordersController;

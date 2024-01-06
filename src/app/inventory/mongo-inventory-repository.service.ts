@@ -75,7 +75,7 @@ export const MongoInventoryRepository : InventoryRepository = {
          const filter = mapUpdateInventoryRecordsRequestToFilter(dto);
          const query = mapInventoryRecordsUpdateFieldsToUpdateQuery(dto.updateFields);
          const result : UpdateWriteOpResult = await InventoryRecordsModel.updateMany(filter, query);
-         return { success: result.acknowledged, affectedCount: result.modifiedCount };
+         return CommandResult(result.acknowledged, result.modifiedCount);
       }
       catch (error) {
          return Error("Internal", (error as Error).message);
@@ -85,7 +85,7 @@ export const MongoInventoryRepository : InventoryRepository = {
    deleteRecord: async (dto : DeleteInventoryRecordRequest) : Promise<CommandResult | Error> => {
       try {
          const result : DeleteResult = await InventoryRecordsModel.deleteOne({ productId: dto.productId });
-         return { success: result.acknowledged, affectedCount: result.deletedCount };
+         return CommandResult(result.acknowledged, result.deletedCount);
       }
       catch (error) {
          return Error("Internal", (error as Error).message);
@@ -96,7 +96,7 @@ export const MongoInventoryRepository : InventoryRepository = {
       try {
          const filter = mapInventoryRecordsRequestToFilter(dto);
          const result : DeleteResult = await InventoryRecordsModel.deleteMany(filter);
-         return { success: result.acknowledged, affectedCount: result.deletedCount };
+         return CommandResult(result.acknowledged, result.deletedCount);
       }
       catch (error) {
          return Error("Internal", (error as Error).message);

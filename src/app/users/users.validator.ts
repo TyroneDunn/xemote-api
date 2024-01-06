@@ -13,8 +13,10 @@ export const UsersValidator = (repository: UsersRepository): UsersValidator => (
    validateGetUserRequest: async (request: GetUserRequest): Promise<ValidationError | null> => {
       if (!request.username)
          return ValidationError("BadRequest", 'Username required.');
+
       if (!(await repository.exists(request.username)))
          return ValidationError("NotFound", `User "${request.username}" not found.`);
+
       return null;
    },
 
@@ -29,14 +31,17 @@ export const UsersValidator = (repository: UsersRepository): UsersValidator => (
             if (request.timestamps.createdAt.start && isNaN(Date.parse(request.timestamps.createdAt.start)))
                return ValidationError("BadRequest", 'Invalid createdAt start' +
                         ' date. Provide a valid ISO date string.');
+
             if (request.timestamps.createdAt.end && isNaN(Date.parse(request.timestamps.createdAt.end)))
                return ValidationError("BadRequest", 'Invalid createdAt end' +
                         ' date. Provide a valid ISO date string.');
          }
+
          if (request.timestamps.updatedAt) {
             if (request.timestamps.updatedAt.start && isNaN(Date.parse(request.timestamps.updatedAt.start)))
                return ValidationError("BadRequest", 'Invalid updatedAt start' +
                         ' date. Provide a valid ISO date string.');
+
             if (request.timestamps.updatedAt.end && isNaN(Date.parse(request.timestamps.updatedAt.end)))
                return ValidationError("BadRequest", 'Invalid updatedAt end' +
                         ' date. Provide a valid ISO date string.');
@@ -46,13 +51,16 @@ export const UsersValidator = (repository: UsersRepository): UsersValidator => (
       if (request.sort) {
          if (request.sort.field && !request.sort.order)
             return ValidationError("BadRequest", 'Invalid sort. Provide sort order.');
+
          if (!request.sort.field && request.sort.order)
             return ValidationError("BadRequest", 'Invalid sort. Provide sort field.');
+
          if (request.sort.field !== "username"
             && request.sort.field !== "createdAt"
             && request.sort.field !== "updatedAt")
             return ValidationError("BadRequest", 'Invalid sort. Sort field must be' +
                      ' "username", "createdAt", or "updatedAt".');
+
          if (request.sort.order !== "asc" && request.sort.order !== "desc")
             return ValidationError("BadRequest", 'Invalid sort. Sort order must be' +
                      ' "asc" or "desc".');
@@ -61,11 +69,14 @@ export const UsersValidator = (repository: UsersRepository): UsersValidator => (
       if (request.page) {
          if (request.page.index && !request.page.limit)
             return ValidationError("BadRequest", 'Invalid page. Provide page limit.');
+
          if (!request.page.index && request.page.limit)
             return ValidationError("BadRequest", 'Invalid page. Provide page index.');
+
          if (request.page.index < 0)
             return ValidationError("BadRequest", 'Invalid page. Page index must be' +
                      ' 0 or greater.');
+
          if (request.page.limit < 1)
             return ValidationError("BadRequest", 'Invalid page. Page limit must be' +
                      ' 1 or greater.');
@@ -91,8 +102,10 @@ export const UsersValidator = (repository: UsersRepository): UsersValidator => (
    validateDeleteUserRequest: async (request: DeleteUserRequest): Promise<ValidationError | null> => {
       if (!request.username)
          return ValidationError("BadRequest", 'Username required.');
+
       if (!(await repository.exists(request.username)))
          return ValidationError("NotFound", `User "${request.username}" not found.`);
+
       return null;
    },
 });

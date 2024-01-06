@@ -20,11 +20,11 @@ export const MongoUsersRepository: UsersRepository = {
    getUser: async (dto: GetUserRequest): Promise<User | Error> => {
       try {
          const user: User | null = await UsersModel.findOne({ username: dto.username });
-         if (!user) return { type: "NotFound", message: 'User not found.' };
+         if (!user) return Error("NotFound", 'User not found.');
          return user as User;
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -41,7 +41,7 @@ export const MongoUsersRepository: UsersRepository = {
          return query.exec();
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -56,7 +56,7 @@ export const MongoUsersRepository: UsersRepository = {
          return user as User;
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -66,7 +66,7 @@ export const MongoUsersRepository: UsersRepository = {
          return { success: result.acknowledged, affectedCount: result.deletedCount };
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -77,7 +77,7 @@ export const MongoUsersRepository: UsersRepository = {
          return { success: result.acknowledged, affectedCount: result.deletedCount };
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 
@@ -87,7 +87,7 @@ export const MongoUsersRepository: UsersRepository = {
          return !!user;
       }
       catch (error) {
-         return { type: "Internal", message: (error as Error).message };
+         return Error("Internal", (error as Error).message);
       }
    },
 };

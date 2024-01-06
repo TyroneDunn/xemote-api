@@ -27,7 +27,7 @@ import {
    mapRequestToInventoryRecordsRequest,
    mapRequestToUpdateInventoryRecordRequest,
    mapRequestToUpdateInventoryRecordsRequest,
-} from "./inventory-records-dtos.utility";
+} from "./inventory-records.utility";
 import { InventoryRecordsValidator } from "./inventory-records.validator";
 
 export type InventoryService = {

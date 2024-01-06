@@ -25,13 +25,13 @@ import { Order } from "./order.type";
 import {
    mapOrdersToSuccessResponse,
    mapOrderToSuccessResponse,
-   mapRequestToCreateOrderDTO,
-   mapRequestToDeleteOrderDTO,
-   mapRequestToGetOrderDTO,
-   mapRequestToOrdersDTO,
-   mapRequestToUpdateOrderDTO,
-   mapRequestToUpdateOrdersDTO,
-} from "./orders-dtos.utility";
+   mapRequestToCreateOrderRequest,
+   mapRequestToDeleteOrderRequest,
+   mapRequestToGetOrderRequest,
+   mapRequestToOrdersRequest,
+   mapRequestToUpdateOrderRequest,
+   mapRequestToUpdateOrdersRequest,
+} from "./orders.utility";
 import { OrdersValidator } from "./orders.validator";
 
 export type OrdersService = {
@@ -49,7 +49,7 @@ export const OrdersService = (
    validator: OrdersValidator,
 ): OrdersService => ({
    getOrder: async (request: Request): Promise<Response> => {
-      const dto: GetOrderRequest = mapRequestToGetOrderDTO(request);
+      const dto: GetOrderRequest = mapRequestToGetOrderRequest(request);
       const validationOutcome: ValidationError | null = await validator.validateGetOrderRequest(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: Order | Error = await repository.getOrder(dto);
@@ -58,7 +58,7 @@ export const OrdersService = (
    },
 
    getOrders: async (request: Request): Promise<Response> => {
-      const dto: OrdersRequest = mapRequestToOrdersDTO(request);
+      const dto: OrdersRequest = mapRequestToOrdersRequest(request);
       const validationOutcome: ValidationError | null = await validator.validateOrdersRequest(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: Order[] | Error = await repository.getOrders(dto);
@@ -69,7 +69,7 @@ export const OrdersService = (
    },
 
    createOrder: async (request: Request): Promise<Response> => {
-      const dto: CreateOrderRequest = mapRequestToCreateOrderDTO(request);
+      const dto: CreateOrderRequest = mapRequestToCreateOrderRequest(request);
       const validationOutcome: ValidationError | null = await validator.validateCreateOrderRequest(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: Order | Error = await repository.createOrder(dto);
@@ -78,7 +78,7 @@ export const OrdersService = (
    },
 
    updateOrder: async (request: Request): Promise<Response> => {
-      const dto: UpdateOrderRequest = mapRequestToUpdateOrderDTO(request);
+      const dto: UpdateOrderRequest = mapRequestToUpdateOrderRequest(request);
       const validationOutcome: ValidationError | null = await validator.validateUpdateOrderRequest(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: Order | Error = await repository.updateOrder(dto);
@@ -87,7 +87,7 @@ export const OrdersService = (
    },
 
    updateOrders: async (request: Request): Promise<Response> => {
-      const dto: UpdateOrdersRequest = mapRequestToUpdateOrdersDTO(request);
+      const dto: UpdateOrdersRequest = mapRequestToUpdateOrdersRequest(request);
       const validationOutcome: ValidationError | null = await validator.validateUpdateOrdersRequest(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: CommandResult | Error = await repository.updateOrders(dto);
@@ -96,7 +96,7 @@ export const OrdersService = (
    },
 
    deleteOrder: async (request: Request): Promise<Response> => {
-      const dto: DeleteOrderRequest = mapRequestToDeleteOrderDTO(request);
+      const dto: DeleteOrderRequest = mapRequestToDeleteOrderRequest(request);
       const validationOutcome: ValidationError | null = await validator.validateDeleteOrderRequest(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: CommandResult | Error = await repository.deleteOrder(dto);
@@ -105,7 +105,7 @@ export const OrdersService = (
    },
 
    deleteOrders: async (request: Request): Promise<Response> => {
-      const dto: OrdersRequest = mapRequestToOrdersDTO(request);
+      const dto: OrdersRequest = mapRequestToOrdersRequest(request);
       const validationOutcome: ValidationError | null = await validator.validateOrdersRequest(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: CommandResult | Error = await repository.deleteOrders(dto);

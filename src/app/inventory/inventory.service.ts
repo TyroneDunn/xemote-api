@@ -1,19 +1,5 @@
 import { InventoryRepository } from "./inventory-repository.type";
-import { UpdateInventoryRecordsRequest } from "./inventory-records.type";
-import {
-   CommandResult,
-   Error,
-   handleRequest,
-   isError,
-   isValidationError,
-   mapCommandResultToSuccessResponse,
-   mapErrorToInternalServerErrorResponse,
-   mapValidationErrorToErrorResponse,
-   Request,
-   RequestHandler,
-   Response,
-   ValidationError,
-} from "@hals/common";
+import { handleRequest, Request, RequestHandler, Response } from "@hals/common";
 import {
    getInventoryRecordAndMapResultToResponse,
    getRecordsAndMapResultToResponse,
@@ -22,6 +8,7 @@ import {
    mapRequestToUpdateInventoryRecordRequest,
    mapRequestToUpdateInventoryRecordsRequest,
    updateRecordAndMapResultToResponse,
+   updateRecordsAndMapResultToResponse,
 } from "./inventory-records.utility";
 import { InventoryRecordsValidator } from "./inventory-records.validator";
 
@@ -54,12 +41,9 @@ export const InventoryService = (
       updateRecordAndMapResultToResponse(repository.updateRecord),
    ),
 
-   updateRecords: async (request: Request): Promise<Response> => {
-      const dto: UpdateInventoryRecordsRequest = mapRequestToUpdateInventoryRecordsRequest(request);
-      const validationOutcome: ValidationError | null = await validator.validateUpdateInventoryRecordsRequest(dto);
-      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
-      const result: CommandResult | Error = await repository.updateRecords(dto);
-      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
-      return mapCommandResultToSuccessResponse(result);
-   },
+   updateRecords: async (request: Request): Promise<Response> => handleRequest(
+      mapRequestToUpdateInventoryRecordsRequest(request),
+      validator.validateUpdateInventoryRecordsRequest,
+      updateRecordsAndMapResultToResponse(repository.updateRecords),
+   ),
 });

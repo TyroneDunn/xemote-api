@@ -1,8 +1,8 @@
-import { Order } from "./order.type";
 import {
    CreateOrderRequest,
    DeleteOrderRequest,
    GetOrderRequest,
+   Order,
    OrdersRequest,
    UpdateOrderRequest,
    UpdateOrdersRequest,

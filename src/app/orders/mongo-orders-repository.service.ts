@@ -3,12 +3,12 @@ import {
    CreateOrderRequest,
    DeleteOrderRequest,
    GetOrderRequest,
+   Order,
    OrdersRequest,
    OrderUpdateFields,
    UpdateOrderRequest,
    UpdateOrdersRequest,
 } from "./orders.type";
-import { Order } from "./order.type";
 import OrdersModel from "./mongo-orders-model.type";
 import { DeleteResult } from "mongodb";
 import { UpdateWriteOpResult } from "mongoose";

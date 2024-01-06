@@ -17,12 +17,14 @@ import {
    CreateOrderRequest,
    DeleteOrderRequest,
    GetOrderRequest,
+   Order,
    OrdersRequest,
    OrdersSortOptions,
+   OrderStatus,
+   ProductCount,
    UpdateOrderRequest,
    UpdateOrdersRequest,
 } from "./orders.type";
-import { Order, OrderStatus, ProductCount } from "./order.type";
 import {
    CreateOrder,
    DeleteOrder,

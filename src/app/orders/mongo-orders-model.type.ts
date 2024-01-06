@@ -1,6 +1,6 @@
-import { Order, OrderStatus, ProductCount } from "./order.type";
 import { Schema } from "mongoose";
 import database from "../../database/mongodb.config";
+import { Order, OrderStatus, ProductCount } from './orders.type';
 
 export interface OrdersDocument extends Document, Order {
    clientId: string,

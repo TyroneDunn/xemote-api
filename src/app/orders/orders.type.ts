@@ -1,5 +1,18 @@
-import { OrderStatus, ProductCount } from "./order.type";
 import { NumberRange, OrderOption, Page, Timestamps } from "@hals/common";
+
+export type Order = {
+   _id : string
+   clientId : string,
+   cart : ProductCount,
+   status : OrderStatus,
+};
+
+export type ProductCount = Record<string, number>;
+
+export type OrderStatus =
+   | "complete"
+   | "pending"
+   | "cancelled";
 
 export type GetOrderRequest = { _id : string };
 
@@ -9,6 +22,7 @@ export type OrdersRequest = {
    sort? : OrdersSort,
    page? : Page,
 };
+
 
 export type CreateOrderRequest = {
    clientId : string,

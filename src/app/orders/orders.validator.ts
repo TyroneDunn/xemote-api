@@ -11,12 +11,12 @@ import { ValidationError } from "@hals/common";
 import { ProductsRepository } from "../products/products-repository.type";
 
 export type OrdersValidator = {
-   validateGetOrderDto: (dto: GetOrderRequest) => Promise<ValidationError | null>,
-   validateOrdersDto: (dto: OrdersRequest) => Promise<ValidationError | null>,
-   validateCreateOrderDto: (dto: CreateOrderRequest) => Promise<ValidationError | null>,
-   validateUpdateOrderDto: (dto: UpdateOrderRequest) => Promise<ValidationError | null>,
-   validateUpdateOrdersDto: (dto: UpdateOrdersRequest) => Promise<ValidationError | null>,
-   validateDeleteOrderDto: (dto: DeleteOrderRequest) => Promise<ValidationError | null>,
+   validateGetOrderRequest: (request: GetOrderRequest) => Promise<ValidationError | null>,
+   validateOrdersRequest: (request: OrdersRequest) => Promise<ValidationError | null>,
+   validateCreateOrderRequest: (request: CreateOrderRequest) => Promise<ValidationError | null>,
+   validateUpdateOrderRequest: (request: UpdateOrderRequest) => Promise<ValidationError | null>,
+   validateUpdateOrdersRequest: (request: UpdateOrdersRequest) => Promise<ValidationError | null>,
+   validateDeleteOrderRequest: (request: DeleteOrderRequest) => Promise<ValidationError | null>,
 };
 
 export const OrdersValidator =
@@ -24,43 +24,43 @@ export const OrdersValidator =
       ordersRepository: OrdersRepository,
       productsRepository: ProductsRepository,
    ): OrdersValidator => ({
-      validateGetOrderDto: async (dto: GetOrderRequest): Promise<ValidationError | null> => {
-         if (!dto._id)
+      validateGetOrderRequest: async (request: GetOrderRequest): Promise<ValidationError | null> => {
+         if (!request._id)
             return { error: { type: "BadRequest", message: 'ID required.' } };
-         if (!(await ordersRepository.exists(dto)))
-            return { error: { type: "NotFound", message: `Order "${dto._id}" not found.` } };
+         if (!(await ordersRepository.exists(request)))
+            return { error: { type: "NotFound", message: `Order "${request._id}" not found.` } };
          return null;
       },
 
-      validateOrdersDto: async (dto: OrdersRequest): Promise<ValidationError | null> => {
-         if (dto.filter) {
-            if (dto.filter.status)
-               if (dto.filter.status !== "complete"
-                  && dto.filter.status !== "pending"
-                  && dto.filter.status !== "cancelled")
+      validateOrdersRequest: async (request: OrdersRequest): Promise<ValidationError | null> => {
+         if (request.filter) {
+            if (request.filter.status)
+               if (request.filter.status !== "complete"
+                  && request.filter.status !== "pending"
+                  && request.filter.status !== "cancelled")
                   return {
                      error: {
                         type: "BadRequest", message: 'Invalid status. Status must be' +
                            ' "complete", "pending" or "cancelled".',
                      },
                   };
-            if (dto.filter.countRange) {
-               if (dto.filter.countRange.start && (dto.filter.countRange.start < 0))
+            if (request.filter.countRange) {
+               if (request.filter.countRange.start && (request.filter.countRange.start < 0))
                   return {
                      error: {
                         type: "BadRequest", message: 'Invalid count range. Count range' +
                            ' start value must be greater than 0.',
                      },
                   };
-               if (dto.filter.countRange.end && (dto.filter.countRange.end < 0))
+               if (request.filter.countRange.end && (request.filter.countRange.end < 0))
                   return {
                      error: {
                         type: "BadRequest", message: 'Invalid count range. Count range' +
                            ' end value must be greater than 0.',
                      },
                   };
-               if ((dto.filter.countRange.start && dto.filter.countRange.end)
-                  && (dto.filter.countRange.end < dto.filter.countRange.start))
+               if ((request.filter.countRange.start && request.filter.countRange.end)
+                  && (request.filter.countRange.end < request.filter.countRange.start))
                   return {
                      error: {
                         type: "BadRequest", message: 'Invalid count range. Count range' +
@@ -70,16 +70,16 @@ export const OrdersValidator =
             }
          }
 
-         if (dto.timestamps) {
-            if (dto.timestamps.createdAt) {
-               if (dto.timestamps.createdAt.start && isNaN(Date.parse(dto.timestamps.createdAt.start)))
+         if (request.timestamps) {
+            if (request.timestamps.createdAt) {
+               if (request.timestamps.createdAt.start && isNaN(Date.parse(request.timestamps.createdAt.start)))
                   return {
                      error: {
                         type: "BadRequest", message: 'Invalid createdAt start' +
                            ' date. Provide a valid ISO date string.',
                      },
                   };
-               if (dto.timestamps.createdAt.end && isNaN(Date.parse(dto.timestamps.createdAt.end)))
+               if (request.timestamps.createdAt.end && isNaN(Date.parse(request.timestamps.createdAt.end)))
                   return {
                      error: {
                         type: "BadRequest", message: 'Invalid createdAt end' +
@@ -87,15 +87,15 @@ export const OrdersValidator =
                      },
                   };
             }
-            if (dto.timestamps.updatedAt) {
-               if (dto.timestamps.updatedAt.start && isNaN(Date.parse(dto.timestamps.updatedAt.start)))
+            if (request.timestamps.updatedAt) {
+               if (request.timestamps.updatedAt.start && isNaN(Date.parse(request.timestamps.updatedAt.start)))
                   return {
                      error: {
                         type: "BadRequest", message: 'Invalid updatedAt start' +
                            ' date. Provide a valid ISO date string.',
                      },
                   };
-               if (dto.timestamps.updatedAt.end && isNaN(Date.parse(dto.timestamps.updatedAt.end)))
+               if (request.timestamps.updatedAt.end && isNaN(Date.parse(request.timestamps.updatedAt.end)))
                   return {
                      error: {
                         type: "BadRequest", message: 'Invalid updatedAt end' +
@@ -105,30 +105,30 @@ export const OrdersValidator =
             }
          }
 
-         if (dto.sort) {
-            if (dto.sort.field && !dto.sort.order)
+         if (request.sort) {
+            if (request.sort.field && !request.sort.order)
                return {
                   error: {
                      type: "BadRequest",
                      message: 'Invalid sort. Provide sort order.',
                   },
                };
-            if (!dto.sort.field && dto.sort.order)
+            if (!request.sort.field && request.sort.order)
                return {
                   error: {
                      type: "BadRequest",
                      message: 'Invalid sort. Provide sort field.',
                   },
                };
-            if (dto.sort.field !== "clientId"
-               && dto.sort.field !== "status")
+            if (request.sort.field !== "clientId"
+               && request.sort.field !== "status")
                return {
                   error: {
                      type: "BadRequest", message: 'Invalid sort. Sort field must be' +
                         ' "clientId" or "status".',
                   },
                };
-            if (dto.sort.order !== "asc" && dto.sort.order !== "desc")
+            if (request.sort.order !== "asc" && request.sort.order !== "desc")
                return {
                   error: {
                      type: "BadRequest", message: 'Invalid sort. Sort order must be' +
@@ -137,29 +137,29 @@ export const OrdersValidator =
                };
          }
 
-         if (dto.page) {
-            if (dto.page.index && !dto.page.limit)
+         if (request.page) {
+            if (request.page.index && !request.page.limit)
                return {
                   error: {
                      type: "BadRequest",
                      message: 'Invalid page. Provide page limit.',
                   },
                };
-            if (!dto.page.index && dto.page.limit)
+            if (!request.page.index && request.page.limit)
                return {
                   error: {
                      type: "BadRequest",
                      message: 'Invalid page. Provide page index.',
                   },
                };
-            if (dto.page.index < 0)
+            if (request.page.index < 0)
                return {
                   error: {
                      type: "BadRequest", message: 'Invalid page. Page index must be' +
                         ' 0 or greater.',
                   },
                };
-            if (dto.page.limit < 1)
+            if (request.page.limit < 1)
                return {
                   error: {
                      type: "BadRequest", message: 'Invalid page. Page limit must be' +
@@ -171,24 +171,24 @@ export const OrdersValidator =
          return null;
       },
 
-      validateCreateOrderDto: async (dto: CreateOrderRequest): Promise<ValidationError | null> => {
-         if (!dto.clientId)
+      validateCreateOrderRequest: async (request: CreateOrderRequest): Promise<ValidationError | null> => {
+         if (!request.clientId)
             return { error: { type: "BadRequest", message: 'Client ID required.' } };
-         if (!dto.status)
+         if (!request.status)
             return { error: { type: "BadRequest", message: 'Status required.' } };
-         if (dto.status)
-            if (dto.status !== "complete"
-               && dto.status !== "pending"
-               && dto.status !== "cancelled")
+         if (request.status)
+            if (request.status !== "complete"
+               && request.status !== "pending"
+               && request.status !== "cancelled")
                return {
                   error: {
                      type: "BadRequest", message: 'Invalid status. Status must be' +
                         ' "complete", "pending" or "cancelled".',
                   },
                };
-         if (!dto.cart)
+         if (!request.cart)
             return { error: { type: "BadRequest", message: 'Cart required.' } };
-         for (let product in dto.cart) {
+         for (let product in request.cart) {
             if (!(await productsRepository.exists({ _id: product })))
                return {
                   error: {
@@ -196,7 +196,7 @@ export const OrdersValidator =
                      message: `Invalid cart. Product "${product}" does not exist.`,
                   },
                };
-            if (dto.cart[product] < 1)
+            if (request.cart[product] < 1)
                return {
                   error: {
                      type: "BadRequest",
@@ -207,30 +207,30 @@ export const OrdersValidator =
          return null;
       },
 
-      validateUpdateOrderDto: async (dto: UpdateOrderRequest): Promise<ValidationError | null> => {
-         if (!dto._id)
+      validateUpdateOrderRequest: async (request: UpdateOrderRequest): Promise<ValidationError | null> => {
+         if (!request._id)
             return { error: { type: "BadRequest", message: 'ID required.' } };
-         if (!(await ordersRepository.exists(dto)))
-            return { error: { type: "NotFound", message: `Order "${dto._id}" not found.` } };
-         if (!dto.updateFields)
+         if (!(await ordersRepository.exists(request)))
+            return { error: { type: "NotFound", message: `Order "${request._id}" not found.` } };
+         if (!request.updateFields)
             return {
                error: {
                   type: "BadRequest", message: 'Invalid request. Update field(s)' +
                      ' required.',
                },
             };
-         if (dto.updateFields.newStatus)
-            if (dto.updateFields.newStatus !== "complete"
-               && dto.updateFields.newStatus !== "pending"
-               && dto.updateFields.newStatus !== "cancelled")
+         if (request.updateFields.newStatus)
+            if (request.updateFields.newStatus !== "complete"
+               && request.updateFields.newStatus !== "pending"
+               && request.updateFields.newStatus !== "cancelled")
                return {
                   error: {
                      type: "BadRequest", message: 'Invalid status. Status must be' +
                         ' "complete", "pending" or "cancelled".',
                   },
                };
-         if (dto.updateFields.newCart) {
-            for (const product in dto.updateFields.newCart) {
+         if (request.updateFields.newCart) {
+            for (const product in request.updateFields.newCart) {
                if (!(await productsRepository.exists({ _id: product })))
                   return {
                      error: {
@@ -238,7 +238,7 @@ export const OrdersValidator =
                         message: `Invalid cart. Product "${product}" does not exist.`,
                      },
                   };
-               if (dto.updateFields.newCart[product] < 1)
+               if (request.updateFields.newCart[product] < 1)
                   return {
                      error: {
                         type: "BadRequest",
@@ -250,11 +250,11 @@ export const OrdersValidator =
          return null;
       },
 
-      validateUpdateOrdersDto: async (dto: UpdateOrdersRequest): Promise<ValidationError | null> => {
-         if (dto.filter.status)
-            if (dto.filter.status !== "complete"
-               && dto.filter.status !== "pending"
-               && dto.filter.status !== "cancelled")
+      validateUpdateOrdersRequest: async (request: UpdateOrdersRequest): Promise<ValidationError | null> => {
+         if (request.filter.status)
+            if (request.filter.status !== "complete"
+               && request.filter.status !== "pending"
+               && request.filter.status !== "cancelled")
                return {
                   error: {
                      type: "BadRequest", message: 'Invalid status. Status must be' +
@@ -262,23 +262,23 @@ export const OrdersValidator =
                   },
                };
 
-         if (dto.filter.countRange) {
-            if (dto.filter.countRange.start && (dto.filter.countRange.start < 0))
+         if (request.filter.countRange) {
+            if (request.filter.countRange.start && (request.filter.countRange.start < 0))
                return {
                   error: {
                      type: "BadRequest", message: 'Invalid count range. Count range' +
                         ' start value must be greater than 0.',
                   },
                };
-            if (dto.filter.countRange.end && (dto.filter.countRange.end < 0))
+            if (request.filter.countRange.end && (request.filter.countRange.end < 0))
                return {
                   error: {
                      type: "BadRequest", message: 'Invalid count range. Count range' +
                         ' end value must be greater than 0.',
                   },
                };
-            if ((dto.filter.countRange.start && dto.filter.countRange.end)
-               && (dto.filter.countRange.end < dto.filter.countRange.start))
+            if ((request.filter.countRange.start && request.filter.countRange.end)
+               && (request.filter.countRange.end < request.filter.countRange.start))
                return {
                   error: {
                      type: "BadRequest", message: 'Invalid count range. Count range' +
@@ -287,16 +287,16 @@ export const OrdersValidator =
                };
          }
 
-         if (dto.timestamps) {
-            if (dto.timestamps.createdAt) {
-               if (dto.timestamps.createdAt.start && isNaN(Date.parse(dto.timestamps.createdAt.start)))
+         if (request.timestamps) {
+            if (request.timestamps.createdAt) {
+               if (request.timestamps.createdAt.start && isNaN(Date.parse(request.timestamps.createdAt.start)))
                   return {
                      error: {
                         type: "BadRequest", message: 'Invalid createdAt start' +
                            ' date. Provide a valid ISO date string.',
                      },
                   };
-               if (dto.timestamps.createdAt.end && isNaN(Date.parse(dto.timestamps.createdAt.end)))
+               if (request.timestamps.createdAt.end && isNaN(Date.parse(request.timestamps.createdAt.end)))
                   return {
                      error: {
                         type: "BadRequest", message: 'Invalid createdAt end' +
@@ -304,15 +304,15 @@ export const OrdersValidator =
                      },
                   };
             }
-            if (dto.timestamps.updatedAt) {
-               if (dto.timestamps.updatedAt.start && isNaN(Date.parse(dto.timestamps.updatedAt.start)))
+            if (request.timestamps.updatedAt) {
+               if (request.timestamps.updatedAt.start && isNaN(Date.parse(request.timestamps.updatedAt.start)))
                   return {
                      error: {
                         type: "BadRequest", message: 'Invalid updatedAt start' +
                            ' date. Provide a valid ISO date string.',
                      },
                   };
-               if (dto.timestamps.updatedAt.end && isNaN(Date.parse(dto.timestamps.updatedAt.end)))
+               if (request.timestamps.updatedAt.end && isNaN(Date.parse(request.timestamps.updatedAt.end)))
                   return {
                      error: {
                         type: "BadRequest", message: 'Invalid updatedAt end' +
@@ -322,25 +322,25 @@ export const OrdersValidator =
             }
          }
 
-         if (!dto.updateFields)
+         if (!request.updateFields)
             return {
                error: {
                   type: "BadRequest", message: 'Invalid request. Update field(s)' +
                      ' required.',
                },
             };
-         if (dto.updateFields.newStatus)
-            if (dto.updateFields.newStatus !== "complete"
-               && dto.updateFields.newStatus !== "pending"
-               && dto.updateFields.newStatus !== "cancelled")
+         if (request.updateFields.newStatus)
+            if (request.updateFields.newStatus !== "complete"
+               && request.updateFields.newStatus !== "pending"
+               && request.updateFields.newStatus !== "cancelled")
                return {
                   error: {
                      type: "BadRequest", message: 'Invalid status. Status must be' +
                         ' "complete", "pending" or "cancelled".',
                   },
                };
-         if (dto.updateFields.newCart) {
-            for (const product in dto.updateFields.newCart) {
+         if (request.updateFields.newCart) {
+            for (const product in request.updateFields.newCart) {
                if (!(await productsRepository.exists({ _id: product })))
                   return {
                      error: {
@@ -348,7 +348,7 @@ export const OrdersValidator =
                         message: `Invalid cart. Product "${product}" does not exist.`,
                      },
                   };
-               if (dto.updateFields.newCart[product] < 1)
+               if (request.updateFields.newCart[product] < 1)
                   return {
                      error: {
                         type: "BadRequest",
@@ -361,11 +361,11 @@ export const OrdersValidator =
          return null;
       },
 
-      validateDeleteOrderDto: async (dto: DeleteOrderRequest): Promise<ValidationError | null> => {
-         if (!dto._id)
+      validateDeleteOrderRequest: async (request: DeleteOrderRequest): Promise<ValidationError | null> => {
+         if (!request._id)
             return { error: { type: "BadRequest", message: 'ID required.' } };
-         if (!(await ordersRepository.exists(dto)))
-            return { error: { type: "NotFound", message: `Order "${dto._id}" not found.` } };
+         if (!(await ordersRepository.exists(request)))
+            return { error: { type: "NotFound", message: `Order "${request._id}" not found.` } };
          return null;
       },
    });

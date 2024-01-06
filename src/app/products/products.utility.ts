@@ -167,11 +167,13 @@ export const mapDeleteProductResultToResponse = (
    deleteProduct : DeleteProduct,
    deleteRecord : DeleteRecord,
 ) => async (deleteProductRequest : DeleteProductRequest) : Promise<Response> => {
-   const result : CommandResult | Error = await deleteProduct(deleteProductRequest);
-   if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
-   // todo improve inventory repository error handling
-   await deleteRecord({ productId: deleteProductRequest._id });
-   return mapDeleteResultToResponse(result);
+   const deleteRecordResult : Either<Error, CommandResult> = await deleteRecord({ productId: deleteProductRequest._id });
+   if (isError(deleteRecordResult)) return mapErrorToInternalServerErrorResponse(deleteRecordResult);
+
+   const deleteProductResult : CommandResult | Error = await deleteProduct(deleteProductRequest);
+   if (isError(deleteProductResult)) return mapErrorToInternalServerErrorResponse(deleteProductResult);
+
+   return mapDeleteResultToResponse(deleteProductResult);
 };
 
 export const mapDeleteProductsResultToResponse = (

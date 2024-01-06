@@ -9,7 +9,7 @@ const getProductsMethod = (getProducts : RequestHandler) : Method => ({
 
 const getProductMethod = (getProduct : RequestHandler) : Method => ({
    type           : "GET",
-   paramKeys      : [ 'id' ],
+   paramKeys      : [ ID ],
    requestHandler : getProduct,
 });
 
@@ -26,7 +26,7 @@ const updateProductsMethod = (updateProducts : RequestHandler) : Method => ({
 
 const updateProductMethod = (updateProduct : RequestHandler) : Method => ({
    type           : "PATCH",
-   paramKeys      : [ 'id' ],
+   paramKeys      : [ ID ],
    requestHandler : updateProduct,
 });
 
@@ -38,9 +38,11 @@ const deleteProductsMethod = (deleteProducts : RequestHandler) : Method => ({
 
 const deleteProductMethod = (deleteProduct : RequestHandler) : Method => ({
    type           : "DELETE",
-   paramKeys      : [ 'id' ],
+   paramKeys      : [ ID ],
    requestHandler : deleteProduct,
 });
+
+const ID : string = 'id';
 
 const ProductsQueryParamKeys : string[] = [
    'name',

@@ -174,7 +174,7 @@ export const ProductsValidator = (repository : ProductsRepository) : ProductsVal
       if (!dto.name)
          return ValidationError("BadRequest", 'Name required.');
       if (!dto.category)
-         return ValidationError("BadRequest", 'Type required.');
+         return ValidationError("BadRequest", 'Category required.');
       if (dto.category !== "Xemote Gateway"
          && dto.category !== "Xemote Accessory"
          && dto.category !== "Wireless Temperature Sensor"

@@ -1,50 +1,37 @@
 import { Controller, Method, RequestHandler } from "@hals/common";
-
 import { InventoryService } from './inventory.service';
-
-export const InventoryQueryParamsKeys: string[] = [
-   'countRange',
-];
 
 const getRecordsMethod = (getRecords: RequestHandler): Method => ({
    type: "GET",
-   paramKeys: [],
    queryParamKeys: InventoryQueryParamsKeys,
-   sideEffects: [],
-   middleware: [],
    requestHandler: getRecords,
 });
 
 const getRecordMethod = (getRecord: RequestHandler): Method => ({
    type: "GET",
-   paramKeys: [ 'id' ],
-   queryParamKeys: [],
-   sideEffects: [],
-   middleware: [],
+   paramKeys: [ ID ],
    requestHandler: getRecord,
 });
 
 const updateRecordsMethod = (updateRecords: RequestHandler): Method => ({
    type: "PATCH",
-   paramKeys: [],
    queryParamKeys: InventoryQueryParamsKeys,
-   sideEffects: [],
-   middleware: [],
    requestHandler: updateRecords,
 });
 
 const updateRecordMethod = (updateRecord: RequestHandler): Method => ({
    type: "PATCH",
-   paramKeys: [ 'id' ],
-   queryParamKeys: [],
-   sideEffects: [],
-   middleware: [],
+   paramKeys: [ ID ],
    requestHandler: updateRecord,
 });
 
-export type InventoryController = Controller;
+const ID : string = 'id';
 
-export const configureInventoryController = (service: InventoryService): Controller => ({
+export const InventoryQueryParamsKeys: string[] = [
+   'countRange',
+];
+
+export const InventoryController = (service: InventoryService): Controller => ({
    path: 'inventory/',
    guard: true,
    methods: [

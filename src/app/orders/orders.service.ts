@@ -14,7 +14,6 @@ import {
 } from "@hals/common";
 import { OrdersRepository } from "./orders-repository.type";
 import {
-   CreateOrderRequest,
    DeleteOrderRequest,
    OrdersRequest,
    UpdateOrderRequest,
@@ -22,6 +21,7 @@ import {
 } from "./orders.type";
 import { Order } from "./order.type";
 import {
+   createOrderAndMapResultToResponse,
    getOrderAndMapToResponse,
    getOrdersAndMapResultToResponse,
    mapOrderToSuccessResponse,
@@ -60,14 +60,11 @@ export const OrdersService = (
       getOrdersAndMapResultToResponse(repository.getOrders),
    ),
 
-   createOrder: async (request: Request): Promise<Response> => {
-      const dto: CreateOrderRequest = mapRequestToCreateOrderRequest(request);
-      const validationOutcome: ValidationError | null = await validator.validateCreateOrderRequest(dto);
-      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
-      const result: Order | Error = await repository.createOrder(dto);
-      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
-      return mapOrderToSuccessResponse(result);
-   },
+   createOrder: async (request: Request): Promise<Response> => handleRequest(
+      mapRequestToCreateOrderRequest(request),
+      validator.validateCreateOrderRequest,
+      createOrderAndMapResultToResponse(repository.createOrder),
+   ),
 
    updateOrder: async (request: Request): Promise<Response> => {
       const dto: UpdateOrderRequest = mapRequestToUpdateOrderRequest(request);

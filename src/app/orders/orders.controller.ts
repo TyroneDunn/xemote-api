@@ -50,9 +50,9 @@ export const OrdersQueryParamsKeys : string[] = [
 ];
 
 export const OrdersController = (service : OrdersService) : Controller => ({
-   path   : 'orders/',
-   guard  : true,
-   methods: [
+   path    : 'orders/',
+   guard   : true,
+   methods : [
       getOrdersMethod(service.getOrders),
       getOrderMethod(service.getOrder),
       createOrderMethod(service.createOrder),

@@ -46,9 +46,9 @@ export const MongoOrdersRepository : OrdersRepository = {
    createOrder: async (dto : CreateOrderRequest) : Promise<Order | Error> => {
       try {
          return new OrdersModel({
-            clientId: dto.clientId,
-            cart    : dto.cart,
-            status  : dto.status,
+            clientId : dto.clientId,
+            cart     : dto.cart,
+            status   : dto.status,
          }).save();
       }
       catch (error) {
@@ -117,18 +117,18 @@ export const MongoOrdersRepository : OrdersRepository = {
 
 const mapOrdersRequestToOrdersFilter = (dto : OrdersRequest) => ({
    ...dto.filter && {
-      ...dto.filter.clientId && { clientId: dto.filter.clientId },
-      ...dto.filter.productId && { productId: dto.filter.productId },
-      ...dto.filter.status && { status: dto.filter.status },
+      ...dto.filter.clientId && { clientId : dto.filter.clientId },
+      ...dto.filter.productId && { productId : dto.filter.productId },
+      ...dto.filter.status && { status : dto.filter.status },
       ...dto.filter.countRange && {
          ...(dto.filter.countRange.start && !dto.filter.countRange.end) &&
-         { count: { $gte: dto.filter.countRange.start } },
+         { count : { $gte : dto.filter.countRange.start } },
          ...(!dto.filter.countRange.start && dto.filter.countRange.end) &&
-         { count: { $lte: dto.filter.countRange.end } },
+         { count : { $lte : dto.filter.countRange.end } },
          ...(dto.filter.countRange.start && dto.filter.countRange.end) && {
-            count: {
-               $gte: dto.filter.countRange.start,
-               $lte: dto.filter.countRange.end,
+            count : {
+               $gte : dto.filter.countRange.start,
+               $lte : dto.filter.countRange.end,
             },
          },
       },
@@ -137,26 +137,26 @@ const mapOrdersRequestToOrdersFilter = (dto : OrdersRequest) => ({
    ...dto.timestamps && {
       ...dto.timestamps.createdAt && {
          ...(dto.timestamps.createdAt.start && !dto.timestamps.createdAt.end) &&
-         { createdAt: { $gte: dto.timestamps.createdAt.start } },
+         { createdAt : { $gte : dto.timestamps.createdAt.start } },
          ...(!dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) &&
-         { createdAt: { $lte: dto.timestamps.createdAt.end } },
+         { createdAt : { $lte : dto.timestamps.createdAt.end } },
          ...(dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
-            createdAt: {
-               $gte: dto.timestamps.createdAt.start,
-               $lte: dto.timestamps.createdAt.end,
+            createdAt : {
+               $gte : dto.timestamps.createdAt.start,
+               $lte : dto.timestamps.createdAt.end,
             },
          },
       },
 
       ...dto.timestamps.updatedAt && {
          ...(dto.timestamps.updatedAt.start && !dto.timestamps.updatedAt.end) &&
-         { updatedAt: { $gte: dto.timestamps.updatedAt.start } },
+         { updatedAt : { $gte: dto.timestamps.updatedAt.start } },
          ...(!dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) &&
-         { updatedAt: { $lte: dto.timestamps.updatedAt.end } },
+         { updatedAt : { $lte: dto.timestamps.updatedAt.end } },
          ...(dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
-            updatedAt: {
-               $gte: dto.timestamps.updatedAt.start,
-               $lte: dto.timestamps.updatedAt.end,
+            updatedAt : {
+               $gte : dto.timestamps.updatedAt.start,
+               $lte : dto.timestamps.updatedAt.end,
             },
          },
       },
@@ -164,23 +164,23 @@ const mapOrdersRequestToOrdersFilter = (dto : OrdersRequest) => ({
 });
 
 const mapUpdateFieldsToUpdateQuery = (updateFields : OrderUpdateFields) => ({
-   ...updateFields.newStatus && { status: updateFields.newStatus },
-   ...updateFields.newCart && { cart: updateFields.newCart },
+   ...updateFields.newStatus && { status : updateFields.newStatus },
+   ...updateFields.newCart && { cart : updateFields.newCart },
 });
 
 const mapUpdateOrdersRequestToOrdersFilter = (dto : UpdateOrdersRequest) => ({
-   ...dto.filter.clientId && { clientId: dto.filter.clientId },
-   ...dto.filter.productId && { productId: dto.filter.productId },
-   ...dto.filter.status && { status: dto.filter.status },
+   ...dto.filter.clientId && { clientId : dto.filter.clientId },
+   ...dto.filter.productId && { productId : dto.filter.productId },
+   ...dto.filter.status && { status : dto.filter.status },
    ...dto.filter.countRange && {
       ...(dto.filter.countRange.start && !dto.filter.countRange.end) &&
-      { count: { $gte: dto.filter.countRange.start } },
+      { count : { $gte : dto.filter.countRange.start } },
       ...(!dto.filter.countRange.start && dto.filter.countRange.end) &&
-      { count: { $lte: dto.filter.countRange.end } },
+      { count : { $lte : dto.filter.countRange.end } },
       ...(dto.filter.countRange.start && dto.filter.countRange.end) && {
-         count: {
-            $gte: dto.filter.countRange.start,
-            $lte: dto.filter.countRange.end,
+         count : {
+            $gte : dto.filter.countRange.start,
+            $lte : dto.filter.countRange.end,
          },
       },
    },
@@ -188,26 +188,26 @@ const mapUpdateOrdersRequestToOrdersFilter = (dto : UpdateOrdersRequest) => ({
    ...dto.timestamps && {
       ...dto.timestamps.createdAt && {
          ...(dto.timestamps.createdAt.start && !dto.timestamps.createdAt.end) &&
-         { createdAt: { $gte: dto.timestamps.createdAt.start } },
+         { createdAt : { $gte : dto.timestamps.createdAt.start } },
          ...(!dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) &&
-         { createdAt: { $lte: dto.timestamps.createdAt.end } },
+         { createdAt : { $lte : dto.timestamps.createdAt.end } },
          ...(dto.timestamps.createdAt.start && dto.timestamps.createdAt.end) && {
-            createdAt: {
-               $gte: dto.timestamps.createdAt.start,
-               $lte: dto.timestamps.createdAt.end,
+            createdAt : {
+               $gte : dto.timestamps.createdAt.start,
+               $lte : dto.timestamps.createdAt.end,
             },
          },
       },
 
       ...dto.timestamps.updatedAt && {
          ...(dto.timestamps.updatedAt.start && !dto.timestamps.updatedAt.end) &&
-         { updatedAt: { $gte: dto.timestamps.updatedAt.start } },
+         { updatedAt : { $gte : dto.timestamps.updatedAt.start } },
          ...(!dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) &&
-         { updatedAt: { $lte: dto.timestamps.updatedAt.end } },
+         { updatedAt : { $lte : dto.timestamps.updatedAt.end } },
          ...(dto.timestamps.updatedAt.start && dto.timestamps.updatedAt.end) && {
-            updatedAt: {
-               $gte: dto.timestamps.updatedAt.start,
-               $lte: dto.timestamps.updatedAt.end,
+            updatedAt : {
+               $gte : dto.timestamps.updatedAt.start,
+               $lte : dto.timestamps.updatedAt.end,
             },
          },
       },

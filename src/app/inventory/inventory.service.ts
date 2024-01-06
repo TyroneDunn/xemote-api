@@ -1,10 +1,10 @@
 import { InventoryRepository } from "./inventory-repository.type";
 import {
-   GetInventoryRecordDTO,
+   GetInventoryRecordRequest,
    InventoryRecord,
-   InventoryRecordsDTO,
-   UpdateInventoryRecordDTO,
-   UpdateInventoryRecordsDTO,
+   InventoryRecordsRequest,
+   UpdateInventoryRecordRequest,
+   UpdateInventoryRecordsRequest,
 } from "./inventory-records.type";
 import {
    addPageDataToResponse,
@@ -42,7 +42,7 @@ export const InventoryService = (
    validator: InventoryRecordsDtosValidator,
 ): InventoryService => ({
    getRecord: async (request: Request): Promise<Response> => {
-      const dto: GetInventoryRecordDTO = mapRequestToGetInventoryRecordDTO(request);
+      const dto: GetInventoryRecordRequest = mapRequestToGetInventoryRecordDTO(request);
       const validationOutcome: ValidationError | null = await validator.validateGetInventoryRecordDto(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: InventoryRecord | Error = await repository.getRecord(dto);
@@ -51,7 +51,7 @@ export const InventoryService = (
    },
 
    getRecords: async (request: Request): Promise<Response> => {
-      const dto: InventoryRecordsDTO = mapRequestToInventoryRecordsDTO(request);
+      const dto: InventoryRecordsRequest = mapRequestToInventoryRecordsDTO(request);
       const validationOutcome: ValidationError | null = await validator.validateInventoryRecordsDto(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: InventoryRecord[] | Error = await repository.getRecords(dto);
@@ -62,7 +62,7 @@ export const InventoryService = (
    },
 
    updateRecord: async (request: Request): Promise<Response> => {
-      const dto: UpdateInventoryRecordDTO = mapRequestToUpdateInventoryRecordDTO(request);
+      const dto: UpdateInventoryRecordRequest = mapRequestToUpdateInventoryRecordDTO(request);
       const validationOutcome: ValidationError | null = await validator.validateUpdateInventoryRecordDto(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: InventoryRecord | Error = await repository.updateRecord(dto);
@@ -71,7 +71,7 @@ export const InventoryService = (
    },
 
    updateRecords: async (request: Request): Promise<Response> => {
-      const dto: UpdateInventoryRecordsDTO = mapRequestToUpdateInventoryRecordsDTO(request);
+      const dto: UpdateInventoryRecordsRequest = mapRequestToUpdateInventoryRecordsDTO(request);
       const validationOutcome: ValidationError | null = await validator.validateUpdateInventoryRecordsDto(dto);
       if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
       const result: CommandResult | Error = await repository.updateRecords(dto);

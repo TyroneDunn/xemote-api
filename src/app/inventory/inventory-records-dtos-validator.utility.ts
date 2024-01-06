@@ -1,23 +1,23 @@
 import {
-   GetInventoryRecordDTO,
+   GetInventoryRecordRequest,
    InventoryRecord,
-   InventoryRecordsDTO,
-   UpdateInventoryRecordDTO,
-   UpdateInventoryRecordsDTO,
+   InventoryRecordsRequest,
+   UpdateInventoryRecordRequest,
+   UpdateInventoryRecordsRequest,
 } from "./inventory-records.type";
 import { InventoryRepository } from "./inventory-repository.type";
 import { Error, isError, ValidationError } from "@hals/common";
 
 export type InventoryRecordsDtosValidator = {
-   validateGetInventoryRecordDto: (dto: GetInventoryRecordDTO) => Promise<ValidationError | null>,
-   validateInventoryRecordsDto: (dto: InventoryRecordsDTO) => Promise<ValidationError | null>,
-   validateUpdateInventoryRecordDto: (dto: UpdateInventoryRecordDTO) => Promise<ValidationError | null>,
-   validateUpdateInventoryRecordsDto: (dto: UpdateInventoryRecordsDTO) => Promise<ValidationError | null>,
+   validateGetInventoryRecordDto: (dto: GetInventoryRecordRequest) => Promise<ValidationError | null>,
+   validateInventoryRecordsDto: (dto: InventoryRecordsRequest) => Promise<ValidationError | null>,
+   validateUpdateInventoryRecordDto: (dto: UpdateInventoryRecordRequest) => Promise<ValidationError | null>,
+   validateUpdateInventoryRecordsDto: (dto: UpdateInventoryRecordsRequest) => Promise<ValidationError | null>,
 };
 
 export const configureInventoryRecordsDtosValidator =
    (inventoryRepository: InventoryRepository): InventoryRecordsDtosValidator => ({
-      validateGetInventoryRecordDto: async (dto: GetInventoryRecordDTO): Promise<ValidationError | null> => {
+      validateGetInventoryRecordDto: async (dto: GetInventoryRecordRequest): Promise<ValidationError | null> => {
          if (!dto.productId)
             return { error: { type: "BadRequest", message: 'Product ID required.' } };
          if (!(await inventoryRepository.exists(dto)))
@@ -30,7 +30,7 @@ export const configureInventoryRecordsDtosValidator =
          return null;
       },
 
-      validateInventoryRecordsDto: async (dto: InventoryRecordsDTO): Promise<ValidationError | null> => {
+      validateInventoryRecordsDto: async (dto: InventoryRecordsRequest): Promise<ValidationError | null> => {
          if (dto.filter) {
             if (dto.filter.countRange) {
                if (dto.filter.countRange.start && (dto.filter.countRange.start < 0))
@@ -158,7 +158,7 @@ export const configureInventoryRecordsDtosValidator =
          return null;
       },
 
-      validateUpdateInventoryRecordDto: async (dto: UpdateInventoryRecordDTO): Promise<ValidationError | null> => {
+      validateUpdateInventoryRecordDto: async (dto: UpdateInventoryRecordRequest): Promise<ValidationError | null> => {
          if (!dto.productId)
             return { error: { type: "BadRequest", message: 'ID required.' } };
          if (!(await inventoryRepository.exists(dto)))
@@ -199,7 +199,7 @@ export const configureInventoryRecordsDtosValidator =
          return null;
       },
 
-      validateUpdateInventoryRecordsDto: async (dto: UpdateInventoryRecordsDTO): Promise<ValidationError | null> => {
+      validateUpdateInventoryRecordsDto: async (dto: UpdateInventoryRecordsRequest): Promise<ValidationError | null> => {
          if (dto.filter.countRange) {
             if (dto.filter.countRange.start && (dto.filter.countRange.start < 0))
                return {

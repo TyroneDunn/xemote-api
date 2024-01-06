@@ -1,13 +1,13 @@
 import { InventoryRepository } from "./inventory-repository.type";
 import {
-   CreateInventoryRecordDTO,
-   DeleteInventoryRecordDTO,
-   GetInventoryRecordDTO,
+   CreateInventoryRecordRequest,
+   DeleteInventoryRecordRequest,
+   GetInventoryRecordRequest,
    InventoryRecord,
-   InventoryRecordsDTO,
+   InventoryRecordsRequest,
    InventoryRecordUpdateFields,
-   UpdateInventoryRecordDTO,
-   UpdateInventoryRecordsDTO,
+   UpdateInventoryRecordRequest,
+   UpdateInventoryRecordsRequest,
 } from "./inventory-records.type";
 import InventoryRecordsModel from "./mongo-inventory-records-model.type";
 import { DeleteResult } from "mongodb";
@@ -15,7 +15,7 @@ import { UpdateWriteOpResult } from "mongoose";
 import { CommandResult, Error } from "@hals/common";
 
 export const MongoInventoryRepository: InventoryRepository = {
-   getRecord: async (dto: GetInventoryRecordDTO): Promise<InventoryRecord | Error> => {
+   getRecord: async (dto: GetInventoryRecordRequest): Promise<InventoryRecord | Error> => {
       try {
          const record: InventoryRecord | null = await InventoryRecordsModel.findOne({ productId: dto.productId });
          if (!record) return { type: "NotFound", message: 'Inventory record not found.' };
@@ -26,7 +26,7 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   getRecords: async (dto: InventoryRecordsDTO): Promise<InventoryRecord[] | Error> => {
+   getRecords: async (dto: InventoryRecordsRequest): Promise<InventoryRecord[] | Error> => {
       try {
          const filter = mapDTOToFilter(dto);
          const query = InventoryRecordsModel.find(filter);
@@ -43,7 +43,7 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   createRecord: async (dto: CreateInventoryRecordDTO): Promise<InventoryRecord | Error> => {
+   createRecord: async (dto: CreateInventoryRecordRequest): Promise<InventoryRecord | Error> => {
       try {
          return new InventoryRecordsModel({
             productId: dto.productId,
@@ -55,7 +55,7 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   updateRecord: async (dto: UpdateInventoryRecordDTO): Promise<InventoryRecord | Error> => {
+   updateRecord: async (dto: UpdateInventoryRecordRequest): Promise<InventoryRecord | Error> => {
       try {
          const record: InventoryRecord | null = await InventoryRecordsModel.findOneAndUpdate(
             { productId: dto.productId },
@@ -70,7 +70,7 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   updateRecords: async (dto: UpdateInventoryRecordsDTO): Promise<CommandResult | Error> => {
+   updateRecords: async (dto: UpdateInventoryRecordsRequest): Promise<CommandResult | Error> => {
       try {
          const filter = mapUpdateInventoryRecordsDTOToFilter(dto);
          const query = mapUpdateFieldsToUpdateQuery(dto.updateFields);
@@ -82,7 +82,7 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   deleteRecord: async (dto: DeleteInventoryRecordDTO): Promise<CommandResult | Error> => {
+   deleteRecord: async (dto: DeleteInventoryRecordRequest): Promise<CommandResult | Error> => {
       try {
          const result: DeleteResult = await InventoryRecordsModel.deleteOne({ productId: dto.productId });
          return { success: result.acknowledged, affectedCount: result.deletedCount };
@@ -92,7 +92,7 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   deleteRecords: async (dto: InventoryRecordsDTO): Promise<CommandResult | Error> => {
+   deleteRecords: async (dto: InventoryRecordsRequest): Promise<CommandResult | Error> => {
       try {
          const filter = mapDTOToFilter(dto);
          const result: DeleteResult = await InventoryRecordsModel.deleteMany(filter);
@@ -103,7 +103,7 @@ export const MongoInventoryRepository: InventoryRepository = {
       }
    },
 
-   exists: async (dto: GetInventoryRecordDTO): Promise<boolean | Error> => {
+   exists: async (dto: GetInventoryRecordRequest): Promise<boolean | Error> => {
       try {
          const record: InventoryRecord | null = await InventoryRecordsModel.findOne({ productId: dto.productId });
          return !!record;
@@ -114,7 +114,7 @@ export const MongoInventoryRepository: InventoryRepository = {
    },
 };
 
-const mapDTOToFilter = (dto: InventoryRecordsDTO) => ({
+const mapDTOToFilter = (dto: InventoryRecordsRequest) => ({
    ...dto.filter && {
       ...dto.filter.countRange && {
          ...(dto.filter.countRange.start && !dto.filter.countRange.end) &&
@@ -162,7 +162,7 @@ const mapUpdateFieldsToUpdateQuery = (updateFields: InventoryRecordUpdateFields)
    ...updateFields.countDelta && { $inc: { count: updateFields.countDelta } },
 });
 
-const mapUpdateInventoryRecordsDTOToFilter = (dto: UpdateInventoryRecordsDTO) => ({
+const mapUpdateInventoryRecordsDTOToFilter = (dto: UpdateInventoryRecordsRequest) => ({
    ...dto.filter.countRange && {
       ...(dto.filter.countRange.start && !dto.filter.countRange.end) &&
       { count: { $gte: dto.filter.countRange.start } },

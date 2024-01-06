@@ -5,9 +5,9 @@ export type InventoryRecord = {
    count : number
 };
 
-export type GetInventoryRecordDTO = { productId: string };
+export type GetInventoryRecordRequest = { productId: string };
 
-export type InventoryRecordsDTO = {
+export type InventoryRecordsRequest = {
    filter?: InventoryRecordsFilter,
    timestamps?: Timestamps,
    sort?: InventoryRecordsSort,
@@ -26,12 +26,12 @@ export type InventoryRecordsSort = {
 export type InventoryRecordsSortOption =
    | "count";
 
-export type CreateInventoryRecordDTO = {
+export type CreateInventoryRecordRequest = {
    productId: string,
    count: number,
 };
 
-export type UpdateInventoryRecordDTO = {
+export type UpdateInventoryRecordRequest = {
    productId: string,
    updateFields: InventoryRecordUpdateFields,
 };
@@ -41,10 +41,10 @@ export type InventoryRecordUpdateFields = {
    countDelta: number
 };
 
-export type UpdateInventoryRecordsDTO = {
+export type UpdateInventoryRecordsRequest = {
    filter: InventoryRecordsFilter,
    timestamps?: Timestamps,
    updateFields: InventoryRecordUpdateFields,
 };
 
-export type DeleteInventoryRecordDTO = { productId: string };
+export type DeleteInventoryRecordRequest = { productId: string };

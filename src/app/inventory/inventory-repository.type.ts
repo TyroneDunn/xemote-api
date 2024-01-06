@@ -1,11 +1,11 @@
 import {
-   CreateInventoryRecordDTO,
-   DeleteInventoryRecordDTO,
-   GetInventoryRecordDTO,
+   CreateInventoryRecordRequest,
+   DeleteInventoryRecordRequest,
+   GetInventoryRecordRequest,
    InventoryRecord,
-   InventoryRecordsDTO,
-   UpdateInventoryRecordDTO,
-   UpdateInventoryRecordsDTO,
+   InventoryRecordsRequest,
+   UpdateInventoryRecordRequest,
+   UpdateInventoryRecordsRequest,
 } from "./inventory-records.type";
 import { CommandResult, Error } from "@hals/common";
 import { Either } from '../../shared/either.type';
@@ -18,13 +18,13 @@ export type InventoryRepository = {
    updateRecords: UpdateRecords,
    deleteRecord: DeleteRecord,
    deleteRecords: DeleteRecords,
-   exists: (dto: GetInventoryRecordDTO) => Promise<boolean | Error>,
+   exists: (request: GetInventoryRecordRequest) => Promise<boolean | Error>,
 };
 
-export type GetRecord = (request : GetInventoryRecordDTO) => Promise<InventoryRecord | Error>;
-export type GetRecords = (request : InventoryRecordsDTO) => Promise<InventoryRecord[] | Error>;
-export type CreateRecord = (request : CreateInventoryRecordDTO) => Promise<InventoryRecord | Error>;
-export type UpdateRecord = (request : UpdateInventoryRecordDTO) => Promise<InventoryRecord | Error>;
-export type UpdateRecords = (request : UpdateInventoryRecordsDTO) => Promise<Either<Error, CommandResult>>;
-export type DeleteRecord = (request : DeleteInventoryRecordDTO) => Promise<Either<Error, CommandResult>>;
-export type DeleteRecords = (request : InventoryRecordsDTO) => Promise<Either<Error, CommandResult>>;
+export type GetRecord = (request : GetInventoryRecordRequest) => Promise<InventoryRecord | Error>;
+export type GetRecords = (request : InventoryRecordsRequest) => Promise<InventoryRecord[] | Error>;
+export type CreateRecord = (request : CreateInventoryRecordRequest) => Promise<InventoryRecord | Error>;
+export type UpdateRecord = (request : UpdateInventoryRecordRequest) => Promise<InventoryRecord | Error>;
+export type UpdateRecords = (request : UpdateInventoryRecordsRequest) => Promise<Either<Error, CommandResult>>;
+export type DeleteRecord = (request : DeleteInventoryRecordRequest) => Promise<Either<Error, CommandResult>>;
+export type DeleteRecords = (request : InventoryRecordsRequest) => Promise<Either<Error, CommandResult>>;

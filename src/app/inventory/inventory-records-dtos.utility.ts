@@ -8,15 +8,15 @@ import {
    Response,
 } from "@hals/common";
 import {
-   GetInventoryRecordDTO,
+   GetInventoryRecordRequest,
    InventoryRecord,
-   InventoryRecordsDTO,
+   InventoryRecordsRequest,
    InventoryRecordsSortOption,
-   UpdateInventoryRecordDTO,
-   UpdateInventoryRecordsDTO,
+   UpdateInventoryRecordRequest,
+   UpdateInventoryRecordsRequest,
 } from "./inventory-records.type";
 
-export const mapRequestToGetInventoryRecordDTO = (request: Request): GetInventoryRecordDTO =>
+export const mapRequestToGetInventoryRecordDTO = (request: Request): GetInventoryRecordRequest =>
    ({ productId: request.paramMap['id'] });
 
 export const mapInventoryRecordToSuccessResponse = (record: InventoryRecord): Response => ({
@@ -25,7 +25,7 @@ export const mapInventoryRecordToSuccessResponse = (record: InventoryRecord): Re
    count: 1,
 });
 
-export const mapRequestToInventoryRecordsDTO = (request: Request): InventoryRecordsDTO =>
+export const mapRequestToInventoryRecordsDTO = (request: Request): InventoryRecordsRequest =>
    ({
       ...mapRequestToInventoryRecordsFilter(request),
       ...mapRequestToTimestamps(request),
@@ -55,7 +55,7 @@ export const mapInventoryRecordsToSuccessResponse = (records: InventoryRecord[])
    count: records.length,
 });
 
-export const mapRequestToUpdateInventoryRecordDTO = (request: Request): UpdateInventoryRecordDTO => ({
+export const mapRequestToUpdateInventoryRecordDTO = (request: Request): UpdateInventoryRecordRequest => ({
    productId: request.paramMap['id'],
    ...mapRequestToInventoryRecordUpdateFields(request.payload),
 });
@@ -68,7 +68,7 @@ const mapRequestToInventoryRecordUpdateFields = (payload: any) => ({
    },
 });
 
-export const mapRequestToUpdateInventoryRecordsDTO = (request: Request): UpdateInventoryRecordsDTO => ({
+export const mapRequestToUpdateInventoryRecordsDTO = (request: Request): UpdateInventoryRecordsRequest => ({
    ...mapRequestToInventoryRecordsFilter(request),
    ...mapRequestToTimestamps(request),
    ...mapToInventoryRecordsSort(request),

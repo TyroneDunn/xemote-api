@@ -13,7 +13,7 @@ import {
    ValidationError,
 } from "@hals/common";
 import { OrdersRepository } from "./orders-repository.type";
-import { DeleteOrderRequest, OrdersRequest, UpdateOrdersRequest } from "./orders.type";
+import { DeleteOrderRequest, OrdersRequest } from "./orders.type";
 import {
    createOrderAndMapResultToResponse,
    getOrderAndMapToResponse,
@@ -25,6 +25,7 @@ import {
    mapRequestToUpdateOrderRequest,
    mapRequestToUpdateOrdersRequest,
    updateOrderAndMapResultToResponse,
+   updateOrdersAndMapResultToResponse,
 } from "./orders.utility";
 import { OrdersValidator } from "./orders.validator";
 
@@ -66,14 +67,11 @@ export const OrdersService = (
       updateOrderAndMapResultToResponse(repository.updateOrder),
    ),
 
-   updateOrders: async (request: Request): Promise<Response> => {
-      const dto: UpdateOrdersRequest = mapRequestToUpdateOrdersRequest(request);
-      const validationOutcome: ValidationError | null = await validator.validateUpdateOrdersRequest(dto);
-      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
-      const result: CommandResult | Error = await repository.updateOrders(dto);
-      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
-      return mapCommandResultToSuccessResponse(result);
-   },
+   updateOrders: async (request: Request): Promise<Response> => handleRequest(
+      mapRequestToUpdateOrdersRequest(request),
+      validator.validateUpdateOrdersRequest,
+      updateOrdersAndMapResultToResponse(repository.updateOrders),
+   ),
 
    deleteOrder: async (request: Request): Promise<Response> => {
       const dto: DeleteOrderRequest = mapRequestToDeleteOrderRequest(request);

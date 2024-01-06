@@ -23,7 +23,7 @@ import {
    mapRequestToUsersDto,
    mapUsersToSuccessResponse,
    mapUserToSuccessResponse,
-} from "./users-dtos.utility";
+} from "./users.utility";
 
 export type UsersService = {
    getUser : RequestHandler,

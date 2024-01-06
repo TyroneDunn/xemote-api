@@ -49,7 +49,7 @@ export const MongoUsersRepository: UsersRepository = {
       try {
          const user: User | null = await UsersModel.findOneAndUpdate(
             { username: dto.username },
-            mapUserUpdateFieldsToUpdateQuery(dto.updateFields),
+            mapUserUpdateFieldsToUpdateQuery(dto.updateFields, hashUtility),
             { new: true },
          );
          if (!user) return Error("NotFound", 'User not found.');
@@ -137,7 +137,10 @@ const hashUtility: HashUtility = configureHashUtility(
    HASHING_ALGORITHM,
 );
 
-const mapUserUpdateFieldsToUpdateQuery = (updateFields: UserUpdateFields) => ({
+const mapUserUpdateFieldsToUpdateQuery = (
+   updateFields: UserUpdateFields,
+   hashUtility: HashUtility
+) => ({
    ...updateFields.newUsername && { username: updateFields.newUsername },
    ...updateFields.newPassword && { hash: hashUtility.generateHash(updateFields.newPassword) },
 });

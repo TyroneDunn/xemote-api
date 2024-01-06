@@ -52,8 +52,6 @@ const deleteUserMethod = (deleteUser: RequestHandler): Method => ({
    requestHandler: deleteUser,
 });
 
-export type UsersController = Controller;
-
 export const configureUsersController = (service: UsersService): Controller => ({
    path: 'users/',
    guard: true,

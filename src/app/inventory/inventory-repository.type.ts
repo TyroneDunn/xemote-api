@@ -1,12 +1,12 @@
-import { InventoryRecord } from "./inventory-record.type";
 import {
    CreateInventoryRecordDTO,
    DeleteInventoryRecordDTO,
    GetInventoryRecordDTO,
+   InventoryRecord,
    InventoryRecordsDTO,
    UpdateInventoryRecordDTO,
    UpdateInventoryRecordsDTO,
-} from "./inventory-records-dtos.type";
+} from "./inventory-records.type";
 import { CommandResult, Error } from "@hals/common";
 import { Either } from '../../shared/either.type';
 

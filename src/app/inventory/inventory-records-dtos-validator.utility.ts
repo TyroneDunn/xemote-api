@@ -1,12 +1,12 @@
 import {
    GetInventoryRecordDTO,
+   InventoryRecord,
    InventoryRecordsDTO,
    UpdateInventoryRecordDTO,
    UpdateInventoryRecordsDTO,
-} from "./inventory-records-dtos.type";
+} from "./inventory-records.type";
 import { InventoryRepository } from "./inventory-repository.type";
 import { Error, isError, ValidationError } from "@hals/common";
-import { InventoryRecord } from "./inventory-record.type";
 
 export type InventoryRecordsDtosValidator = {
    validateGetInventoryRecordDto: (dto: GetInventoryRecordDTO) => Promise<ValidationError | null>,

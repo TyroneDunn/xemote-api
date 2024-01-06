@@ -3,12 +3,12 @@ import {
    CreateInventoryRecordDTO,
    DeleteInventoryRecordDTO,
    GetInventoryRecordDTO,
+   InventoryRecord,
    InventoryRecordsDTO,
    InventoryRecordUpdateFields,
    UpdateInventoryRecordDTO,
    UpdateInventoryRecordsDTO,
-} from "./inventory-records-dtos.type";
-import { InventoryRecord } from "./inventory-record.type";
+} from "./inventory-records.type";
 import InventoryRecordsModel from "./mongo-inventory-records-model.type";
 import { DeleteResult } from "mongodb";
 import { UpdateWriteOpResult } from "mongoose";

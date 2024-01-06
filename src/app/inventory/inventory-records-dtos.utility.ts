@@ -9,12 +9,12 @@ import {
 } from "@hals/common";
 import {
    GetInventoryRecordDTO,
+   InventoryRecord,
    InventoryRecordsDTO,
    InventoryRecordsSortOption,
    UpdateInventoryRecordDTO,
    UpdateInventoryRecordsDTO,
-} from "./inventory-records-dtos.type";
-import { InventoryRecord } from "./inventory-record.type";
+} from "./inventory-records.type";
 
 export const mapRequestToGetInventoryRecordDTO = (request: Request): GetInventoryRecordDTO =>
    ({ productId: request.paramMap['id'] });

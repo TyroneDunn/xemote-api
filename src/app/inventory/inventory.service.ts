@@ -1,10 +1,11 @@
 import { InventoryRepository } from "./inventory-repository.type";
 import {
    GetInventoryRecordDTO,
+   InventoryRecord,
    InventoryRecordsDTO,
    UpdateInventoryRecordDTO,
    UpdateInventoryRecordsDTO,
-} from "./inventory-records-dtos.type";
+} from "./inventory-records.type";
 import {
    addPageDataToResponse,
    CommandResult,
@@ -19,7 +20,6 @@ import {
    Response,
    ValidationError,
 } from "@hals/common";
-import { InventoryRecord } from "./inventory-record.type";
 import {
    mapInventoryRecordsToSuccessResponse,
    mapInventoryRecordToSuccessResponse,

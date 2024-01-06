@@ -1,4 +1,4 @@
-import { InventoryController } from "./inventory-controller.utility";
+import { InventoryController } from "./inventory.controller";
 import { InventoryService } from "./inventory.service";
 import { MongoInventoryRepository } from "./mongo-inventory-repository.service";
 import {

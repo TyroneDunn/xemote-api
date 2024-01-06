@@ -37,7 +37,6 @@ import {
 } from "./products-repository.type";
 import { CreateRecord, DeleteRecord } from "../inventory/inventory-repository.type";
 import { Either } from '../../shared/either.type';
-
 import { InventoryRecord } from '../inventory/inventory-records.type';
 
 export const mapRequestToGetProductRequest = (request : Request) : GetProductRequest => ({

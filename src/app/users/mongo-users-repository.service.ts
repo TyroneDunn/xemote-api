@@ -30,7 +30,7 @@ export const MongoUsersRepository: UsersRepository = {
 
    getUsers: async (dto: UsersRequest): Promise<User[] | Error> => {
       try {
-         const filter = mapUsersDtoToUsersFilter(dto);
+         const filter = mapUsersRequestToUsersFilter(dto);
          const query = UsersModel.find(filter);
          if (dto.sort)
             query.sort({ [dto.sort.field]: dto.sort.order === 'asc' ? 1 : -1 });
@@ -72,7 +72,7 @@ export const MongoUsersRepository: UsersRepository = {
 
    deleteUsers: async (dto: UsersRequest): Promise<CommandResult | Error> => {
       try {
-         const filter = mapUsersDtoToUsersFilter(dto);
+         const filter = mapUsersRequestToUsersFilter(dto);
          const result: DeleteResult = await UsersModel.deleteMany(filter);
          return CommandResult(result.acknowledged, result.deletedCount);
       }
@@ -92,7 +92,7 @@ export const MongoUsersRepository: UsersRepository = {
    },
 };
 
-const mapUsersDtoToUsersFilter = (dto: UsersRequest) => ({
+const mapUsersRequestToUsersFilter = (dto: UsersRequest) => ({
    ...dto.filter && {
       ...dto.filter.username && { username: dto.filter.username },
       ...dto.filter.usernameRegex && {

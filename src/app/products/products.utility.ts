@@ -206,8 +206,7 @@ const deleteRecords = async (
 
 const filterAndReduceErrors = (xs : Either<Error, CommandResult>[]) : Error | null => {
    const errors : Error[] = xs.filter(isError);
-   if (errors.length > 0)
-      return errors.reduce((acc : Error, error : Error) : Error =>
+   if (errors.length === 0) return null;
+   else return errors.reduce((acc : Error, error : Error) : Error =>
          Error('Internal', acc.message.concat(error.message)));
-   else return null;
 };

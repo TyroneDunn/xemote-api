@@ -1,13 +1,13 @@
 import { OrdersRepository } from "./orders-repository.type";
 import {
-   CreateOrderDTO,
-   DeleteOrderDTO,
-   GetOrderDTO,
-   OrdersDTO,
+   CreateOrderRequest,
+   DeleteOrderRequest,
+   GetOrderRequest,
+   OrdersRequest,
    OrderUpdateFields,
-   UpdateOrderDTO,
-   UpdateOrdersDTO,
-} from "./orders-dtos.type";
+   UpdateOrderRequest,
+   UpdateOrdersRequest,
+} from "./orders.type";
 import { Order } from "./order.type";
 import OrdersModel from "./mongo-orders-model.type";
 import { DeleteResult } from "mongodb";
@@ -15,7 +15,7 @@ import { UpdateWriteOpResult } from "mongoose";
 import { CommandResult, Error } from "@hals/common";
 
 export const MongoOrdersRepository: OrdersRepository = {
-   getOrder: async (dto: GetOrderDTO): Promise<Order | Error> => {
+   getOrder: async (dto: GetOrderRequest): Promise<Order | Error> => {
       try {
          const order: Order | null = await OrdersModel.findById(dto._id);
          if (!order) return { type: "NotFound", message: 'Order not found.' };
@@ -26,7 +26,7 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   getOrders: async (dto: OrdersDTO): Promise<Order[] | Error> => {
+   getOrders: async (dto: OrdersRequest): Promise<Order[] | Error> => {
       try {
          const filter = mapOrdersDtoToFilter(dto);
          const query = OrdersModel.find(filter);
@@ -43,7 +43,7 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   createOrder: async (dto: CreateOrderDTO): Promise<Order | Error> => {
+   createOrder: async (dto: CreateOrderRequest): Promise<Order | Error> => {
       try {
          return new OrdersModel({
             clientId: dto.clientId,
@@ -56,7 +56,7 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   updateOrder: async (dto: UpdateOrderDTO): Promise<Order | Error> => {
+   updateOrder: async (dto: UpdateOrderRequest): Promise<Order | Error> => {
       try {
          const order: Order | null = await OrdersModel.findOneAndUpdate(
             { _id: dto._id },
@@ -71,7 +71,7 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   updateOrders: async (dto: UpdateOrdersDTO): Promise<CommandResult | Error> => {
+   updateOrders: async (dto: UpdateOrdersRequest): Promise<CommandResult | Error> => {
       try {
          const filter = mapUpdateOrdersDtoToFilter(dto);
          const updateQuery = mapUpdateFieldsToUpdateQuery(dto.updateFields);
@@ -83,7 +83,7 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   deleteOrder: async (dto: DeleteOrderDTO): Promise<CommandResult | Error> => {
+   deleteOrder: async (dto: DeleteOrderRequest): Promise<CommandResult | Error> => {
       try {
          const result: DeleteResult = await OrdersModel.deleteOne({ _id: dto._id });
          return { success: result.acknowledged, affectedCount: result.deletedCount };
@@ -93,7 +93,7 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   deleteOrders: async (dto: OrdersDTO): Promise<CommandResult | Error> => {
+   deleteOrders: async (dto: OrdersRequest): Promise<CommandResult | Error> => {
       try {
          const filter = mapOrdersDtoToFilter(dto);
          const result: DeleteResult = await OrdersModel.deleteMany(filter);
@@ -104,7 +104,7 @@ export const MongoOrdersRepository: OrdersRepository = {
       }
    },
 
-   exists: async (dto: GetOrderDTO): Promise<boolean | Error> => {
+   exists: async (dto: GetOrderRequest): Promise<boolean | Error> => {
       try {
          const order: Order | null = await OrdersModel.findById(dto._id);
          return !!order;
@@ -115,7 +115,7 @@ export const MongoOrdersRepository: OrdersRepository = {
    },
 };
 
-const mapOrdersDtoToFilter = (dto: OrdersDTO) => ({
+const mapOrdersDtoToFilter = (dto: OrdersRequest) => ({
    ...dto.filter && {
       ...dto.filter.clientId && { clientId: dto.filter.clientId },
       ...dto.filter.productId && { productId: dto.filter.productId },
@@ -166,7 +166,7 @@ const mapUpdateFieldsToUpdateQuery = (updateFields: OrderUpdateFields) => ({
    ...updateFields.newCart && { cart: updateFields.newCart },
 });
 
-const mapUpdateOrdersDtoToFilter = (dto: UpdateOrdersDTO) => ({
+const mapUpdateOrdersDtoToFilter = (dto: UpdateOrdersRequest) => ({
    ...dto.filter.clientId && { clientId: dto.filter.clientId },
    ...dto.filter.productId && { productId: dto.filter.productId },
    ...dto.filter.status && { status: dto.filter.status },

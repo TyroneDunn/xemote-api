@@ -8,17 +8,17 @@ import {
    Response,
 } from "@hals/common";
 import {
-   CreateOrderDTO,
-   DeleteOrderDTO,
-   GetOrderDTO,
-   OrdersDTO,
+   CreateOrderRequest,
+   DeleteOrderRequest,
+   GetOrderRequest,
+   OrdersRequest,
    OrdersSortOptions,
-   UpdateOrderDTO,
-   UpdateOrdersDTO,
-} from "./orders-dtos.type";
+   UpdateOrderRequest,
+   UpdateOrdersRequest,
+} from "./orders.type";
 import { Order, OrderStatus, ProductCount } from "./order.type";
 
-export const mapRequestToGetOrderDTO = (request: Request): GetOrderDTO =>
+export const mapRequestToGetOrderDTO = (request: Request): GetOrderRequest =>
    ({ _id: request.paramMap['id'] });
 
 export const mapOrderToSuccessResponse = (order: Order): Response => ({
@@ -27,7 +27,7 @@ export const mapOrderToSuccessResponse = (order: Order): Response => ({
    count: 1,
 });
 
-export const mapRequestToOrdersDTO = (request: Request): OrdersDTO => ({
+export const mapRequestToOrdersDTO = (request: Request): OrdersRequest => ({
    ...mapRequestToOrdersFilter(request),
    ...mapRequestToTimestamps(request),
    ...mapRequestToOrdersSort(request),
@@ -60,13 +60,13 @@ export const mapOrdersToSuccessResponse = (orders: Order[]): Response => ({
    count: orders.length,
 });
 
-export const mapRequestToCreateOrderDTO = (request: Request): CreateOrderDTO => ({
+export const mapRequestToCreateOrderDTO = (request: Request): CreateOrderRequest => ({
    clientId: request.payload['clientId'],
    status: request.payload['status'] as OrderStatus,
    cart: request.payload['cart'] as ProductCount,
 });
 
-export const mapRequestToUpdateOrderDTO = (request: Request): UpdateOrderDTO => ({
+export const mapRequestToUpdateOrderDTO = (request: Request): UpdateOrderRequest => ({
    _id: request.paramMap['id'],
    ...mapRequestToUpdateFields(request),
 });
@@ -78,7 +78,7 @@ const mapRequestToUpdateFields = (request: Request) => ({
    },
 });
 
-export const mapRequestToUpdateOrdersDTO = (request: Request): UpdateOrdersDTO => ({
+export const mapRequestToUpdateOrdersDTO = (request: Request): UpdateOrdersRequest => ({
    ...mapRequestToOrdersFilter(request),
    ...mapRequestToTimestamps(request),
    ...mapRequestToOrdersSort(request),
@@ -86,5 +86,5 @@ export const mapRequestToUpdateOrdersDTO = (request: Request): UpdateOrdersDTO =
    ...mapRequestToUpdateFields(request),
 });
 
-export const mapRequestToDeleteOrderDTO = (request: Request): DeleteOrderDTO =>
+export const mapRequestToDeleteOrderDTO = (request: Request): DeleteOrderRequest =>
    ({ _id: request.paramMap['id'] });

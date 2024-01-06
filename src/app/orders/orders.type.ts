@@ -1,27 +1,27 @@
 import { OrderStatus, ProductCount } from "./order.type";
 import { NumberRange, OrderOption, Page, Timestamps } from "@hals/common";
 
-export type GetOrderDTO = { _id: string };
+export type GetOrderRequest = { _id: string };
 
-export type OrdersDTO = {
+export type OrdersRequest = {
    filter?: OrdersFilter,
    timestamps?: Timestamps,
    sort?: OrdersSort,
    page?: Page,
 };
 
-export type CreateOrderDTO = {
+export type CreateOrderRequest = {
    clientId: string,
    cart: ProductCount,
    status: OrderStatus,
 };
 
-export type UpdateOrderDTO = {
+export type UpdateOrderRequest = {
    _id: string,
    updateFields: OrderUpdateFields,
 };
 
-export type UpdateOrdersDTO = {
+export type UpdateOrdersRequest = {
    filter: OrdersFilter,
    timestamps?: Timestamps,
    updateFields: OrderUpdateFields,
@@ -39,7 +39,7 @@ export type OrderUpdateFields = {
    newStatus: OrderStatus,
 };
 
-export type DeleteOrderDTO = { _id: string };
+export type DeleteOrderRequest = { _id: string };
 
 export type OrdersSortOptions =
    | "clientId"

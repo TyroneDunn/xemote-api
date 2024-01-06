@@ -2,6 +2,7 @@ import {
    addPageDataToResponse,
    CommandResult,
    Error,
+   handleRequest,
    isError,
    isValidationError,
    mapCommandResultToSuccessResponse,
@@ -16,13 +17,13 @@ import { OrdersRepository } from "./orders-repository.type";
 import {
    CreateOrderRequest,
    DeleteOrderRequest,
-   GetOrderRequest,
    OrdersRequest,
    UpdateOrderRequest,
    UpdateOrdersRequest,
 } from "./orders.type";
 import { Order } from "./order.type";
 import {
+   getOrderAndMapToResponse,
    mapOrdersToSuccessResponse,
    mapOrderToSuccessResponse,
    mapRequestToCreateOrderRequest,
@@ -48,14 +49,11 @@ export const OrdersService = (
    repository: OrdersRepository,
    validator: OrdersValidator,
 ): OrdersService => ({
-   getOrder: async (request: Request): Promise<Response> => {
-      const dto: GetOrderRequest = mapRequestToGetOrderRequest(request);
-      const validationOutcome: ValidationError | null = await validator.validateGetOrderRequest(dto);
-      if (isValidationError(validationOutcome)) return mapValidationErrorToErrorResponse(validationOutcome);
-      const result: Order | Error = await repository.getOrder(dto);
-      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
-      return mapOrderToSuccessResponse(result);
-   },
+   getOrder: async (request: Request): Promise<Response> => handleRequest(
+      mapRequestToGetOrderRequest(request),
+      validator.validateGetOrderRequest,
+      getOrderAndMapToResponse(repository.getOrder),
+   ),
 
    getOrders: async (request: Request): Promise<Response> => {
       const dto: OrdersRequest = mapRequestToOrdersRequest(request);

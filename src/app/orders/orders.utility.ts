@@ -1,4 +1,7 @@
 import {
+   Error,
+   isError,
+   mapErrorToInternalServerErrorResponse,
    mapRequestToPage,
    mapRequestToTimestamps,
    NumberRange,
@@ -17,6 +20,7 @@ import {
    UpdateOrdersRequest,
 } from "./orders.type";
 import { Order, OrderStatus, ProductCount } from "./order.type";
+import { GetOrder } from './orders-repository.type';
 
 export const mapRequestToGetOrderRequest = (request : Request) : GetOrderRequest =>
    ({ _id : request.paramMap['id'] });
@@ -88,3 +92,10 @@ export const mapRequestToUpdateOrdersRequest = (request : Request) : UpdateOrder
 
 export const mapRequestToDeleteOrderRequest = (request : Request) : DeleteOrderRequest =>
    ({ _id : request.paramMap['id'] });
+
+export const getOrderAndMapToResponse = (getOrder : GetOrder) =>
+   async (getOrderRequest : GetOrderRequest) : Promise<Response> => {
+      const result : Order | Error = await getOrder(getOrderRequest);
+      if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
+      else return mapOrderToSuccessResponse(result);
+   };

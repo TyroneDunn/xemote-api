@@ -36,6 +36,7 @@ import {
    UpdateProducts,
 } from "./products-repository.type";
 import { CreateRecord, DeleteRecord } from "../inventory/inventory-repository.type";
+import { Either } from '../../shared/either.type';
 
 export const mapToGetProductRequest = (request : Request) : GetProductRequest => ({
    _id: request.paramMap['id'],
@@ -178,15 +179,35 @@ export const mapDeleteProductsResultToResponse = (
    deleteProducts : DeleteProducts,
    deleteRecord : DeleteRecord,
 ) => async (productsRequest : ProductsRequest) : Promise<Response> => {
-   const products : Product[] | Error = await getProducts(productsRequest);
-   if (isError(products)) return mapErrorToInternalServerErrorResponse(products);
-   products.forEach(async (product) => {
-      // todo improve inventory repository error handling
-      await deleteRecord({ productId: product._id });
-   });
-   const deleteProductsResult : CommandResult | Error =
-      await deleteProducts(productsRequest);
-   if (isError(deleteProductsResult))
-      return mapErrorToInternalServerErrorResponse(deleteProductsResult);
+   const getProductsResult : Product[] | Error = await getProducts(productsRequest);
+   if (isError(getProductsResult)) return mapErrorToInternalServerErrorResponse(getProductsResult);
+
+   const deleteRecordsResult : Either<Error, CommandResult>[] = await deleteRecords(getProductsResult, deleteRecord, []);
+   const deleteRecordsErrors : Error | null = filterAndReduceErrors(deleteRecordsResult);
+   if (isError(deleteRecordsErrors)) return mapErrorToInternalServerErrorResponse(deleteRecordsErrors);
+
+   const deleteProductsResult : CommandResult | Error = await deleteProducts(productsRequest);
+   if (isError(deleteProductsResult)) return mapErrorToInternalServerErrorResponse(deleteProductsResult);
    return mapDeleteResultToResponse(deleteProductsResult);
+};
+
+const deleteRecords = async (
+   products : Product[],
+   deleteRecord : DeleteRecord,
+   results : Either<Error, CommandResult>[],
+) : Promise<Either<Error, CommandResult>[]> => {
+   if (products.length === 0) return results;
+   else {
+      const deleteResult : Either<Error, CommandResult> =
+         await deleteRecord({ productId: products[0]._id });
+      return await deleteRecords(products.slice(1), deleteRecord, results.concat(deleteResult));
+   }
+};
+
+const filterAndReduceErrors = (xs : Either<Error, CommandResult>[]) : Error | null => {
+   const errors : Error[] = xs.filter(isError);
+   if (errors.length > 0)
+      return errors.reduce((acc : Error, error : Error) : Error =>
+         Error('Internal', acc.message.concat(error.message)));
+   else return null;
 };

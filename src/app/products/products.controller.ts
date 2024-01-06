@@ -1,5 +1,4 @@
 import { Controller, Method, RequestHandler } from "@hals/common";
-
 import { ProductsService } from "./products.service";
 
 export const ProductsQueryParamKeys: string[] = [
@@ -57,8 +56,6 @@ const deleteProductMethod = (deleteProduct: RequestHandler): Method => ({
    paramKeys: [ 'id' ],
    requestHandler: deleteProduct,
 });
-
-export type ProductsController = Controller;
 
 export const ProductsController = (service : ProductsService) : Controller => ({
    path: 'products/',

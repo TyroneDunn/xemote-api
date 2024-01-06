@@ -157,8 +157,7 @@ export const mapUpdateProductResultToResponse = (updateProduct : UpdateProduct) 
 
 export const mapUpdateProductsResultToResponse = (updateProducts : UpdateProducts) =>
    async (updateProductsRequest : UpdateProductsRequest) : Promise<Response> => {
-      const result : CommandResult | Error =
-         await updateProducts(updateProductsRequest);
+      const result : CommandResult | Error = await updateProducts(updateProductsRequest);
       if (isError(result)) return mapErrorToInternalServerErrorResponse(result);
       else return mapUpdateResultToResponse(result);
    };

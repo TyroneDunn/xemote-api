@@ -19,12 +19,12 @@ import {
 import { InventoryRepository } from "../inventory/inventory-repository.type";
 
 export type ProductsService = {
-   getProduct : RequestHandler,
-   getProducts : RequestHandler,
-   createProduct : RequestHandler,
-   updateProduct : RequestHandler,
+   getProduct     : RequestHandler,
+   getProducts    : RequestHandler,
+   createProduct  : RequestHandler,
+   updateProduct  : RequestHandler,
    updateProducts : RequestHandler,
-   deleteProduct : RequestHandler,
+   deleteProduct  : RequestHandler,
    deleteProducts : RequestHandler,
 };
 

@@ -187,9 +187,9 @@ export const deleteProductsAndTheirInventoryRecordsAndMapResultToResponse = (
    const getProductsResult : Product[] | Error = await getProducts(productsRequest);
    if (isError(getProductsResult)) return mapErrorToInternalServerErrorResponse(getProductsResult);
 
-   const deleteRecordsResult : Either<Error, CommandResult>[] = await deleteRecords(getProductsResult, deleteRecord, []);
-   const deleteRecordsErrors : Error | null = filterAndReduceErrors(deleteRecordsResult);
-   if (isError(deleteRecordsErrors)) return mapErrorToInternalServerErrorResponse(deleteRecordsErrors);
+   const deleteRecordsResults : Either<Error, CommandResult>[] = await deleteRecords(getProductsResult, deleteRecord, []);
+   const deleteRecordsError : Error | null = filterErrorsFromDeleteResultsAndReduce(deleteRecordsResults);
+   if (isError(deleteRecordsError)) return mapErrorToInternalServerErrorResponse(deleteRecordsError);
 
    const deleteProductsResult : CommandResult | Error = await deleteProducts(productsRequest);
    if (isError(deleteProductsResult)) return mapErrorToInternalServerErrorResponse(deleteProductsResult);
@@ -209,7 +209,7 @@ const deleteRecords = async (
    }
 };
 
-const filterAndReduceErrors = (xs : Either<Error, CommandResult>[]) : Error | null => {
+const filterErrorsFromDeleteResultsAndReduce = (xs : Either<Error, CommandResult>[]) : Error | null => {
    const errors : Error[] = xs.filter(isError);
    if (errors.length === 0) return null;
    else return errors.reduce((acc : Error, error : Error) : Error =>

@@ -19,7 +19,10 @@ export type UsersSort = {
    order: OrderOption,
 };
 
-export type UsersSortOption = 'username' | 'createdAt' | 'updatedAt';
+export type UsersSortOption =
+   | 'username'
+   | 'createdAt'
+   | 'updatedAt';
 
 export type UpdateUserRequest = {
    username: string,

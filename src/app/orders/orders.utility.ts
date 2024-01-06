@@ -18,26 +18,26 @@ import {
 } from "./orders.type";
 import { Order, OrderStatus, ProductCount } from "./order.type";
 
-export const mapRequestToGetOrderRequest = (request: Request): GetOrderRequest =>
-   ({ _id: request.paramMap['id'] });
+export const mapRequestToGetOrderRequest = (request : Request) : GetOrderRequest =>
+   ({ _id : request.paramMap['id'] });
 
-export const mapOrderToSuccessResponse = (order: Order): Response => ({
-   status: OK,
-   collection: [ order ],
-   count: 1,
+export const mapOrderToSuccessResponse = (order : Order) : Response => ({
+   status     : OK,
+   collection : [ order ],
+   count      : 1,
 });
 
-export const mapRequestToOrdersRequest = (request: Request): OrdersRequest => ({
+export const mapRequestToOrdersRequest = (request : Request) : OrdersRequest => ({
    ...mapRequestToOrdersFilter(request),
    ...mapRequestToTimestamps(request),
    ...mapRequestToOrdersSort(request),
    ...mapRequestToPage(request),
 });
 
-const mapRequestToOrdersFilter = (request: Request) => ({
-   filter: {
-      ...request.queryParamMap['clientId'] && { clientId: request.queryParamMap['clientId'] },
-      ...request.queryParamMap['productId'] && { productId: request.queryParamMap['productId'] },
+const mapRequestToOrdersFilter = (request : Request) => ({
+   filter : {
+      ...request.queryParamMap['clientId'] && { clientId : request.queryParamMap['clientId'] },
+      ...request.queryParamMap['productId'] && { productId : request.queryParamMap['productId'] },
       ...request.queryParamMap['status']
       && { status: request.queryParamMap['status'] as OrderStatus },
       ...request.queryParamMap['countRange']
@@ -45,40 +45,40 @@ const mapRequestToOrdersFilter = (request: Request) => ({
    },
 });
 
-const mapRequestToOrdersSort = (request: Request) => ({
+const mapRequestToOrdersSort = (request : Request) => ({
    ...(request.queryParamMap['sort'] && request.queryParamMap['order']) && {
-      sort: {
-         field: request.queryParamMap['sort'] as OrdersSortOptions,
-         order: request.queryParamMap['order'] as OrderOption,
+      sort : {
+         field : request.queryParamMap['sort'] as OrdersSortOptions,
+         order : request.queryParamMap['order'] as OrderOption,
       },
    },
 });
 
-export const mapOrdersToSuccessResponse = (orders: Order[]): Response => ({
-   status: OK,
-   collection: [ orders ],
-   count: orders.length,
+export const mapOrdersToSuccessResponse = (orders : Order[]) : Response => ({
+   status     : OK,
+   collection : [ orders ],
+   count      : orders.length,
 });
 
-export const mapRequestToCreateOrderRequest = (request: Request): CreateOrderRequest => ({
-   clientId: request.payload['clientId'],
-   status: request.payload['status'] as OrderStatus,
-   cart: request.payload['cart'] as ProductCount,
+export const mapRequestToCreateOrderRequest = (request : Request) : CreateOrderRequest => ({
+   clientId : request.payload['clientId'],
+   status   : request.payload['status'] as OrderStatus,
+   cart     : request.payload['cart'] as ProductCount,
 });
 
-export const mapRequestToUpdateOrderRequest = (request: Request): UpdateOrderRequest => ({
-   _id: request.paramMap['id'],
+export const mapRequestToUpdateOrderRequest = (request : Request) : UpdateOrderRequest => ({
+   _id : request.paramMap['id'],
    ...mapRequestToUpdateFields(request),
 });
 
-const mapRequestToUpdateFields = (request: Request) => ({
-   updateFields: {
-      ...request.payload['newStatus'] && { newStatus: request.payload['newStatus'] },
-      ...request.payload['newCart'] && { newCart: request.payload['newCart'] as ProductCount },
+const mapRequestToUpdateFields = (request : Request) => ({
+   updateFields : {
+      ...request.payload['newStatus'] && { newStatus : request.payload['newStatus'] },
+      ...request.payload['newCart'] && { newCart : request.payload['newCart'] as ProductCount },
    },
 });
 
-export const mapRequestToUpdateOrdersRequest = (request: Request): UpdateOrdersRequest => ({
+export const mapRequestToUpdateOrdersRequest = (request : Request) : UpdateOrdersRequest => ({
    ...mapRequestToOrdersFilter(request),
    ...mapRequestToTimestamps(request),
    ...mapRequestToOrdersSort(request),
@@ -86,5 +86,5 @@ export const mapRequestToUpdateOrdersRequest = (request: Request): UpdateOrdersR
    ...mapRequestToUpdateFields(request),
 });
 
-export const mapRequestToDeleteOrderRequest = (request: Request): DeleteOrderRequest =>
-   ({ _id: request.paramMap['id'] });
+export const mapRequestToDeleteOrderRequest = (request : Request) : DeleteOrderRequest =>
+   ({ _id : request.paramMap['id'] });

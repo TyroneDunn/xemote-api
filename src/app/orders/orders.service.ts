@@ -35,12 +35,12 @@ import {
 import { OrdersValidator } from "./orders.validator";
 
 export type OrdersService = {
-   getOrder : RequestHandler,
-   getOrders : RequestHandler,
-   createOrder : RequestHandler,
-   updateOrder : RequestHandler,
+   getOrder     : RequestHandler,
+   getOrders    : RequestHandler,
+   createOrder  : RequestHandler,
+   updateOrder  : RequestHandler,
    updateOrders : RequestHandler,
-   deleteOrder : RequestHandler,
+   deleteOrder  : RequestHandler,
    deleteOrders : RequestHandler,
 };
 

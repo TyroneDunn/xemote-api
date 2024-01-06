@@ -52,7 +52,7 @@ export const MongoUsersRepository: UsersRepository = {
             mapUserUpdateFieldsToUpdateQuery(dto.updateFields),
             { new: true },
          );
-         if (!user) return { type: "NotFound", message: 'User not found.' };
+         if (!user) return Error("NotFound", 'User not found.');
          return user as User;
       }
       catch (error) {
@@ -63,7 +63,7 @@ export const MongoUsersRepository: UsersRepository = {
    deleteUser: async (dto: DeleteUserRequest): Promise<CommandResult | Error> => {
       try {
          const result: DeleteResult = await UsersModel.deleteOne({ username: dto.username });
-         return { success: result.acknowledged, affectedCount: result.deletedCount };
+         return CommandResult(result.acknowledged, result.deletedCount);
       }
       catch (error) {
          return Error("Internal", (error as Error).message);
@@ -74,7 +74,7 @@ export const MongoUsersRepository: UsersRepository = {
       try {
          const filter = mapUsersDtoToUsersFilter(dto);
          const result: DeleteResult = await UsersModel.deleteMany(filter);
-         return { success: result.acknowledged, affectedCount: result.deletedCount };
+         return CommandResult(result.acknowledged, result.deletedCount);
       }
       catch (error) {
          return Error("Internal", (error as Error).message);

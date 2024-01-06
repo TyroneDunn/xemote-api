@@ -76,7 +76,7 @@ export const MongoOrdersRepository: OrdersRepository = {
          const filter = mapUpdateOrdersRequestToOrdersFilter(dto);
          const updateQuery = mapUpdateFieldsToUpdateQuery(dto.updateFields);
          const updateResult: UpdateWriteOpResult = await OrdersModel.updateMany(filter, updateQuery);
-         return { success: updateResult.acknowledged, affectedCount: updateResult.modifiedCount };
+         return CommandResult(updateResult.acknowledged, updateResult.modifiedCount);
       }
       catch (error) {
          return Error("Internal", (error as Error).message);
@@ -86,7 +86,7 @@ export const MongoOrdersRepository: OrdersRepository = {
    deleteOrder: async (dto: DeleteOrderRequest): Promise<CommandResult | Error> => {
       try {
          const result: DeleteResult = await OrdersModel.deleteOne({ _id: dto._id });
-         return { success: result.acknowledged, affectedCount: result.deletedCount };
+         return CommandResult(result.acknowledged, result.deletedCount);
       }
       catch (error) {
          return Error("Internal", (error as Error).message);
@@ -97,7 +97,7 @@ export const MongoOrdersRepository: OrdersRepository = {
       try {
          const filter = mapOrdersRequestToOrdersFilter(dto);
          const result: DeleteResult = await OrdersModel.deleteMany(filter);
-         return { success: result.acknowledged, affectedCount: result.deletedCount };
+         return CommandResult(result.acknowledged, result.deletedCount);
       }
       catch (error) {
          return Error("Internal", (error as Error).message);

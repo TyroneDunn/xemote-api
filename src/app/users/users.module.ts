@@ -1,4 +1,4 @@
-import { configureUsersController, UsersController } from "./users-controller.utility";
+import { configureUsersController, UsersController } from "./users.controller";
 import { UsersService } from "./users-service.type";
 import { MongoUsersRepository } from "./mongo-users-repository.service";
 import { UsersRepository } from "./users-repository.type";

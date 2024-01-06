@@ -9,13 +9,13 @@ const getUsersMethod = (getUsers: RequestHandler): Method => ({
 
 const getUserMethod = (getUser: RequestHandler): Method => ({
    type: "GET",
-   paramKeys: [ 'username' ],
+   paramKeys: [ USERNAME ],
    requestHandler: getUser,
 });
 
 const updateUserMethod = (updateUser: RequestHandler): Method => ({
    type: "PATCH",
-   paramKeys: [ 'username' ],
+   paramKeys: [ USERNAME ],
    requestHandler: updateUser,
 });
 
@@ -27,9 +27,11 @@ const deleteUsersMethod = (deleteUsers: RequestHandler): Method => ({
 
 const deleteUserMethod = (deleteUser: RequestHandler): Method => ({
    type: "DELETE",
-   paramKeys: [ 'username' ],
+   paramKeys: [ USERNAME ],
    requestHandler: deleteUser,
 });
+
+const USERNAME : string = 'username';
 
 const UserQueryParamKeys: string[] = [
    'username',

@@ -7,7 +7,7 @@ import {
    UserUpdateFields,
 } from "./users-dtos.type";
 import { CommandResult, configureHashUtility, Error, User } from "@hals/common";
-import UsersModel from "./mongo-user.model";
+import UsersModel from "./mongo-user-model.type";
 import {
    HASHING_ALGORITHM,
    HASHING_ITERATIONS,

@@ -16,16 +16,16 @@ import {
    UpdateInventoryRecordsRequest,
 } from "./inventory-records.type";
 
-export const mapRequestToGetInventoryRecordDTO = (request: Request): GetInventoryRecordRequest =>
-   ({ productId: request.paramMap['id'] });
+export const mapRequestToGetInventoryRecordRequest = (request : Request) : GetInventoryRecordRequest =>
+   ({ productId : request.paramMap['id'] });
 
-export const mapInventoryRecordToSuccessResponse = (record: InventoryRecord): Response => ({
-   status: OK,
-   collection: [ record ],
-   count: 1,
+export const mapInventoryRecordToSuccessResponse = (record : InventoryRecord) : Response => ({
+   status     : OK,
+   collection : [ record ],
+   count      : 1,
 });
 
-export const mapRequestToInventoryRecordsDTO = (request: Request): InventoryRecordsRequest =>
+export const mapRequestToInventoryRecordsRequest = (request : Request) : InventoryRecordsRequest =>
    ({
       ...mapRequestToInventoryRecordsFilter(request),
       ...mapRequestToTimestamps(request),
@@ -33,45 +33,45 @@ export const mapRequestToInventoryRecordsDTO = (request: Request): InventoryReco
       ...mapRequestToPage(request),
    });
 
-const mapRequestToInventoryRecordsFilter = (request: Request) => ({
+const mapRequestToInventoryRecordsFilter = (request : Request) => ({
    filter: {
       ...request.queryParamMap['countRange']
       && { countRange: JSON.parse(request.queryParamMap['countRange']) as NumberRange },
    },
 });
 
-const mapToInventoryRecordsSort = (request: Request) => ({
+const mapToInventoryRecordsSort = (request : Request) => ({
    ...(request.queryParamMap['sort'] && request.queryParamMap['order']) && {
-      sort: {
-         field: request.queryParamMap['sort'] as InventoryRecordsSortOption,
-         order: request.queryParamMap['order'] as OrderOption,
+      sort : {
+         field : request.queryParamMap['sort'] as InventoryRecordsSortOption,
+         order : request.queryParamMap['order'] as OrderOption,
       },
    },
 });
 
-export const mapInventoryRecordsToSuccessResponse = (records: InventoryRecord[]): Response => ({
-   status: OK,
-   collection: records,
-   count: records.length,
+export const mapInventoryRecordsToSuccessResponse = (records : InventoryRecord[]) : Response => ({
+   status     : OK,
+   collection : records,
+   count      : records.length,
 });
 
-export const mapRequestToUpdateInventoryRecordDTO = (request: Request): UpdateInventoryRecordRequest => ({
-   productId: request.paramMap['id'],
-   ...mapRequestToInventoryRecordUpdateFields(request.payload),
+export const mapRequestToUpdateInventoryRecordRequest = (request : Request) : UpdateInventoryRecordRequest => ({
+   productId : request.paramMap['id'],
+   ...mapRequestPayloadToInventoryRecordUpdateFields(request.payload),
 });
 
-const mapRequestToInventoryRecordUpdateFields = (payload: any) => ({
-   updateFields: {
-      ...payload['newProductId'] && { newProductId: payload['newProductId'] },
-      ...payload['newCount'] && { newCount: payload['newCount'] },
-      ...payload['countDelta'] && { countDelta: payload['countDelta'] },
+const mapRequestPayloadToInventoryRecordUpdateFields = (payload : any) => ({
+   updateFields : {
+      ...payload['newProductId'] && { newProductId : payload['newProductId'] },
+      ...payload['newCount'] && { newCount : payload['newCount'] },
+      ...payload['countDelta'] && { countDelta : payload['countDelta'] },
    },
 });
 
-export const mapRequestToUpdateInventoryRecordsDTO = (request: Request): UpdateInventoryRecordsRequest => ({
+export const mapRequestToUpdateInventoryRecordsRequest = (request : Request) : UpdateInventoryRecordsRequest => ({
    ...mapRequestToInventoryRecordsFilter(request),
    ...mapRequestToTimestamps(request),
    ...mapToInventoryRecordsSort(request),
    ...mapRequestToPage(request),
-   ...mapRequestToInventoryRecordUpdateFields(request.payload),
+   ...mapRequestPayloadToInventoryRecordUpdateFields(request.payload),
 });

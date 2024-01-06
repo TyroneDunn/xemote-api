@@ -1,5 +1,5 @@
 import { ValidationError } from "@hals/common";
-import { DeleteUserDTO, GetUserDTO, UpdateUserDTO, UsersDTO } from "./users-dtos.type";
+import { DeleteUserDTO, GetUserDTO, UpdateUserDTO, UsersDTO } from "./users.type";
 import { UsersRepository } from "./users-repository.type";
 
 export type UsersDtosValidator = {

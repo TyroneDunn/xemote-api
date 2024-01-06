@@ -14,7 +14,7 @@ import {
    User,
    ValidationError,
 } from "@hals/common";
-import { DeleteUserDTO, GetUserDTO, UpdateUserDTO, UsersDTO } from "./users-dtos.type";
+import { DeleteUserDTO, GetUserDTO, UpdateUserDTO, UsersDTO } from "./users.type";
 import { UsersDtosValidator } from "./users-dtos-validator.utility";
 import {
    mapRequestToDeleteUserDto,

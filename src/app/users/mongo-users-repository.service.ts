@@ -5,7 +5,7 @@ import {
    UpdateUserDTO,
    UsersDTO,
    UserUpdateFields,
-} from "./users-dtos.type";
+} from "./users.type";
 import { CommandResult, configureHashUtility, Error, User } from "@hals/common";
 import UsersModel from "./mongo-user-model.type";
 import {

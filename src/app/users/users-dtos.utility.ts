@@ -7,13 +7,7 @@ import {
    Response,
    User,
 } from "@hals/common";
-import {
-   DeleteUserDTO,
-   GetUserDTO,
-   UpdateUserDTO,
-   UsersDTO,
-   UsersSortOption,
-} from "./users-dtos.type";
+import { DeleteUserDTO, GetUserDTO, UpdateUserDTO, UsersDTO, UsersSortOption } from "./users.type";
 
 export const mapRequestToGetUserDto = (request: Request): GetUserDTO =>
    ({ username: request.paramMap['username'] });

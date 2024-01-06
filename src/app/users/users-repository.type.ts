@@ -1,4 +1,4 @@
-import { DeleteUserDTO, GetUserDTO, UpdateUserDTO, UsersDTO } from "./users-dtos.type";
+import { DeleteUserDTO, GetUserDTO, UpdateUserDTO, UsersDTO } from "./users.type";
 import { CommandResult, Error, User } from "@hals/common";
 
 export type UsersRepository = {

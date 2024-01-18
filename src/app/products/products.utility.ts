@@ -55,6 +55,7 @@ export const mapRequestToCreateProductRequest = (request : Request) : CreateProd
    category : request.payload['category'] as ProductCategory,
    costPrice: request.payload['costPrice'] as Price,
    markup   : parseFloat(request.payload['markup']),
+   imageUrl : request.payload['imageUrl'],
 });
 
 export const mapRequestToUpdateProductRequest = (request : Request) : UpdateProductRequest => ({

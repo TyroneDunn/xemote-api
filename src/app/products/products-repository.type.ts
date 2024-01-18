@@ -8,6 +8,7 @@ import {
    UpdateProductsRequest,
 } from "./products.type";
 import { CommandResult, Error } from "@hals/common";
+import { GetRecordsResponse } from '../../shared/get-records-response.type';
 
 export type ProductsRepository = {
    getProduct : GetProduct,
@@ -21,7 +22,7 @@ export type ProductsRepository = {
 };
 
 export type GetProduct = (request : GetProductRequest) => Promise<Product | Error>;
-export type GetProducts = (request : ProductsRequest) => Promise<Product[] | Error>;
+export type GetProducts = (request : ProductsRequest) => Promise<GetRecordsResponse<Product> | Error>;
 export type CreateProduct = (request : CreateProductRequest) => Promise<Product | Error>;
 export type UpdateProduct = (request : UpdateProductRequest) => Promise<Product | Error>;
 export type UpdateProducts = (request : UpdateProductsRequest) => Promise<CommandResult | Error>;

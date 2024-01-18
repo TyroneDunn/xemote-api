@@ -38,6 +38,7 @@ import {
 import { CreateRecord, DeleteRecord } from "../inventory/inventory-repository.type";
 import { Either } from '../../shared/either.type';
 import { InventoryRecord } from '../inventory/inventory-records.type';
+import { GetRecordsResponse } from '../../shared/get-records-response.type';
 
 export const mapRequestToGetProductRequest = (request : Request) : GetProductRequest => ({
    _id: request.paramMap['id'],
@@ -112,10 +113,10 @@ export const mapProductToSuccessResponse = (product : Product) : Response => ({
    count      : 1,
 });
 
-export const mapProductsToSuccessResponse = (products : Product[]) : Response => ({
+export const mapProductsToSuccessResponse = (products : { count : number; collection : Product[] }) : Response => ({
    status     : OK,
-   collection : [ products ],
-   count      : products.length,
+   collection : [ products.collection ],
+   count      : products.count,
 });
 
 export const getProductAndMapResultToResponse = (getProduct : GetProduct) =>
@@ -127,7 +128,7 @@ export const getProductAndMapResultToResponse = (getProduct : GetProduct) =>
 
 export const getProductsAndMapResultToResponse = (getProducts : GetProducts) =>
    async (productsRequest : ProductsRequest) : Promise<Response> => {
-      const getProductsResult : Product[] | Error = await getProducts(productsRequest);
+      const getProductsResult : GetRecordsResponse<Product> | Error = await getProducts(productsRequest);
       if (isError(getProductsResult))
          return mapErrorToInternalServerErrorResponse(getProductsResult);
       else {
@@ -185,10 +186,10 @@ export const deleteProductsAndTheirInventoryRecordsAndMapResultToResponse = (
    deleteProducts : DeleteProducts,
    deleteRecord : DeleteRecord,
 ) => async (productsRequest : ProductsRequest) : Promise<Response> => {
-   const getProductsResult : Product[] | Error = await getProducts(productsRequest);
+   const getProductsResult : GetRecordsResponse<Product> | Error = await getProducts(productsRequest);
    if (isError(getProductsResult)) return mapErrorToInternalServerErrorResponse(getProductsResult);
 
-   const deleteRecordsResults : Either<Error, CommandResult>[] = await deleteRecords(getProductsResult, deleteRecord, []);
+   const deleteRecordsResults : Either<Error, CommandResult>[] = await deleteRecords(getProductsResult.collection, deleteRecord, []);
    const deleteRecordsError : Error | null = filterErrorsFromDeleteResultsAndReduce(deleteRecordsResults);
    if (isError(deleteRecordsError)) return mapErrorToInternalServerErrorResponse(deleteRecordsError);
 

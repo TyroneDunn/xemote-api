@@ -14,6 +14,7 @@ import {
 import { DeleteResult } from "mongodb";
 import { UpdateWriteOpResult } from "mongoose";
 import { CommandResult, Error } from "@hals/common";
+import { GetRecordsResponse } from '../../shared/get-records-response.type';
 
 export const MongoProductsRepository : ProductsRepository = {
    getProduct: async (request : GetProductRequest) : Promise<Product | Error> => {
@@ -27,9 +28,10 @@ export const MongoProductsRepository : ProductsRepository = {
       }
    },
 
-   getProducts: async (request : ProductsRequest) : Promise<Product[] | Error> => {
+   getProducts: async (request : ProductsRequest) : Promise<GetRecordsResponse<Product> | Error> => {
       try {
          const filter = mapProductsRequestToProductsFilter(request);
+         const count = await ProductModel.countDocuments(filter);
          const query = ProductModel.find(filter);
          if (request.sort !== undefined)
             query.sort({ [request.sort.field]: request.sort.order === 'asc' ? 1 : -1 });
@@ -37,7 +39,7 @@ export const MongoProductsRepository : ProductsRepository = {
             query.skip(request.page.index * request.page.limit);
             query.limit(request.page.limit);
          }
-         return query.exec();
+         return {count: count, collection: await query.exec()};
       }
       catch (error) {
          return Error("Internal", (error as Error).message);

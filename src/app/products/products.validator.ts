@@ -150,9 +150,9 @@ export const ProductsValidator = (repository : ProductsRepository) : ProductsVal
       }
 
       if (dto.page) {
-         if (dto.page.index && !dto.page.limit)
+         if (dto.page.index && dto.page.limit  == undefined)
             return ValidationError("BadRequest", 'Invalid page. Provide page limit.');
-         if (!dto.page.index && dto.page.limit)
+         if (dto.page.index == undefined && dto.page.limit)
             return ValidationError("BadRequest", 'Invalid page. Provide page index.');
          if (dto.page.index < 0)
             return ValidationError(
@@ -165,7 +165,10 @@ export const ProductsValidator = (repository : ProductsRepository) : ProductsVal
                'Invalid page. Page limit must be' +
                ' 1 or greater.'
             );
-      }
+      } else return ValidationError(
+         "BadRequest",
+         'Invalid query. Index and limit required.'
+      );
 
       return null;
    },

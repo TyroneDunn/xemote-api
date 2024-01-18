@@ -126,13 +126,30 @@ export const getProductAndMapResultToResponse = (getProduct : GetProduct) =>
       else return mapProductToSuccessResponse(result);
    };
 
+const addComputedPriceToEachProduct =
+   (getProductsResult : GetRecordsResponse<Product>) : GetRecordsResponse<Product> => ({
+      ...getProductsResult,
+      collection: getProductsResult.collection.map(product => ({
+         _id: product._id,
+         name: product.name,
+         markup: product.markup,
+         costPrice: product.costPrice,
+         imageUrl: product.imageUrl,
+         category: product.category,
+         price: {
+            currency: product.costPrice.currency,
+            price: product.costPrice.price * product.markup,
+         },
+      })),
+   });
+
 export const getProductsAndMapResultToResponse = (getProducts : GetProducts) =>
    async (productsRequest : ProductsRequest) : Promise<Response> => {
       const getProductsResult : GetRecordsResponse<Product> | Error = await getProducts(productsRequest);
       if (isError(getProductsResult))
          return mapErrorToInternalServerErrorResponse(getProductsResult);
       else {
-         const response : Response = mapProductsToSuccessResponse(getProductsResult);
+         const response : Response = mapProductsToSuccessResponse(addComputedPriceToEachProduct(getProductsResult));
          if (productsRequest.page === undefined) return response;
          else return addPageDataToResponse(productsRequest.page, response);
       }

@@ -7,6 +7,7 @@ export type Product = {
    markup : number,
    category : ProductCategory,
    imageUrl: string
+   price?: Price
 };
 
 export type Price = {

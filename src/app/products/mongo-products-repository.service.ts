@@ -51,6 +51,7 @@ export const MongoProductsRepository : ProductsRepository = {
             category  : request.category,
             costPrice : request.costPrice,
             markup    : request.markup,
+            imageUrl  : request.imageUrl,
          }).save();
       }
       catch (error) {
@@ -238,4 +239,5 @@ const mapUpdateFieldsToUpdateQuery = (dto : ProductUpdateFields) => ({
    ...dto.newCategory && { category: dto.newCategory },
    ...dto.newCostPrice && { costPrice: dto.newCostPrice as Price },
    ...dto.newMarkup && { markup: dto.newMarkup },
+   ...dto.newImageUrl && { imageUrl: dto.newImageUrl },
 });

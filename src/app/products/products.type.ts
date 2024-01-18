@@ -6,6 +6,7 @@ export type Product = {
    costPrice : Price,
    markup : number,
    category : ProductCategory,
+   imageUrl: string
 };
 
 export type Price = {
@@ -37,6 +38,7 @@ export type CreateProductRequest = {
    category: ProductCategory,
    costPrice: Price,
    markup: number,
+   imageUrl: string
 };
 
 export type UpdateProductRequest = {
@@ -55,6 +57,7 @@ export type ProductUpdateFields = {
    newCostPrice? : Price,
    newMarkup? : number,
    newCategory? : ProductCategory,
+   newImageUrl?: string
 };
 
 export type DeleteProductRequest = { _id : string };

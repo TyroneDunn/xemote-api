@@ -8,6 +8,7 @@ export interface ProductDocument extends Document, Product {
    costPrice: Price,
    markup: number,
    category: ProductCategory,
+   imageUrl: string
 }
 
 const CostPriceSchema = new Schema(
@@ -41,6 +42,9 @@ const ProductSchema = new Schema<ProductDocument>(
       category: {
          type: String,
       },
+      imageUrl: {
+         type: String,
+      }
    },
    { timestamps: true },
 );

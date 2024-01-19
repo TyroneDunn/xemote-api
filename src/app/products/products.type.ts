@@ -67,7 +67,7 @@ export type DeleteProductRequest = { _id : string };
 export type ProductsFilter = {
    name?: string,
    nameRegex?: string,
-   category?: ProductCategory,
+   category?: ProductCategory[],
    categoryRegex?: string,
    costPriceRange?: NumberRange,
    markupRange?: NumberRange,

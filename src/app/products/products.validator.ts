@@ -37,22 +37,37 @@ export const ProductsValidator = (repository : ProductsRepository) : ProductsVal
             "BadRequest",
             'Invalid category. Provide either "category" or "categoryRegex".',
          );
-         if (dto.filter.category)
-            if (dto.filter.category !== "Xemote Gateway"
-               && dto.filter.category !== "Xemote Accessory"
-               && dto.filter.category !== "Wireless Temperature Sensor"
-               && dto.filter.category !== "Wireless Humidity Sensor"
-               && dto.filter.category !== "Wireless AC Current Meter"
-               && dto.filter.category !== "Wireless Event-Based Sensor"
-               && dto.filter.category !== "Wireless Infrared Beam Sensor"
-               && dto.filter.category !== "Wireless 4-30mA Sensor")
+
+         if (dto.filter.category) {
+            if (!Array.isArray(dto.filter.category))
                return ValidationError(
-                  "BadRequest",
-                  'Invalid filter category. Type must be "Xemote' +
-                  ' Accessory", "Xemote Gateway", "Wireless Temperature Sensor", "Wireless' +
-                  ' Humidity Sensor", "Wireless Ac Current Meter", "Wireless Event-Based' +
-                  ' Sensor", "Wireless Infrared Beam Sensor", or "Wireless 4-30mA Sensor".',
+                  'BadRequest',
+                  "Invalid category type. Category must be array."
                );
+
+            for (const value of dto.filter.category) {
+               if (value !== "Xemote Gateway"
+                  && value !== "Xemote Accessory"
+                  && value !== "Wireless Temperature Sensor"
+                  && value !== "Wireless Humidity Sensor"
+                  && value !== "Wireless AC Current Meter"
+                  && value !== "Wireless Event-Based Sensor"
+                  && value !== "Wireless Infrared Beam Sensor"
+                  && value !== "Wireless 4-30mA Sensor"
+                  && value !== "Wireless Control Device"
+               ) {
+                  return ValidationError(
+                     "BadRequest",
+                     'Invalid filter category. Type must be "Xemote' +
+                     ' Accessory", "Xemote Gateway", "Wireless Temperature Sensor", "Wireless' +
+                     ' Humidity Sensor", "Wireless Ac Current Meter", "Wireless Event-Based' +
+                     ' Sensor", "Wireless Infrared Beam Sensor", "Wireless 4-30mA Sensor", or' +
+                     ' "Wireless Control Device".',
+                  );
+               }
+            }
+         }
+
          if (dto.filter.costPriceRange) {
             if (dto.filter.costPriceRange.start && (dto.filter.costPriceRange.start < 0))
                return ValidationError(
@@ -294,22 +309,37 @@ export const ProductsValidator = (repository : ProductsRepository) : ProductsVal
             'Invalid category. Provide either "category"' +
             ' or "categoryRegex".'
          );
-      if (dto.filter.category)
-         if (dto.filter.category !== "Xemote Gateway"
-            && dto.filter.category !== "Xemote Accessory"
-            && dto.filter.category !== "Wireless Temperature Sensor"
-            && dto.filter.category !== "Wireless Humidity Sensor"
-            && dto.filter.category !== "Wireless AC Current Meter"
-            && dto.filter.category !== "Wireless Event-Based Sensor"
-            && dto.filter.category !== "Wireless Infrared Beam Sensor"
-            && dto.filter.category !== "Wireless 4-30mA Sensor")
+
+      if (dto.filter.category) {
+         if (!Array.isArray(dto.filter.category))
             return ValidationError(
-               "BadRequest",
-               'Invalid filter category. Category must be "Xemote' +
-               ' Accessory", "Xemote Gateway", "Wireless Temperature Sensor", "Wireless' +
-               ' Humidity Sensor", "Wireless Ac Current Meter", "Wireless Event-Based' +
-               ' Sensor", "Wireless Infrared Beam Sensor", or "Wireless 4-30mA Sensor".'
+               'BadRequest',
+               "Invalid category type. Category must be array."
             );
+
+         for (const value of dto.filter.category) {
+            if (value !== "Xemote Gateway"
+               && value !== "Xemote Accessory"
+               && value !== "Wireless Temperature Sensor"
+               && value !== "Wireless Humidity Sensor"
+               && value !== "Wireless AC Current Meter"
+               && value !== "Wireless Event-Based Sensor"
+               && value !== "Wireless Infrared Beam Sensor"
+               && value !== "Wireless 4-30mA Sensor"
+               && value !== "Wireless Control Device"
+            ) {
+               return ValidationError(
+                  "BadRequest",
+                  'Invalid filter category. Type must be "Xemote' +
+                  ' Accessory", "Xemote Gateway", "Wireless Temperature Sensor", "Wireless' +
+                  ' Humidity Sensor", "Wireless Ac Current Meter", "Wireless Event-Based' +
+                  ' Sensor", "Wireless Infrared Beam Sensor", "Wireless 4-30mA Sensor", or' +
+                  ' "Wireless Control Device".',
+               );
+            }
+         }
+      }
+
       if (dto.filter.costPriceRange) {
          if (dto.filter.costPriceRange.start && (dto.filter.costPriceRange.start < 0))
             return ValidationError(
@@ -452,26 +482,42 @@ export const ProductsValidator = (repository : ProductsRepository) : ProductsVal
             "BadRequest",
             'Invalid name. Provide either "name" or "nameRegex".',
          );
+
          if (dto.filter.category && dto.filter.categoryRegex) return ValidationError(
             "BadRequest",
             'Invalid category. Provide either "category" or "categoryRegex".',
          );
-         if (dto.filter.category)
-            if (dto.filter.category !== "Xemote Gateway"
-               && dto.filter.category !== "Xemote Accessory"
-               && dto.filter.category !== "Wireless Temperature Sensor"
-               && dto.filter.category !== "Wireless Humidity Sensor"
-               && dto.filter.category !== "Wireless AC Current Meter"
-               && dto.filter.category !== "Wireless Event-Based Sensor"
-               && dto.filter.category !== "Wireless Infrared Beam Sensor"
-               && dto.filter.category !== "Wireless 4-30mA Sensor")
+
+         if (dto.filter.category) {
+            if (!Array.isArray(dto.filter.category))
                return ValidationError(
-                  "BadRequest",
-                  'Invalid filter category. Type must be "Xemote' +
-                  ' Accessory", "Xemote Gateway", "Wireless Temperature Sensor", "Wireless' +
-                  ' Humidity Sensor", "Wireless Ac Current Meter", "Wireless Event-Based' +
-                  ' Sensor", "Wireless Infrared Beam Sensor", or "Wireless 4-30mA Sensor".',
+                  'BadRequest',
+                  "Invalid category type. Category must be array."
                );
+
+            for (const value of dto.filter.category) {
+               if (value !== "Xemote Gateway"
+                  && value !== "Xemote Accessory"
+                  && value !== "Wireless Temperature Sensor"
+                  && value !== "Wireless Humidity Sensor"
+                  && value !== "Wireless AC Current Meter"
+                  && value !== "Wireless Event-Based Sensor"
+                  && value !== "Wireless Infrared Beam Sensor"
+                  && value !== "Wireless 4-30mA Sensor"
+                  && value !== "Wireless Control Device"
+               ) {
+                  return ValidationError(
+                     "BadRequest",
+                     'Invalid filter category. Type must be "Xemote' +
+                     ' Accessory", "Xemote Gateway", "Wireless Temperature Sensor", "Wireless' +
+                     ' Humidity Sensor", "Wireless Ac Current Meter", "Wireless Event-Based' +
+                     ' Sensor", "Wireless Infrared Beam Sensor", "Wireless 4-30mA Sensor", or' +
+                     ' "Wireless Control Device".',
+                  );
+               }
+            }
+         }
+
          if (dto.filter.costPriceRange) {
             if (dto.filter.costPriceRange.start && (dto.filter.costPriceRange.start < 0))
                return ValidationError(

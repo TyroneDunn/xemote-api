@@ -115,7 +115,7 @@ export const mapProductToSuccessResponse = (product : Product) : Response => ({
 
 export const mapProductsToSuccessResponse = (products : { count : number; collection : Product[] }) : Response => ({
    status     : OK,
-   collection : [ products.collection ],
+   collection : products.collection,
    count      : products.count,
 });
 

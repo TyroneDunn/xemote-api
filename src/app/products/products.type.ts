@@ -23,7 +23,8 @@ export type ProductCategory =
    | "Wireless AC Current Meter"
    | "Wireless Event-Based Sensor"
    | "Wireless Infrared Beam Sensor"
-   | "Wireless 4-30mA Sensor";
+   | "Wireless 4-30mA Sensor"
+   | "Wireless Control Device";
 
 export type ProductsRequest = {
    filter?: ProductsFilter,

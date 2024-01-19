@@ -16,6 +16,7 @@ export type ProductsValidator = {
    validateUpdateProductRequest : (dto : UpdateProductRequest) => Promise<ValidationError | null>,
    validateUpdateProductsRequest : (dto : UpdateProductsRequest) => Promise<ValidationError | null>,
    validateDeleteProductRequest : (dto : DeleteProductRequest) => Promise<ValidationError | null>,
+   validateDeleteProductsRequest : (dto : ProductsRequest) => Promise<ValidationError | null>,
 };
 
 export const ProductsValidator = (repository : ProductsRepository) : ProductsValidator => ({
@@ -185,13 +186,15 @@ export const ProductsValidator = (repository : ProductsRepository) : ProductsVal
          && dto.category !== "Wireless AC Current Meter"
          && dto.category !== "Wireless Event-Based Sensor"
          && dto.category !== "Wireless Infrared Beam Sensor"
+         && dto.category !== "Wireless Control Device"
          && dto.category !== "Wireless 4-30mA Sensor")
          return ValidationError(
             "BadRequest",
             'Invalid category. Category must be "Xemote' +
             ' Accessory", "Xemote Gateway", "Wireless Temperature Sensor", "Wireless' +
             ' Humidity Sensor", "Wireless Ac Current Meter", "Wireless Event-Based' +
-            ' Sensor", "Wireless Infrared Beam Sensor", or "Wireless 4-30mA Sensor".'
+            ' Sensor", "Wireless Infrared Beam Sensor", "Wireless Control Device", or "Wireless' +
+            ' 4-30mA Sensor".'
          );
       if (!dto.name)
          return ValidationError("BadRequest", 'Name required.');
@@ -442,4 +445,108 @@ export const ProductsValidator = (repository : ProductsRepository) : ProductsVal
          return ValidationError("NotFound", `Product "${dto._id}" not found.`);
       return null;
    },
+
+   validateDeleteProductsRequest: async (dto : ProductsRequest) : Promise<ValidationError | null> => {
+      if (dto.filter) {
+         if (dto.filter.name && dto.filter.nameRegex) return ValidationError(
+            "BadRequest",
+            'Invalid name. Provide either "name" or "nameRegex".',
+         );
+         if (dto.filter.category && dto.filter.categoryRegex) return ValidationError(
+            "BadRequest",
+            'Invalid category. Provide either "category" or "categoryRegex".',
+         );
+         if (dto.filter.category)
+            if (dto.filter.category !== "Xemote Gateway"
+               && dto.filter.category !== "Xemote Accessory"
+               && dto.filter.category !== "Wireless Temperature Sensor"
+               && dto.filter.category !== "Wireless Humidity Sensor"
+               && dto.filter.category !== "Wireless AC Current Meter"
+               && dto.filter.category !== "Wireless Event-Based Sensor"
+               && dto.filter.category !== "Wireless Infrared Beam Sensor"
+               && dto.filter.category !== "Wireless 4-30mA Sensor")
+               return ValidationError(
+                  "BadRequest",
+                  'Invalid filter category. Type must be "Xemote' +
+                  ' Accessory", "Xemote Gateway", "Wireless Temperature Sensor", "Wireless' +
+                  ' Humidity Sensor", "Wireless Ac Current Meter", "Wireless Event-Based' +
+                  ' Sensor", "Wireless Infrared Beam Sensor", or "Wireless 4-30mA Sensor".',
+               );
+         if (dto.filter.costPriceRange) {
+            if (dto.filter.costPriceRange.start && (dto.filter.costPriceRange.start < 0))
+               return ValidationError(
+                  "BadRequest",
+                  'Invalid cost price range. Cost price range' +
+                  ' start value must be greater than 0.',
+               );
+            if (dto.filter.costPriceRange.end && (dto.filter.costPriceRange.end < 0))
+               return ValidationError(
+                  "BadRequest",
+                  'Invalid cost price range. Cost price range' +
+                  ' end value must be greater than 0.',
+               );
+            if ((dto.filter.costPriceRange.start && dto.filter.costPriceRange.end)
+               && (dto.filter.costPriceRange.end < dto.filter.costPriceRange.start))
+               return ValidationError(
+                  "BadRequest",
+                  'Invalid cost price range. Cost price range end value must be greater ' +
+                  'than start value.',
+               );
+         }
+         if (dto.filter.markupRange) {
+            if (dto.filter.markupRange.start && (dto.filter.markupRange.start < 0))
+               return ValidationError(
+                  "BadRequest",
+                  'Invalid markup range. Markup range' +
+                  ' start value must be greater than 0.'
+               );
+            if (dto.filter.markupRange.end && (dto.filter.markupRange.end < 0))
+               return ValidationError(
+                  "BadRequest",
+                  'Invalid markup range. Markup range' +
+                  ' end value must be greater than 0.'
+               );
+            if ((dto.filter.markupRange.start && dto.filter.markupRange.end)
+               && (dto.filter.markupRange.end < dto.filter.markupRange.start))
+               return ValidationError(
+                  "BadRequest",
+                  'Invalid markup range. Markup range' +
+                  ' end value must be greater than start value.'
+               );
+         }
+      }
+
+      if (dto.timestamps) {
+         if (dto.timestamps.createdAt) {
+            if (dto.timestamps.createdAt.start && isNaN(Date.parse(dto.timestamps.createdAt.start)))
+               return ValidationError(
+                  "BadRequest",
+                  'Invalid createdAt start' +
+                  ' date. Provide a valid ISO date string.'
+               );
+            if (dto.timestamps.createdAt.end && isNaN(Date.parse(dto.timestamps.createdAt.end)))
+               return ValidationError(
+                  "BadRequest",
+                  'Invalid createdAt end' +
+                  ' date. Provide a valid ISO date string.'
+               );
+         }
+         if (dto.timestamps.updatedAt) {
+            if (dto.timestamps.updatedAt.start && isNaN(Date.parse(dto.timestamps.updatedAt.start)))
+               return ValidationError(
+                  "BadRequest",
+                  'Invalid updatedAt start' +
+                  ' date. Provide a valid ISO date string.'
+               );
+            if (dto.timestamps.updatedAt.end && isNaN(Date.parse(dto.timestamps.updatedAt.end)))
+               return ValidationError(
+                  "BadRequest",
+                  'Invalid updatedAt end' +
+                  ' date. Provide a valid ISO date string.'
+               );
+         }
+      }
+
+      return null;
+   }
 });

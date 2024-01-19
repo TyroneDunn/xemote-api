@@ -77,7 +77,7 @@ export const ProductsService = (
 
    deleteProducts: async (request : Request) : Promise<Response> => handleRequest(
       mapRequestToProductsRequest(request),
-      validator.validateProductsRequest,
+      validator.validateDeleteProductsRequest,
       deleteProductsAndTheirInventoryRecordsAndMapResultToResponse(
          productsRepository.getProducts,
          productsRepository.deleteProducts,

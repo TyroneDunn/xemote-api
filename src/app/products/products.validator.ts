@@ -151,13 +151,14 @@ export const ProductsValidator = (repository : ProductsRepository) : ProductsVal
          if (dto.sort.field !== "name"
             && dto.sort.field !== "category"
             && dto.sort.field !== "costPrice"
+            && dto.sort.field !== "price"
             && dto.sort.field !== "markup"
             && dto.sort.field !== "createdAt"
             && dto.sort.field !== "updatedAt")
             return ValidationError(
                "BadRequest",
                'Invalid sort. Sort field must be' +
-               ' "name", "category", "costPrice", "markup", "createdAt", or' +
+               ' "name", "category", "costPrice", "price", "markup", "createdAt", or' +
                ' "updatedAt".'
             );
          if (dto.sort.order !== "asc" && dto.sort.order !== "desc")

@@ -4,10 +4,10 @@ export type Product = {
    _id : string,
    name : string,
    costPrice : Price,
+   retailPrice?: Price
    markup : number,
    category : ProductCategory,
    imageUrl: string
-   price?: Price
 };
 
 export type Price = {
@@ -69,6 +69,7 @@ export type ProductsFilter = {
    nameRegex?: string,
    category?: ProductCategory[],
    categoryRegex?: string,
+   price?: NumberRange,
    costPriceRange?: NumberRange,
    markupRange?: NumberRange,
 };
@@ -77,6 +78,7 @@ export type ProductsSortOption =
    | "name"
    | "category"
    | "costPrice"
+   | "price"
    | "markup"
    | "createdAt"
    | "updatedAt";

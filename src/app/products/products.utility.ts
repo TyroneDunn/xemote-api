@@ -80,6 +80,9 @@ const mapToProductsRequestFilter = (request : Request) => ({
       ...request.queryParamMap['nameRegex'] && { nameRegex: request.queryParamMap['nameRegex'] },
       ...request.queryParamMap['category'] && { category: JSON.parse(request.queryParamMap['category']) },
       ...request.queryParamMap['categoryRegex'] && { categoryRegex: request.queryParamMap['categoryRegex'] },
+      ...request.queryParamMap['price'] && {
+         price: JSON.parse(request.queryParamMap['price']) as NumberRange,
+      },
       ...request.queryParamMap['costPriceRange'] && {
          costPriceRange: JSON.parse(request.queryParamMap['costPriceRange']) as NumberRange,
       },

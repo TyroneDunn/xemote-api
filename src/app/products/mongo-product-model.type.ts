@@ -6,6 +6,7 @@ export interface ProductDocument extends Document, Product {
    _id: string,
    name: string,
    costPrice: Price,
+   retailPrice: Price,
    markup: number,
    category: ProductCategory,
    imageUrl: string
@@ -25,6 +26,21 @@ const CostPriceSchema = new Schema(
    { _id: false },
 );
 
+const RetailPriceSchema = new Schema(
+   {
+      price: {
+         type: Number,
+         required: true,
+      },
+      currency: {
+         type: String,
+         required: true,
+      },
+   },
+   { _id: false },
+);
+
+
 const ProductSchema = new Schema<ProductDocument>(
    {
       name: {
@@ -33,6 +49,10 @@ const ProductSchema = new Schema<ProductDocument>(
       },
       costPrice: {
          type: CostPriceSchema,
+         required: true,
+      },
+      retailPrice: {
+         type: RetailPriceSchema,
          required: true,
       },
       markup: {

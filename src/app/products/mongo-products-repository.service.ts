@@ -7,6 +7,7 @@ import {
    Price,
    Product,
    ProductsRequest,
+   ProductsSortOption,
    ProductUpdateFields,
    UpdateProductRequest,
    UpdateProductsRequest,
@@ -34,7 +35,7 @@ export const MongoProductsRepository : ProductsRepository = {
          const count = await ProductModel.countDocuments(filter);
          const query = ProductModel.find(filter);
          if (request.sort !== undefined)
-            query.sort({ [request.sort.field]: request.sort.order === 'asc' ? 1 : -1 });
+            query.sort({ [mapSortFieldToProductField(request.sort.field)]: request.sort.order === 'asc' ? 1 : -1 });
          if (request.page !== undefined) {
             query.skip(request.page.index * request.page.limit);
             query.limit(request.page.limit);
@@ -53,6 +54,7 @@ export const MongoProductsRepository : ProductsRepository = {
             category  : request.category,
             costPrice : request.costPrice,
             markup    : request.markup,
+            retailPrice: {price: request.costPrice.price * request.markup, currency: request.costPrice.currency},
             imageUrl  : request.imageUrl,
          }).save();
       }
@@ -126,6 +128,18 @@ const mapProductsRequestToProductsFilter = (dto : ProductsRequest) => ({
       ...dto.filter.nameRegex && { name: { $regex: dto.filter.nameRegex, $options: 'i' } },
       ...dto.filter.category && { category: dto.filter.category },
       ...dto.filter.categoryRegex && { category: { $regex: dto.filter.categoryRegex, $options: 'i' } },
+      ...dto.filter.price && {
+         ...(dto.filter.price.start && !dto.filter.price.end) &&
+         { 'retailPrice.price': { $gte: dto.filter.price.start } },
+         ...(!dto.filter.price.start && dto.filter.price.end) &&
+         { 'retailPrice.price': { $lte: dto.filter.price.end } },
+         ...(dto.filter.price.start && dto.filter.price.end) && {
+            'retailPrice.price': {
+               $gte: dto.filter.price.start,
+               $lte: dto.filter.price.end,
+            },
+         },
+      },
       ...dto.filter.costPriceRange && {
          ...(dto.filter.costPriceRange.start && !dto.filter.costPriceRange.end) &&
          { 'costPrice.price': { $gte: dto.filter.costPriceRange.start } },
@@ -243,3 +257,10 @@ const mapUpdateFieldsToUpdateQuery = (dto : ProductUpdateFields) => ({
    ...dto.newMarkup && { markup: dto.newMarkup },
    ...dto.newImageUrl && { imageUrl: dto.newImageUrl },
 });
+
+const mapSortFieldToProductField = (field : ProductsSortOption) : string => {
+   switch (field) {
+      case "price": return "retailPrice";
+      default: return field;
+   }
+};

@@ -50,6 +50,7 @@ const ProductsQueryParamKeys : string[] = [
    'category',
    'categoryRegex',
    'costPriceRange',
+   'price',
    'markupRange',
    'createdAt',
    'updatedAt',

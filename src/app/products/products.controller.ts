@@ -62,7 +62,7 @@ const ProductsQueryParamKeys : string[] = [
 
 export const ProductsController = (service : ProductsService) : Controller => ({
    path    : 'products/',
-   guard   : true,
+   guard   : false,
    methods : [
       getProductsMethod(service.getProducts),
       getProductMethod(service.getProduct),

@@ -66,10 +66,10 @@ export const ProductsController = (service : ProductsService) : Controller => ({
    methods : [
       getProductsMethod(service.getProducts),
       // getProductMethod(service.getProduct),
-      // createProductMethod(service.createProduct),
+      createProductMethod(service.createProduct),
       // updateProductsMethod(service.updateProducts),
-      // updateProductMethod(service.updateProduct),
+      updateProductMethod(service.updateProduct),
       // deleteProductsMethod(service.deleteProducts),
-      // deleteProductMethod(service.deleteProduct),
+      deleteProductMethod(service.deleteProduct),
    ],
 });

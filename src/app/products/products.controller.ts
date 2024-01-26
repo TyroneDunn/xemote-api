@@ -65,11 +65,11 @@ export const ProductsController = (service : ProductsService) : Controller => ({
    guard   : false,
    methods : [
       getProductsMethod(service.getProducts),
-      getProductMethod(service.getProduct),
-      createProductMethod(service.createProduct),
-      updateProductsMethod(service.updateProducts),
-      updateProductMethod(service.updateProduct),
-      deleteProductsMethod(service.deleteProducts),
-      deleteProductMethod(service.deleteProduct),
+      // getProductMethod(service.getProduct),
+      // createProductMethod(service.createProduct),
+      // updateProductsMethod(service.updateProducts),
+      // updateProductMethod(service.updateProduct),
+      // deleteProductsMethod(service.deleteProducts),
+      // deleteProductMethod(service.deleteProduct),
    ],
 });

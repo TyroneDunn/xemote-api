@@ -10,14 +10,15 @@
   "keywords": [
     "Node.js",
     "MongoDB",
+    "hals",
     "API",
     "Server"
   ],
   "author": "Tyrone B. Dunn",
   "license": "MIT",
   "dependencies": {
-    "@hals/common": "file:../../../lib/@hals/common",
-    "@hals/core": "file:../../../lib/@hals/core",
+    "@hals/common": "file:../../../lib/@hals/common-1.1.23",
+    "@hals/core": "file:../../../lib/@hals/core-1.2.10",
     "connect-mongo": "^5.1.0",
     "dotenv": "^16.3.1",
     "mongoose": "^8.0.3"

@@ -19,21 +19,11 @@ export const logDeleteRequest = (id: string) => async (request: Request): Promis
 const logRequest = (id: string, method: string, request : Request): void => {
    const logMessage =
       'Server Request\n' +
-      `Timestamp: ${new Intl.DateTimeFormat('en-GB',  formatOptions).format(Date.now())}\n` +
+      `Timestamp: ${new Date().toISOString()}\n` +
       `ID: ${id}\n` +
       `Method: ${method}\n` +
       `Params: ${request.paramMap}\n` +
       `Query Params: ${request.queryParamMap}\n` +
       `Payload: ${request.payload}\n\n`
    console.log(logMessage);
-};
-
-const formatOptions: Intl.DateTimeFormatOptions = {
-   year: 'numeric',
-   month: 'short',
-   day: 'numeric',
-   hour: 'numeric',
-   minute: 'numeric',
-   second: 'numeric',
-   hour12: false,
 };
